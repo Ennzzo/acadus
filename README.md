@@ -11,8 +11,8 @@
 
 Professores:
 
-**Prof. Nome do Prof 1**  
-**Prof. Nome do Prof 2**  
+**Cleia Marcia Gomes Amaral**  
+**Joana Gabriela Ribeiro de Souza**  
 
 ---
 
