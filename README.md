@@ -98,7 +98,7 @@ A proposta consiste no desenvolvimento de uma aplicação web que centralize as 
 
 [PROCESSO 1 - Nome do Processo](processo-1-nome-do-processo.md)
 
-[PROCESSO 2 - Gerenciamento de Grupos](Gestão de Grupos.md)
+[PROCESSO 2 - Gerenciamento de Grupos](gestao_grupos.md)
 
 [PROCESSO 3 - Nome do Processo](processo-3-nome-do-processo.md)
 
