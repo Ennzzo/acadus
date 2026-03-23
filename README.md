@@ -5,7 +5,7 @@
 **Francisco Maycon Lima Castro**  
 **Thiago Junio Oliveira da Silva**  
 **Sofia Ferreira Costa**  
-**Rafael Vasconcellos Vaz de Mello** 
+**Rafael Henrique de Oliveira Cruz** 
 
 ---
 
