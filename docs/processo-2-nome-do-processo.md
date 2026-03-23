@@ -1,67 +1,78 @@
-### 3.3.2 Processo 2 – NOME DO PROCESSO
+### 3.3.2 Processo 2 – Atribuição Automática de Tarefas
 
-_Apresente aqui o nome e as oportunidades de melhoria para o processo 2. 
-Em seguida, apresente o modelo do processo 2, descrito no padrão BPMN._
+_O processo de Atribuição Automática de Tarefas tem como objetivo distribuir tarefas aos usuários de forma automatizada, com base em critérios predefinidos, como disponibilidade, prioridade e carga de trabalho. Oportunidades de melhoria incluem reduzir o tempo de alocação manual, evitar sobrecarga de usuários e aumentar a rastreabilidade das tarefas._
 
-![Exemplo de um Modelo BPMN do PROCESSO 2](images/process.png "Modelo BPMN do Processo 2.")
-
+![Modelo BPMN Atribuição Automática de Tarefas](images/process.png "Modelo BPMN do Processo 2.")
 
 #### Detalhamento das atividades
 
-_Descreva aqui cada uma das propriedades das atividades do processo 2. 
-Devem estar relacionadas com o modelo de processo apresentado anteriormente._
-
-_Os tipos de dados a serem utilizados são:_
-
-_* **Área de texto** - campo texto de múltiplas linhas_
-
-_* **Caixa de texto** - campo texto de uma linha_
-
-_* **Número** - campo numérico_
-
-_* **Data** - campo do tipo data (dd-mm-aaaa)_
-
-_* **Hora** - campo do tipo hora (hh:mm:ss)_
-
-_* **Data e Hora** - campo do tipo data e hora (dd-mm-aaaa, hh:mm:ss)_
-
-_* **Imagem** - campo contendo uma imagem_
-
-_* **Seleção única** - campo com várias opções de valores que são mutuamente exclusivas (tradicional radio button ou combobox)_
-
-_* **Seleção múltipla** - campo com várias opções que podem ser selecionadas mutuamente (tradicional checkbox ou listbox)_
-
-_* **Arquivo** - campo de upload de documento_
-
-_* **Link** - campo que armazena uma URL_
-
-_* **Tabela** - campo formado por uma matriz de valores_
-
-**Nome da atividade 1**
+**Receber solicitação de tarefa**
 
 | **Campo**       | **Tipo**         | **Restrições** | **Valor default** |
 | ---             | ---              | ---            | ---               |
-| [Nome do campo] | [tipo de dados]  |                |                   |
-| ***Exemplo:***  |                  |                |                   |
-| login           | Caixa de Texto   | formato de e-mail |                |
-| senha           | Caixa de Texto   | mínimo de 8 caracteres |           |
+| ID da Tarefa    | Campo numérico   | Automático, único |                   |
+| Descrição       | Área de texto    | Obrigatório    |                   |
+| Data da Criação | Data (dd-mm-aaaa) | Automático    | Data atual        |
+| Data da Entrega | Data (dd-mm-aaaa) | Obrigatório   |                   |
+| Prioridade      | Seleção única    | Alta, Média, Baixa | Média         |
+| Anexo           | Arquivo          |                |                   |
 
 | **Comandos**         |  **Destino**                   | **Tipo** |
 | ---                  | ---                            | ---               |
-| [Nome do botão/link] | Atividade/processo de destino  | (default/cancel  ) |
-| ***Exemplo:***       |                                |                   |
-| entrar               | Fim do Processo 1              | default           |
-| cadastrar            | Início do proceso de cadastro  |                   |
+| Confirmar            | Avaliar critérios de distribuição | default |
+| Cancelar             | Fim do processo                | cancel            |
 
-
-**Nome da atividade 2**
+**Avaliar critérios de distribuição**
 
 | **Campo**       | **Tipo**         | **Restrições** | **Valor default** |
 | ---             | ---              | ---            | ---               |
-| [Nome do campo] | [tipo de dados]  |                |                   |
-|                 |                  |                |                   |
+| Carga de Trabalho do Usuário | Campo numérico | Somente leitura | 0 |
+| Disponibilidade  | Seleção única    | Disponível, Ocupado, Ausente | Disponível |
+| Habilidades Requeridas | Seleção única | Múltipla escolha | |
+| Observação       | Área de texto    |                |                   |
 
-| **Comandos**         |  **Destino**                   | **Tipo**          |
+| **Comandos**         |  **Destino**                   | **Tipo** |
 | ---                  | ---                            | ---               |
-| [Nome do botão/link] | Atividade/processo de destino  | (default/cancel/  ) |
-|                      |                                |                   |
+| Propor usuários      | Selecionar usuário responsável | default |
+| Reprocessar          | Avaliar critérios de distribuição | default |
+| Cancelar             | Fim do processo                | cancel            |
+
+**Selecionar usuário responsável**
+
+| **Campo**       | **Tipo**         | **Restrições** | **Valor default** |
+| ---             | ---              | ---            | ---               |
+| Usuário Selecionado | Caixa de texto  | Obrigatório    |                   |
+| Critério de Seleção | Seleção única   | Menor carga, Maior disponibilidade, Habilidade específica | Menor carga |
+
+| **Comandos**         |  **Destino**                   | **Tipo** |
+| ---                  | ---                            | ---               |
+| Atribuir             | Atribuir tarefa                | default |
+| Reavaliar            | Avaliar critérios de distribuição | default |
+| Cancelar             | Fim do processo                | cancel            |
+
+**Atribuir tarefa**
+
+| **Campo**       | **Tipo**         | **Restrições** | **Valor default** |
+| ---             | ---              | ---            | ---               |
+| Data e Hora de Atribuição | Data e Hora (dd-mm-aaaa, hh:mm:ss) | Automático | Data e hora atuais |
+| Notificação Enviada | Seleção única | Sim, Não | Não |
+| Link para Tarefa | Link            | Automático     |                   |
+
+| **Comandos**         |  **Destino**                   | **Tipo** |
+| ---                  | ---                            | ---               |
+| Enviar notificação e continuar | Monitorar e registrar status | default |
+| Reatribuir           | Selecionar usuário responsável | default |
+| Cancelar             | Fim do processo                | cancel            |
+
+**Monitorar e registrar status**
+
+| **Campo**       | **Tipo**         | **Restrições** | **Valor default** |
+| ---             | ---              | ---            | ---               |
+| Data de Entrega | Data (dd-mm-aaaa) |                |                   |
+| Notificação Enviada | Seleção única | Sim, Não | Não |
+| Comentários     | Área de texto    |                |                   |
+
+| **Comandos**         |  **Destino**                   | **Tipo** |
+| ---                  | ---                            | ---               |
+| Finalizar            | Fim do processo                | default |
+| Reabrir tarefa       | Avaliar critérios de distribuição | default ||
