@@ -1,6 +1,6 @@
 ### 3.3.2 Processo 2 – Gestão de Grupos / Times
 
-_O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação, organização e manutenção de grupos de trabalho, permitindo a definição de líderes, convite de membros, aprovação de entradas, remoção de membros e estruturação de subgrupos ou squads. Oportunidades de melhoria incluem reduzir o tempo de formação de times, aumentar a transparência na composição dos grupos e garantir a governança adequada sobre as equipes._
+O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação, organização e manutenção de grupos de trabalho, permitindo a definição de líderes, convite de membros, aprovação de entradas, remoção de membros e estruturação de subgrupos ou squads. Oportunidades de melhoria incluem reduzir o tempo de formação de times, aumentar a transparência na composição dos grupos e garantir a governança adequada sobre as equipes.
 
 #### Modelo BPMN
 
@@ -23,6 +23,7 @@ _O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação
 | Criar | Convidar membros | default |
 | Cancelar | Fim do processo | cancel |
 
+
 **Convidar membros**
 
 | **Campo** | **Tipo** | **Restrições** | **Valor default** |
@@ -40,6 +41,7 @@ _O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação
 | Pular | Verificar aprovação necessária | default |
 | Cancelar | Fim do processo | cancel |
 
+
 **Definir líder/coordenador**
 
 | **Campo** | **Tipo** | **Restrições** | **Valor default** |
@@ -55,6 +57,7 @@ _O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação
 | Confirmar | Verificar criação de subgrupos | default |
 | Alterar | Definir líder/coordenador | default |
 | Cancelar | Fim do processo | cancel |
+
 
 **Criar subgrupos/squads**
 
@@ -73,6 +76,7 @@ _O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação
 | Pular | Grupo ativo | default |
 | Cancelar | Fim do processo | cancel |
 
+
 **Remover membro**
 
 | **Campo** | **Tipo** | **Restrições** | **Valor default** |
@@ -87,6 +91,7 @@ _O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação
 | --- | --- | --- |
 | Remover | Grupo ativo | default |
 | Cancelar | Grupo ativo | cancel |
+
 
 **Alterar líder/coordenador**
 
