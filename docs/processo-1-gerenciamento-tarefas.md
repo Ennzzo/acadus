@@ -72,3 +72,8 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 | **Comandos** | **Destino** | **Tipo** |
 | --- | --- | --- |
 | Confirmar | Fim do processo | default |
+
+
+**Wireframe**
+
+![Tela Criar Tarefa](images/Criar_Tarefa)
