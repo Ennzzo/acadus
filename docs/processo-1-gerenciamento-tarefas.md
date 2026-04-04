@@ -10,7 +10,7 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 
 #### Detalhamento das atividades
 
-**Criar projeto**
+**01. Criar projeto**
 
 | **Campo** | **Tipo** | **Restrições** | **Valor default** |
 | --- | --- | --- | --- |
@@ -24,7 +24,7 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 | Cancelar | Fim do processo | cancel |
 
 
-**Adicionar membros**
+**02. Adicionar membros**
 
 | **Campo** | **Tipo** | **Restrições** | **Valor default** |
 | --- | --- | --- | --- |
@@ -36,7 +36,7 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 | Cancelar | Criar projeto | cancel |
 
 
-**Criar tarefa**
+**03. Criar tarefa**
 
 | **Campo** | **Tipo** | **Restrições** | **Valor default** |
 | --- | --- | --- | --- |
@@ -51,7 +51,7 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 | Cancelar | Adicionar membros | cancel |
 
 
-**Executar tarefa**
+**04. Executar tarefa**
 
 | **Campo** | **Tipo** | **Restrições** | **Valor default** |
 | --- | --- | --- | --- |
@@ -63,7 +63,7 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 | Marcar como concluída | Gateway (Tarefa concluída?) | default |
 
 
-**Marcar tarefa como concluída**
+**05. Marcar tarefa como concluída**
 
 | **Campo** | **Tipo** | **Restrições** | **Valor default** |
 | --- | --- | --- | --- |
