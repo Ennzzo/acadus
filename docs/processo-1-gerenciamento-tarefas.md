@@ -10,70 +10,112 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 
 #### Detalhamento das atividades
 
-**01. Criar projeto**
+**01. Criar tarefa**
 
-| **Campo** | **Tipo** | **Restrições** | **Valor default** |
-| --- | --- | --- | --- |
-| Nome do projeto | Caixa de texto | Obrigatório |  |
-| Descrição | Área de texto | Opcional |  |
-| Data de criação | Data | Automática | Data atual |
+| **Campo**        | **Tipo**         | **Restrições**                                   | **Valor default** |
+|------------------|------------------|--------------------------------------------------|-------------------|
+| Nome da tarefa   | Caixa de texto   | 3 a 100 caracteres                               |                   |
+| Descrição        | Área de texto    | até 500 caracteres                               |                   |
+| Responsável      | Seleção única    | deve selecionar usuário válido do grupo          |                   |
+| Prazo            | Data             | formato dd-mm-aaaa; data futura                  |                   |
 
-| **Comandos** | **Destino** | **Tipo** |
-| --- | --- | --- |
-| Criar | Adicionar membros | default |
-| Cancelar | Fim do processo | cancel |
-
-
-**02. Adicionar membros**
-
-| **Campo** | **Tipo** | **Restrições** | **Valor default** |
-| --- | --- | --- | --- |
-| Usuários | Seleção múltipla | Pelo menos 1 membro |  |
-
-| **Comandos** | **Destino** | **Tipo** |
-| --- | --- | --- |
-| Confirmar | Criar tarefa | default |
-| Cancelar | Criar projeto | cancel |
+| **Comandos** | **Destino**                  | **Tipo**  |
+|--------------|-----------------------------|-----------|
+| Salvar       | Visualizar tarefas          | default   |
+| Cancelar     | Visualizar tarefas          | cancel    |
 
 
-**03. Criar tarefa**
+**02. Visualizar tarefas**
 
-| **Campo** | **Tipo** | **Restrições** | **Valor default** |
-| --- | --- | --- | --- |
-| Nome da tarefa | Caixa de texto | Obrigatório |  |
-| Descrição | Área de texto | Opcional |  |
-| Responsável | Seleção única | Obrigatório |  |
-| Prazo | Data | Obrigatório |  |
+| **Campo**        | **Tipo**      | **Restrições**                         | **Valor default** |
+|------------------|--------------|----------------------------------------|-------------------|
+| Lista de tarefas | Tabela       | exibe tarefas do projeto do usuário    |                   |
+| Status           | Seleção única| pendente / em progresso / concluída    | pendente          |
 
-| **Comandos** | **Destino** | **Tipo** |
-| --- | --- | --- |
-| Salvar | Executar tarefa | default |
-| Cancelar | Adicionar membros | cancel |
+| **Comandos**       | **Destino**             | **Tipo** |
+|--------------------|------------------------|----------|
+| Abrir tarefa       | Visualizar tarefa      | default  |
+| Adicionar tarefa   | Criar tarefa           | default  |
+
+
+**03. Visualizar tarefa**
+
+| **Campo**        | **Tipo**         | **Restrições**                        | **Valor default** |
+|------------------|------------------|---------------------------------------|-------------------|
+| Nome da tarefa   | Caixa de texto   | somente leitura                      |                   |
+| Descrição        | Área de texto    | até 500 caracteres                   |                   |
+| Responsável      | Seleção única    | deve existir no grupo                |                   |
+| Status           | Seleção única    | pendente / em progresso / concluída  |                   |
+
+| **Comandos**          | **Destino**              | **Tipo** |
+|-----------------------|--------------------------|----------|
+| Executar tarefa       | Executar tarefa          | default  |
+| Validar tarefa        | Validar tarefas          | default  |
+| Mover para lixeira    | Excluir tarefa           | default  |
+| Fechar                | Visualizar tarefas       | cancel   |
 
 
 **04. Executar tarefa**
 
+| **Campo**        | **Tipo**         | **Restrições**                        | **Valor default** |
+|------------------|------------------|---------------------------------------|-------------------|
+| Progresso        | Número           | 0 a 100 (%)                          | 0                 |
+| Comentário       | Área de texto    | até 300 caracteres                   |                   |
+| Anexos           | Arquivo          | formatos: pdf, jpg, png; máx 5MB     |                   |
+
+| **Comandos**             | **Destino**                 | **Tipo** |
+|--------------------------|-----------------------------|----------|
+| Atualizar progresso      | Atualizar progresso         | default  |
+| Finalizar tarefa         | Enviar para validação       | default  |
+| Cancelar                 | Visualizar tarefa           | cancel   |
+
+
+**05. Atualizar progresso**
+
+| **Campo**        | **Tipo** | **Restrições**         | **Valor default** |
+|------------------|----------|------------------------|-------------------|
+| Progresso        | Número   | 0 a 100 (%)           |                   |
+
+| **Comandos** | **Destino**        | **Tipo** |
+|--------------|-------------------|----------|
+| Salvar       | Executar tarefa   | default  |
+
+
+**06. Enviar para validação**
+
 | **Campo** | **Tipo** | **Restrições** | **Valor default** |
-| --- | --- | --- | --- |
-| Descrição | Área de texto | Opcional |  |
-| Anexos | Arquivo | Opcional |  |
+|-----------|----------|----------------|-------------------|
+| -         | -        | -              | -                 |
 
-| **Comandos** | **Destino** | **Tipo** |
-| --- | --- | --- |
-| Marcar como concluída | Gateway (Tarefa concluída?) | default |
+| **Comandos** | **Destino**        | **Tipo** |
+|--------------|-------------------|----------|
+| Confirmar    | Validar tarefas   | default  |
 
 
-**05. Marcar tarefa como concluída**
+**07. Validar tarefas**
 
-| **Campo** | **Tipo** | **Restrições** | **Valor default** |
-| --- | --- | --- | --- |
-| Data de conclusão | Data | Automática | Data atual |
+| **Campo**        | **Tipo**         | **Restrições**                        | **Valor default** |
+|------------------|------------------|---------------------------------------|-------------------|
+| Status           | Seleção única    | aprovado / reprovado                  |                   |
+| Comentário       | Área de texto    | até 300 caracteres                   |                   |
 
-| **Comandos** | **Destino** | **Tipo** |
-| --- | --- | --- |
-| Confirmar | Fim do processo | default |
+| **Comandos**       | **Destino**                     | **Tipo** |
+|--------------------|--------------------------------|----------|
+| Aprovar            | Fim (tarefa validada)          | default  |
+| Solicitar ajustes  | Ajustar tarefa                 | default  |
 
+**08. Excluir tarefa**
+
+| **Campo**        | **Tipo** | **Restrições**               | **Valor default** |
+|------------------|----------|------------------------------|-------------------|
+| Confirmação      | Booleano | true / false                 | false             |
+
+| **Comandos** | **Destino**              | **Tipo** |
+|--------------|--------------------------|----------|
+| Confirmar    | Fim (tarefa excluída)    | default  |
+| Cancelar     | Visualizar tarefa        | cancel   |
 
 **Wireframe**
 
-![Tela Criar Tarefa](images/Criar_Tarefa)
+![Tela Gerenciamento de Tarefas](images/wireframe-processo1.png)
+![Tela Criar Tarefa](images/wireframe-processo1-1.png)
