@@ -44,14 +44,10 @@ O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação,
 
 **03. Verificar aprovação necessária**
 
-| **Campo**              | **Tipo**      | **Restrições**              | **Valor default** |
-|------------------------|--------------|-----------------------------|-------------------|
-| Aprovação necessária   | Booleano     | true / false                | true              |
-
 | **Comandos** | **Destino**                  | **Tipo** |
 |--------------|-----------------------------|----------|
 | Sim          | Aprovar entrada de membro   | default  |
-| Não          | Definir líder/coordenador  | default  |
+| Não          | Definir líder/coordenador   | default  |
 
 
 **04. Aprovar entrada de membro**
@@ -59,7 +55,6 @@ O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação,
 | **Campo**        | **Tipo**         | **Restrições**            | **Valor default** |
 |------------------|------------------|---------------------------|-------------------|
 | Membro           | Caixa de texto   | obrigatório               |                   |
-| Status           | Seleção única    | aprovado / rejeitado      |                   |
 | Comentário       | Área de texto    | até 300 caracteres        |                   |
 
 | **Comandos** | **Destino**                     | **Tipo** |
@@ -76,7 +71,7 @@ O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação,
 | Tipo de Liderança       | Seleção única    | única / compartilhada / rotativa            | única             |
 | Data de Início          | Data             | automática                                  | data atual        |
 | Data de Fim             | Data             | opcional                                    |                   |
-| Permissões Especiais    | Múltipla escolha | aprovar membros, remover membros, etc.      |                   |
+| Permissões Especiais    | Múltipla escolha | aprovar membros, remover membros      |                   |
 
 | **Comandos** | **Destino**                        | **Tipo** |
 |--------------|-----------------------------------|----------|
@@ -98,7 +93,7 @@ O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação,
 | **Comandos**      | **Destino**         | **Tipo** |
 |-------------------|--------------------|----------|
 | Criar             | Grupo ativo        | default  |
-| Adicionar outro   | Criar subgrupos    | default  |
+| Adicionar outro   | Criar subgrupos/squads   | default  |
 | Pular             | Grupo ativo        | default  |
 | Cancelar          | Fim do processo    | cancel   |
 
@@ -146,3 +141,7 @@ O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação,
 |--------------|--------------|----------|
 | Confirmar    | Grupo ativo  | default  |
 | Cancelar     | Grupo ativo  | cancel   |
+
+#### Wireframes
+
+![Wireframe do processo 2](images/processo_2.png "Wireframe")
