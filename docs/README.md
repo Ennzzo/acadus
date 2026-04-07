@@ -5,14 +5,14 @@
 **Francisco Maycon Lima Castro**  
 **Thiago Junio Oliveira da Silva**  
 **Sofia Ferreira Costa**  
-**Rafael Vasconcellos Vaz de Mello** 
+**Rafael Henrique de Oliveira Cruz** 
 
 ---
 
 Professores:
 
-**Prof. Nome do Prof 1**  
-**Prof. Nome do Prof 2**  
+**Cleia Marcia Gomes Amaral**  
+**Joana Gabriela Ribeiro de Souza**   
 
 ---
 
@@ -96,11 +96,11 @@ A proposta consiste no desenvolvimento de uma aplicação web que centralize as 
 
 ### 3.3. Modelagem dos processos
 
-[PROCESSO 1 - Gerenciamento de Tarefas](processo-1-gerenciamento-tarefas.md)
+[PROCESSO 1 - Gerenciamento de Projetos](processo-1-gerenciamento-projetos.md)
 
-[PROCESSO 2 - Gerenciamento de Grupos](processo-2-gestao-grupos.md)
+[PROCESSO 2 - Gerenciamento de Equipe](processo-2-gerenciamento-equipe.md)
 
-[PROCESSO 3 - Nome do Processo](processo-3-nome-do-processo.md)
+[PROCESSO 3 - Gerenciamento de Tarefas](processo-3-gerenciamento-tarefas.md)
 
 [PROCESSO 4 - Nome do Processo](processo-4-nome-do-processo.md)
 

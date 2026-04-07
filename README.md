@@ -96,11 +96,11 @@ A proposta consiste no desenvolvimento de uma aplicação web que centralize as 
 
 ### 3.3. Modelagem dos processos
 
-[PROCESSO 1 - Gerenciamento de Tarefas](docs/processo-1-gerenciamento-tarefas.md)
+[PROCESSO 1 - Gerenciamento de Projetos](docs/processo-1-gerenciamento-projetos.md)
 
-[PROCESSO 2 - Gerenciamento de Grupos](docs/processo-2-gestao-grupos.md)
+[PROCESSO 2 - Gerenciamento de Equipe](docs/processo-2-gerenciamento-equipe.md)
 
-[PROCESSO 3 - Nome do Processo](docs/processo-3-nome-do-processo.md)
+[PROCESSO 3 - Gerenciamento de Tarefas](docs/processo-3-gerenciamento-tarefas.md)
 
 [PROCESSO 4 - Nome do Processo](docs/processo-4-nome-do-processo.md)
 

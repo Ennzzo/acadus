@@ -1,0 +1,109 @@
+### 3.3.2 Processo 2 – Gestão de Grupos / Times
+
+O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação, organização e manutenção de grupos de trabalho, permitindo a definição de líderes, convite de membros, aprovação de entradas, remoção de membros e estruturação de subgrupos ou squads. Oportunidades de melhoria incluem reduzir o tempo de formação de times, aumentar a transparência na composição dos grupos e garantir a governança adequada sobre as equipes.
+
+#### Modelo BPMN
+
+![Modelo BPMN do PROCESSO de Gerenciamento de grupos](images/gerenciamento_grupos.png "Modelo BPMN do Processo de Gerenciamento de grupos.")
+
+#### Detalhamento das atividades
+
+**Criar grupo**
+
+| **Campo** | **Tipo** | **Restrições** | **Valor default** |
+| --- | --- | --- | --- |
+| Nome do Grupo | Caixa de texto | Obrigatório, único | |
+| Descrição | Área de texto | | |
+| Tipo de Grupo | Seleção única | Permanente, Temporário, Projeto | Permanente |
+| Data de Criação | Data (dd-mm-aaaa) | Automático | Data atual |
+| Visibilidade | Seleção única | Público, Privado | Privado |
+
+| **Comandos** | **Destino** | **Tipo** |
+| --- | --- | --- |
+| Criar | Convidar membros | default |
+| Cancelar | Fim do processo | cancel |
+
+
+**Convidar membros**
+
+| **Campo** | **Tipo** | **Restrições** | **Valor default** |
+| --- | --- | --- | --- |
+| E-mail do Membro | Caixa de texto | Formato de e-mail | |
+| Nome do Membro | Caixa de texto | | |
+| Papel Sugerido | Seleção única | Membro, Líder, Observador | Membro |
+| Mensagem de Convite | Área de texto | | |
+| Data do Convite | Data (dd-mm-aaaa) | Automático | Data atual |
+
+| **Comandos** | **Destino** | **Tipo** |
+| --- | --- | --- |
+| Enviar Convite | Verificar aprovação necessária | default |
+| Adicionar outro | Convidar membros | default |
+| Pular | Verificar aprovação necessária | default |
+| Cancelar | Fim do processo | cancel |
+
+
+**Definir líder/coordenador**
+
+| **Campo** | **Tipo** | **Restrições** | **Valor default** |
+| --- | --- | --- | --- |
+| Líder Selecionado | Caixa de texto | Obrigatório | |
+| Tipo de Liderança | Seleção única | Única, Compartilhada, Rotativa | Única |
+| Data de Início | Data (dd-mm-aaaa) | Automático | Data atual |
+| Data de Fim | Data (dd-mm-aaaa) | | |
+| Permissões Especiais | Múltipla escolha | Aprovar membros, Remover membros, Criar subgrupos, Editar grupo | |
+
+| **Comandos** | **Destino** | **Tipo** |
+| --- | --- | --- |
+| Confirmar | Verificar criação de subgrupos | default |
+| Alterar | Definir líder/coordenador | default |
+| Cancelar | Fim do processo | cancel |
+
+
+**Criar subgrupos/squads**
+
+| **Campo** | **Tipo** | **Restrições** | **Valor default** |
+| --- | --- | --- | --- |
+| Nome do Subgrupo | Caixa de texto | Obrigatório | |
+| Descrição | Área de texto | | |
+| Membros Designados | Múltipla escolha | | |
+| Líder do Subgrupo | Caixa de texto | | |
+| Objetivo | Área de texto | | |
+
+| **Comandos** | **Destino** | **Tipo** |
+| --- | --- | --- |
+| Criar | Grupo ativo | default |
+| Adicionar outro | Criar subgrupos/squads | default |
+| Pular | Grupo ativo | default |
+| Cancelar | Fim do processo | cancel |
+
+
+**Remover membro**
+
+| **Campo** | **Tipo** | **Restrições** | **Valor default** |
+| --- | --- | --- | --- |
+| Membro a Remover | Caixa de texto | Obrigatório | |
+| Motivo da Remoção | Área de texto | | |
+| Data da Remoção | Data (dd-mm-aaaa) | Automático | Data atual |
+| Notificar Membro | Seleção única | Sim, Não | Sim |
+| Transferir Responsabilidades | Seleção única | Sim, Não | Não |
+
+| **Comandos** | **Destino** | **Tipo** |
+| --- | --- | --- |
+| Remover | Grupo ativo | default |
+| Cancelar | Grupo ativo | cancel |
+
+
+**Alterar líder/coordenador**
+
+| **Campo** | **Tipo** | **Restrições** | **Valor default** |
+| --- | --- | --- | --- |
+| Novo Líder | Caixa de texto | Obrigatório | |
+| Líder Anterior | Caixa de texto | Somente leitura | |
+| Data da Transição | Data (dd-mm-aaaa) | Automático | Data atual |
+| Motivo da Alteração | Área de texto | | |
+| Notificar Grupo | Seleção única | Sim, Não | Sim |
+
+| **Comandos** | **Destino** | **Tipo** |
+| --- | --- | --- |
+| Confirmar | Grupo ativo | default |
+| Cancelar | Grupo ativo | cancel |
