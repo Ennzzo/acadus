@@ -1,4 +1,4 @@
-### 3.3.1 Processo 1 – Gerenciamento de Projetos
+### 3.3.1 Processo 3 – Gerenciamento de Projetos
 
 O processo de gerenciamento de projetos tem como objetivo permitir a criação, edição, exclusão e acesso aos projetos acadêmicos pelos usuários do sistema, de acordo com seus respectivos papéis (líder ou membro).
 
