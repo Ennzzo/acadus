@@ -117,9 +117,7 @@ _Os tipos de dados a serem utilizados são:_
 
 **Wireframe**
 
-![Tela Login](images/wireframe-processo4.png)
-![Tela Pagina inicial](images/wireframe-processo4-1.png)
-![Tela Tela quadro kanban](images/wireframe-processo4-1.png)
-![Tela Tela criar card](images/wireframe-processo4-1.png)
-
-
+![Tela Login](images/wireframe_processo_3-1.png)
+![Tela Pagina inicial](images/wireframe_processo_3-2.png)
+![Tela Tela quadro kanban](images/wireframe_processo_4-1.png.png)
+![Tela Tela criar card](images/wireframe_processo_4-2.png)
