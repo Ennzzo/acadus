@@ -102,7 +102,7 @@ A proposta consiste no desenvolvimento de uma aplicação web que centralize as 
 
 [PROCESSO 3 - Gerenciamento de Tarefas](processo-3-gerenciamento-tarefas.md)
 
-[PROCESSO 4 - Quadro Kanban](processo-4-quadro-kanban.md)
+[PROCESSO 4 - Acompanhamento com Quadro Kanban](processo-4-acompanhamento-kanban.md)
 
 ## 4. Projeto da solução
 
