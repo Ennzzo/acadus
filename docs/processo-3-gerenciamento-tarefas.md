@@ -2,7 +2,7 @@
 
 O processo de gerenciamento de tarefas tem como objetivo organizar, distribuir e acompanhar as atividades realizadas por membros de uma equipe dentro de um projeto acadêmico, garantindo controle sobre responsabilidades, prazos e andamento das tarefas.
 
-O processo inicia-se com o usuário acessando o sistema. Em seguida, o usuário realiza o login para entrar na aplicação. Após autenticado, o sistema apresenta a área de gerenciamento de tarefas.
+O processo inicia-se com o usuário acessando o sistema. Em seguida, o usuário realiza o login para entrar na aplicação. Após autenticado, o sistema apresenta a área de gerenciamento de tarefas. Ressalta-se que, em um cenário completo, o sistema pode disponibilizar diferentes módulos, como gerenciamento de equipes e projetos; no entanto, para fins desta modelagem, considera-se o acesso direto ao módulo de gerenciamento de tarefas, por se tratar do escopo específico deste processo.
 
 A partir desse ponto, o usuário (líder da equipe) pode escolher entre visualizar tarefas existentes ou criar uma nova tarefa. Caso opte por criar uma tarefa, o usuário informa os dados necessários, como nome, descrição, responsável e prazo, e salva a tarefa, que passa a ficar disponível para execução.
 
@@ -94,10 +94,6 @@ O processo se encerra quando a tarefa é validada ou excluída.
 
 
 **06. Enviar para validação**
-
-| **Campo** | **Tipo** | **Restrições** | **Valor default** |
-|-----------|----------|----------------|-------------------|
-| -         | -        | -              | -                 |
 
 | **Comandos** | **Destino**        | **Tipo** |
 |--------------|-------------------|----------|
