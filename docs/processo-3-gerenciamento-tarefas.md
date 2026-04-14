@@ -1,4 +1,4 @@
-### 3.3.3 Processo 1 – Gerenciamento de Tarefas
+### 3.3.3 Processo 3 – Gerenciamento de Tarefas
 
 O processo de gerenciamento de tarefas em projetos acadêmicos tem como objetivo organizar e acompanhar as atividades desenvolvidas pelas equipes, desde a criação do projeto até a conclusão das tarefas.
 
