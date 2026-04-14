@@ -1,6 +1,14 @@
 ### 3.3.1 Processo 3 – Gerenciamento de Projetos
 
-O processo de gerenciamento de projetos tem como objetivo permitir a criação, edição, exclusão e acesso aos projetos acadêmicos pelos usuários do sistema, de acordo com seus respectivos papéis (líder ou membro).
+O gerenciamento de projetos tem como objetivo permitir a criação, edição, exclusão e acesso aos projetos acadêmicos pelos usuários do sistema, de acordo com seus respectivos papéis (líder ou membro).
+
+Esse fluxo tem início com o acesso do usuário ao sistema, sendo necessário realizar o login ou, caso ainda não possua cadastro, efetuar o cadastro informando os dados solicitados. Após a autenticação, o usuário é direcionado para a tela de visualização de projetos, na qual são exibidos todos os projetos aos quais está vinculado.
+
+Nessa tela, o usuário pode utilizar funcionalidades de busca e filtragem para localizar projetos específicos. A partir dessa tela, diferentes ações podem ser realizadas. Caso possua perfil de líder, o usuário poderá criar um novo projeto, informando os dados necessários para seu cadastro. Após a criação, o projeto passa a integrar a lista de projetos disponíveis.
+
+Além disso, o líder pode editar projetos existentes, atualizando suas informações, ou excluí-los, mediante confirmação da ação. Já os membros possuem acesso restrito à visualização e ao acesso aos projetos.
+
+Por fim, ao selecionar um projeto, o usuário acessa seus detalhes, permitindo o acesso a outros processos do sistema, como o gerenciamento de equipe e de tarefas.
 
 Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centralização das informações em um único ambiente, possibilitando melhor organização dos projetos e evitando a dispersão de dados em diferentes ferramentas. Além disso, o processo permite maior controle das ações realizadas pelos usuários, garantindo que apenas o líder tenha permissões de gerenciamento, enquanto os membros podem apenas visualizar e acessar os projetos.
 
