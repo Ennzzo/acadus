@@ -22,7 +22,50 @@ O processo se encerra quando a tarefa é validada ou excluída.
 
 #### Detalhamento das atividades
 
-**01. Criar tarefa**
+**01. Acessar sistema**
+
+| **Campo**              | **Tipo**         | **Restrições**                          | **Valor default** |
+|------------------------|------------------|------------------------------------------|-------------------|
+| E-mail/Usuário        | Caixa de texto   | obrigatório; formato válido              |                   |
+| Senha                 | Caixa de texto   | obrigatório                              |                   |
+
+| **Comandos** | **Destino**        | **Tipo** |
+|--------------|-------------------|----------|
+| Entrar       | Visualizar tarefas| default  |
+| Criar conta  | Cadastro          | default  |
+
+
+**02. Cadastro**
+
+| **Campo**              | **Tipo**         | **Restrições**                          | **Valor default** |
+|------------------------|------------------|------------------------------------------|-------------------|
+| Nome                  | Caixa de texto   | obrigatório                              |                   |
+| Sobrenome             | Caixa de texto   | obrigatório                              |                   |
+| E-mail                | Caixa de texto   | obrigatório; formato válido              |                   |
+| Senha                 | Caixa de texto   | mínimo 6 caracteres                      |                   |
+| Confirmar senha       | Caixa de texto   | deve ser igual à senha                   |                   |
+| Aceitar termos        | Booleano         | obrigatório (true)                       | false             |
+
+| **Comandos** | **Destino**         | **Tipo** |
+|--------------|--------------------|----------|
+| Criar conta  | Visualizar tarefas | default  |
+| Cancelar     | Acessar sistema    | cancel   |
+
+
+**03. Visualizar tarefas (acesso ao sistema)**
+
+| **Campo**        | **Tipo**       | **Restrições**                         | **Valor default** |
+|------------------|---------------|----------------------------------------|-------------------|
+| Lista de tarefas | Tabela        | exibe tarefas do projeto do usuário    |                   |
+| Status           | Seleção única | pendente / em progresso / concluída    | pendente          |
+
+| **Comandos**       | **Destino**         | **Tipo** |
+|--------------------|--------------------|----------|
+| Abrir tarefa       | Visualizar tarefa  | default  |
+| Adicionar tarefa   | Criar tarefa       | default  |
+
+
+**04. Criar tarefa**
 
 | **Campo**        | **Tipo**         | **Restrições**                                   | **Valor default** |
 |------------------|------------------|--------------------------------------------------|-------------------|
@@ -37,7 +80,7 @@ O processo se encerra quando a tarefa é validada ou excluída.
 | Cancelar     | Visualizar tarefas  | cancel   |
 
 
-**02. Visualizar tarefas**
+**05. Visualizar tarefas**
 
 | **Campo**        | **Tipo**       | **Restrições**                         | **Valor default** |
 |------------------|---------------|----------------------------------------|-------------------|
@@ -50,7 +93,7 @@ O processo se encerra quando a tarefa é validada ou excluída.
 | Adicionar tarefa   | Criar tarefa       | default  |
 
 
-**03. Visualizar tarefa**
+**06. Visualizar tarefa**
 
 | **Campo**        | **Tipo**         | **Restrições**                        | **Valor default** |
 |------------------|------------------|---------------------------------------|-------------------|
@@ -67,7 +110,7 @@ O processo se encerra quando a tarefa é validada ou excluída.
 | Fechar                | Visualizar tarefas       | cancel   |
 
 
-**04. Executar tarefa**
+**07. Executar tarefa**
 
 | **Campo**        | **Tipo**         | **Restrições**                        | **Valor default** |
 |------------------|------------------|---------------------------------------|-------------------|
@@ -82,7 +125,7 @@ O processo se encerra quando a tarefa é validada ou excluída.
 | Cancelar                 | Visualizar tarefa           | cancel   |
 
 
-**05. Atualizar progresso**
+**08. Atualizar progresso**
 
 | **Campo**  | **Tipo** | **Restrições** | **Valor default** |
 |------------|----------|----------------|-------------------|
@@ -93,14 +136,14 @@ O processo se encerra quando a tarefa é validada ou excluída.
 | Salvar       | Executar tarefa   | default  |
 
 
-**06. Enviar para validação**
+**09. Enviar para validação**
 
 | **Comandos** | **Destino**        | **Tipo** |
 |--------------|-------------------|----------|
 | Confirmar    | Validar tarefas   | default  |
 
 
-**07. Validar tarefas**
+**10. Validar tarefas**
 
 | **Campo**  | **Tipo**         | **Restrições**         | **Valor default** |
 |------------|------------------|------------------------|-------------------|
@@ -113,7 +156,7 @@ O processo se encerra quando a tarefa é validada ou excluída.
 | Solicitar ajustes  | Ajustar tarefa                 | default  |
 
 
-**08. Excluir tarefa**
+**11. Excluir tarefa**
 
 | **Campo**     | **Tipo** | **Restrições** | **Valor default** |
 |---------------|----------|----------------|-------------------|
@@ -122,9 +165,13 @@ O processo se encerra quando a tarefa é validada ou excluída.
 | **Comandos** | **Destino**              | **Tipo** |
 |--------------|--------------------------|----------|
 | Confirmar    | Fim (tarefa excluída)    | default  |
-| Cancelar     | Visualizar tarefa        | cancel   | 
+| Cancelar     | Visualizar tarefa        | cancel   |
 
 **Wireframe**
 
-![Tela Gerenciamento de Tarefas](images/wireframe-processo1.png)
-![Tela Criar Tarefa](images/wireframe-processo1-1.png)
+![Tela de Login](images/wireframe_processo_3-1.png)
+![Tela de Cadastro](images/wireframe_processo_3-2.png)
+![Tela de Acesso ao Sistema de Gerenciamento de Tarefas](images/wireframe_processo_3-3.png)
+![Tela de Edição de Tarefas - Visualização do Líder](images/wireframe_processo_3-4.png)
+![Tela de Validação de Tarefas - Visualização do Líder](images/wireframe_processo_3-6.png)
+![Tela de Visualização de Tarefas - Visualização do Membro](images/wireframe_processo_3-5.png)
