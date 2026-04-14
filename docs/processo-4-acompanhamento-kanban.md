@@ -1,6 +1,6 @@
 ### 3.3.4 Processo 4 – Quadro Kanban
 
-O processo do Quadro Kanban oferece uma visualização visual das tarefas criadas no processo de Gerenciamento de Tarefas (Processo 3), organizando-as em colunas que representam estágios de progresso. O quadro permite o acompanhamento e o andamento das atividades de forma clara.
+O processo do Quadro Kanban oferece uma visualização visual das tarefas criadas organizando-as em colunas que representam estágios de progresso. O quadro permite o acompanhamento e o andamento das atividades de forma clara.
 
 Como oportunidade de melhoria temos a possibilidade de personalização do fluxo de trabalho, com colunas customizáveis que se adaptam à dinâmica de cada grupo. Além disso, o processo centraliza a visualização do progresso do projeto em um único painel, reduzindo a necessidade de comunicação manual sobre o status das tarefas aumentando assim a transparência entre os membros.
 
