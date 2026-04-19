@@ -101,7 +101,6 @@ O processo se encerra quando a tarefa é validada ou excluída.
 
 | **Comandos**          | **Destino**              | **Tipo** |
 |-----------------------|--------------------------|----------|
-| Validar tarefa        | Validar previamente tarefas          | default  |
 | Mover para lixeira    | Excluir tarefa           | default  |
 | Fechar                | Visualizar tarefas       | cancel   |
 
