@@ -34,6 +34,7 @@ O processo se encerra quando a tarefa é validada ou excluída.
 | Entrar       | Visualizar tarefas| default  |
 | Criar conta  | Cadastro          | default  |
 
+![Tela de Login](images/wireframe_processo_3-1.png)
 
 **02. Cadastro**
 
@@ -51,6 +52,7 @@ O processo se encerra quando a tarefa é validada ou excluída.
 | Criar conta  | Visualizar tarefas | default  |
 | Cancelar     | Acessar sistema    | cancel   |
 
+![Tela de Cadastro](images/wireframe_processo_3-2.png)
 
 **03. Visualizar tarefas (acesso ao sistema)**
 
@@ -64,6 +66,7 @@ O processo se encerra quando a tarefa é validada ou excluída.
 | Abrir tarefa       | Visualizar tarefa  | default  |
 | Adicionar tarefa   | Criar tarefa       | default  |
 
+![Tela de Acesso ao Sistema de Gerenciamento de Tarefas](images/wireframe_processo_3-3.png)
 
 **04. Criar tarefa**
 
@@ -71,79 +74,55 @@ O processo se encerra quando a tarefa é validada ou excluída.
 |------------------|------------------|--------------------------------------------------|-------------------|
 | Nome da tarefa   | Caixa de texto   | 3 a 100 caracteres                               |                   |
 | Descrição        | Área de texto    | até 500 caracteres                               |                   |
-| Responsável      | Seleção única    | deve selecionar usuário válido do grupo          |                   |
+| Atribuir membros     | Seleção múltipla | deve selecionar usuários válidos do grupo        |                   |
 | Prazo            | Data             | formato dd-mm-aaaa; data futura                  |                   |
+| Anexos           | Arquivo          | formatos: pdf, jpg, png; máx 5MB                 |                   |
+| Checklist         | Lista de itens (checkbox) | cada item: 10 a 100 caracteres |                |
 
 | **Comandos** | **Destino**          | **Tipo** |
 |--------------|---------------------|----------|
 | Salvar       | Visualizar tarefas  | default  |
 | Cancelar     | Visualizar tarefas  | cancel   |
 
-
-**05. Visualizar tarefas**
-
-| **Campo**        | **Tipo**       | **Restrições**                         | **Valor default** |
-|------------------|---------------|----------------------------------------|-------------------|
-| Lista de tarefas | Tabela        | exibe tarefas do projeto do usuário    |                   |
-| Status           | Seleção única | pendente / em progresso / concluída    | pendente          |
-
-| **Comandos**       | **Destino**         | **Tipo** |
-|--------------------|--------------------|----------|
-| Abrir tarefa       | Visualizar tarefa  | default  |
-| Adicionar tarefa   | Criar tarefa       | default  |
-
-
-**06. Visualizar tarefa**
+**05. Visualizar tarefa / Editar tarefa (Líder de equipe)**
 
 | **Campo**        | **Tipo**         | **Restrições**                        | **Valor default** |
 |------------------|------------------|---------------------------------------|-------------------|
 | Nome da tarefa   | Caixa de texto   | somente leitura                      |                   |
 | Descrição        | Área de texto    | até 500 caracteres                   |                   |
-| Responsável      | Seleção única    | deve existir no grupo                |                   |
+| Anexos           | Arquivo          | formatos: pdf, jpg, png; máx 5MB                 |                   |
+| Atribuir membros     | Seleção múltipla | deve selecionar usuários válidos do grupo        |                   |
 | Status           | Seleção única    | pendente / em progresso / concluída  |                   |
+| Progresso        | Número           | 0 a 100 (%)                          | 0                 |
+| Comentário       | Área de texto    | até 300 caracteres                   |                   |
+| Checklist         | Lista de itens (checkbox) | cada item: 10 a 100 caracteres |                |
 
 | **Comandos**          | **Destino**              | **Tipo** |
 |-----------------------|--------------------------|----------|
-| Executar tarefa       | Executar tarefa          | default  |
-| Validar tarefa        | Validar tarefas          | default  |
+| Validar tarefa        | Validar previamente tarefas          | default  |
 | Mover para lixeira    | Excluir tarefa           | default  |
 | Fechar                | Visualizar tarefas       | cancel   |
 
+![Tela de Edição de Tarefas - Visualização do Líder](images/wireframe_processo_3-4.png)
 
-**07. Executar tarefa**
+**06. Executar tarefa / Enviar para validação**
 
 | **Campo**        | **Tipo**         | **Restrições**                        | **Valor default** |
 |------------------|------------------|---------------------------------------|-------------------|
+| Descrição        | Área de texto    | até 500 caracteres                   |                   |
 | Progresso        | Número           | 0 a 100 (%)                          | 0                 |
 | Comentário       | Área de texto    | até 300 caracteres                   |                   |
 | Anexos           | Arquivo          | formatos: pdf, jpg, png; máx 5MB     |                   |
+| Checklist         | Lista de itens (checkbox) | cada item: 10 a 100 caracteres |                |
 
 | **Comandos**             | **Destino**                 | **Tipo** |
 |--------------------------|-----------------------------|----------|
-| Atualizar progresso      | Atualizar progresso         | default  |
-| Finalizar tarefa         | Enviar para validação       | default  |
-| Cancelar                 | Visualizar tarefa           | cancel   |
+| Enviar para validação         | Enviar para validação       | default  |
+| Fechar                | Visualizar tarefas       | cancel   |
 
+![Tela de Visualização de Tarefas - Visualização do Membro](images/wireframe_processo_3-5.png)
 
-**08. Atualizar progresso**
-
-| **Campo**  | **Tipo** | **Restrições** | **Valor default** |
-|------------|----------|----------------|-------------------|
-| Progresso  | Número   | 0 a 100 (%)    |                   |
-
-| **Comandos** | **Destino**        | **Tipo** |
-|--------------|-------------------|----------|
-| Salvar       | Executar tarefa   | default  |
-
-
-**09. Enviar para validação**
-
-| **Comandos** | **Destino**        | **Tipo** |
-|--------------|-------------------|----------|
-| Confirmar    | Validar tarefas   | default  |
-
-
-**10. Validar tarefas**
+**07. Validar tarefas**
 
 | **Campo**  | **Tipo**         | **Restrições**         | **Valor default** |
 |------------|------------------|------------------------|-------------------|
@@ -152,9 +131,10 @@ O processo se encerra quando a tarefa é validada ou excluída.
 
 | **Comandos**       | **Destino**                     | **Tipo** |
 |--------------------|--------------------------------|----------|
-| Aprovar            | Fim (tarefa validada)          | default  |
+| Validar tarefa     | Fim (tarefa validada)          | default  |
 | Solicitar ajustes  | Ajustar tarefa                 | default  |
 
+![Tela de Validação de Tarefas - Visualização do Líder](images/wireframe_processo_3-6.png)
 
 **11. Excluir tarefa**
 
@@ -169,9 +149,8 @@ O processo se encerra quando a tarefa é validada ou excluída.
 
 **Wireframe**
 
-![Tela de Login](images/wireframe_processo_3-1.png)
-![Tela de Cadastro](images/wireframe_processo_3-2.png)
-![Tela de Acesso ao Sistema de Gerenciamento de Tarefas](images/wireframe_processo_3-3.png)
-![Tela de Edição de Tarefas - Visualização do Líder](images/wireframe_processo_3-4.png)
-![Tela de Validação de Tarefas - Visualização do Líder](images/wireframe_processo_3-6.png)
-![Tela de Visualização de Tarefas - Visualização do Membro](images/wireframe_processo_3-5.png)
+
+
+
+
+
