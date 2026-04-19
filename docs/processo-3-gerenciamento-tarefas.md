@@ -84,6 +84,8 @@ O processo se encerra quando a tarefa é validada ou excluída.
 | Salvar       | Visualizar tarefas  | default  |
 | Cancelar     | Visualizar tarefas  | cancel   |
 
+![Tela de Criar Tarefas](images/wireframe_processo_3-7.png)
+
 **05. Visualizar tarefa / Editar tarefa (Líder de equipe)**
 
 | **Campo**        | **Tipo**         | **Restrições**                        | **Valor default** |
@@ -135,19 +137,6 @@ O processo se encerra quando a tarefa é validada ou excluída.
 | Solicitar ajustes  | Ajustar tarefa                 | default  |
 
 ![Tela de Validação de Tarefas - Visualização do Líder](images/wireframe_processo_3-6.png)
-
-**11. Excluir tarefa**
-
-| **Campo**     | **Tipo** | **Restrições** | **Valor default** |
-|---------------|----------|----------------|-------------------|
-| Confirmação   | Booleano | true / false   | false             |
-
-| **Comandos** | **Destino**              | **Tipo** |
-|--------------|--------------------------|----------|
-| Confirmar    | Fim (tarefa excluída)    | default  |
-| Cancelar     | Visualizar tarefa        | cancel   |
-
-**Wireframe**
 
 
 
