@@ -8,15 +8,12 @@ O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação,
 
 #### Detalhamento das atividades
 
-**01. Criar grupo**
+**01. Criar equipe**
 
-| **Campo**        | **Tipo**         | **Restrições**                          | **Valor default** |
-|------------------|------------------|-----------------------------------------|-------------------|
-| Nome do Grupo    | Caixa de texto   | obrigatório; único                      |                   |
-| Descrição        | Área de texto    | até 500 caracteres                      |                   |
-| Tipo de Grupo    | Seleção única    | permanente / temporário / projeto       | permanente        |
-| Data de Criação  | Data             | automática                              | data atual        |
-| Visibilidade     | Seleção única    | público / privado                       | privado           |
+| **Campo**            | **Tipo**         | **Restrições**                          | **Valor default** |
+|----------------------|------------------|-----------------------------------------|-------------------|
+| Nome da Equipe       | Caixa de texto   | obrigatório; único                      |                   |
+| Projeto Relacionado  | Texto            | somente leitura (conforme contexto)     |                   |
 
 | **Comandos** | **Destino**           | **Tipo** |
 |--------------|----------------------|----------|
@@ -29,118 +26,103 @@ O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação,
 | **Campo**            | **Tipo**         | **Restrições**                    | **Valor default** |
 |----------------------|------------------|----------------------------------|-------------------|
 | E-mail do Membro     | Caixa de texto   | formato válido de e-mail         |                   |
-| Nome do Membro       | Caixa de texto   |                                  |                   |
 | Papel Sugerido       | Seleção única    | membro / líder / observador      | membro            |
-| Mensagem de Convite  | Área de texto    | até 300 caracteres               |                   |
-| Data do Convite      | Data             | automática                       | data atual        |
+| Mensagem de Convite  | Área de texto    | opcional; até 300 caracteres     |                   |
 
-| **Comandos**      | **Destino**                         | **Tipo** |
-|-------------------|-------------------------------------|----------|
-| Enviar convite    | Verificar aprovação necessária      | default  |
-| Adicionar outro   | Convidar membros                   | default  |
-| Pular             | Verificar aprovação necessária      | default  |
-| Cancelar          | Fim do processo                     | cancel   |
+| **Comandos**      | **Destino**              | **Tipo** |
+|-------------------|--------------------------|----------|
+| Enviar convite    | Aceitar convite?         | default  |
+| Voltar            | Visualizar equipe        | cancel   |
 
 
-**03. Verificar aprovação necessária**
+**03. Aceitar convite?**
 
-| **Comandos** | **Destino**                  | **Tipo** |
-|--------------|-----------------------------|----------|
-| Sim          | Aprovar entrada de membro   | default  |
-| Não          | Definir líder/coordenador   | default  |
+| **Campo**   | **Tipo**         | **Restrições**         | **Valor default** |
+|-------------|------------------|------------------------|-------------------|
+| Decisão     | Botão/Seleção    | aceitar ou recusar     |                   |
 
-
-**04. Aprovar entrada de membro**
-
-| **Campo**        | **Tipo**         | **Restrições**            | **Valor default** |
-|------------------|------------------|---------------------------|-------------------|
-| Membro           | Caixa de texto   | obrigatório               |                   |
-| Comentário       | Área de texto    | até 300 caracteres        |                   |
-
-| **Comandos** | **Destino**                     | **Tipo** |
-|--------------|--------------------------------|----------|
-| Aprovar      | Definir líder/coordenador      | default  |
-| Rejeitar     | Convidar membros               | default  |
+| **Comandos** | **Destino**                                      | **Tipo** |
+|--------------|--------------------------------------------------|----------|
+| Confirmar    | Sim: Visualizar equipe / Não: Fim do processo    | default  |
 
 
-**05. Definir líder/coordenador**
+**04. Visualizar equipe**
 
-| **Campo**               | **Tipo**         | **Restrições**                             | **Valor default** |
-|-------------------------|------------------|----------------------------------------------|-------------------|
-| Líder Selecionado       | Seleção única    | deve ser membro do grupo                    |                   |
-| Tipo de Liderança       | Seleção única    | única / compartilhada / rotativa            | única             |
-| Data de Início          | Data             | automática                                  | data atual        |
-| Data de Fim             | Data             | opcional                                    |                   |
-| Permissões Especiais    | Múltipla escolha | aprovar membros, remover membros      |                   |
+| **Campo**           | **Tipo**     | **Restrições**                | **Valor default** |
+|---------------------|--------------|-------------------------------|-------------------|
+| Lista de Membros    | Tabela/Grid  | visualização dos integrantes  |                   |
 
-| **Comandos** | **Destino**                        | **Tipo** |
-|--------------|-----------------------------------|----------|
-| Confirmar    | Criar subgrupos/squads            | default  |
-| Alterar      | Definir líder/coordenador         | default  |
-| Cancelar     | Fim do processo                   | cancel   |
+| **Comandos**        | **Destino**         | **Tipo** |
+|---------------------|--------------------|----------|
+| Adicionar membro    | Convidar membros   | default  |
+| Remover membro      | Remover membro     | default  |
+| Editar equipe       | Editar equipe      | default  |
+| Excluir equipe      | Excluir equipe     | default  |
+| Sair/Fechar         | Fim                | default  |
 
 
-**06. Criar subgrupos/squads**
+**05. Remover membro**
 
-| **Campo**              | **Tipo**         | **Restrições**                  | **Valor default** |
-|------------------------|------------------|---------------------------------|-------------------|
-| Nome do Subgrupo       | Caixa de texto   | obrigatório                     |                   |
-| Descrição              | Área de texto    | até 500 caracteres              |                   |
-| Membros Designados     | Múltipla escolha | devem pertencer ao grupo        |                   |
-| Líder do Subgrupo      | Seleção única    | deve pertencer ao grupo         |                   |
-| Objetivo               | Área de texto    | até 300 caracteres              |                   |
+| **Campo**            | **Tipo**         | **Restrições** | **Valor default** |
+|----------------------|------------------|----------------|-------------------|
+| Membro a Remover     | Seleção única    | obrigatório    |                   |
+| Motivo da Remoção    | Área de texto    | opcional       |                   |
 
-| **Comandos**      | **Destino**         | **Tipo** |
-|-------------------|--------------------|----------|
-| Criar             | Grupo ativo        | default  |
-| Adicionar outro   | Criar subgrupos/squads   | default  |
-| Pular             | Grupo ativo        | default  |
-| Cancelar          | Fim do processo    | cancel   |
+| **Comandos** | **Destino**                                                                 | **Tipo** |
+|--------------|------------------------------------------------------------------------------|----------|
+| Confirmar    | Se restar membros: Visualizar equipe / Se vazio: Excluir equipe             | default  |
+| Cancelar     | Visualizar equipe                                                           | cancel   |
 
 
-**07. Grupo ativo**
+**06. Editar equipe**
+
+| **Campo**            | **Tipo**         | **Restrições**              | **Valor default** |
+|----------------------|------------------|-----------------------------|-------------------|
+| Nome da Equipe       | Caixa de texto   | obrigatório; único          |                   |
+| Projeto Relacionado  | Texto            | somente leitura             |                   |
+
+| **Comandos** | **Destino**        | **Tipo** |
+|--------------|-------------------|----------|
+| Salvar       | Visualizar equipe | default  |
+| Cancelar     | Visualizar equipe | cancel   |
+
+
+**07. Excluir equipe**
+
+| **Campo**            | **Tipo** | **Restrições** | **Valor default** |
+|----------------------|----------|----------------|-------------------|
+| Confirmação          | Texto    | informativo    |                   |
+
+| **Comandos** | **Destino**       | **Tipo** |
+|--------------|------------------|----------|
+| Confirmar    | Fim do processo  | default  |
+| Cancelar     | Visualizar equipe| cancel   |
+
+
+**08. Listar equipes (CRUD)**
+
+| **Campo**        | **Tipo**     | **Restrições**                 | **Valor default** |
+|------------------|--------------|--------------------------------|-------------------|
+| Lista de Equipes | Tabela/Grid  | visualizar todas as equipes    |                   |
+| Filtro           | Caixa texto  | opcional                       |                   |
+
+| **Comandos**        | **Destino**        | **Tipo** |
+|---------------------|-------------------|----------|
+| Nova equipe         | Criar equipe      | default  |
+| Visualizar equipe   | Visualizar equipe | default  |
+| Editar              | Editar equipe     | default  |
+| Excluir             | Excluir equipe    | default  |
+
+
+**09. Excluir grupo (automático)**
 
 | **Campo**        | **Tipo** | **Restrições** | **Valor default** |
 |------------------|----------|----------------|-------------------|
-| -                | -        | -              | -                 |
+| Status Final     | Texto    | informativo    | grupo excluído    |
 
-| **Comandos**           | **Destino**                    | **Tipo** |
-|------------------------|-------------------------------|----------|
-| Remover membro         | Remover membro                | default  |
-| Alterar líder          | Alterar líder/coordenador     | default  |
-| Encerrar grupo         | Fim (grupo encerrado)         | default  |
-
-
-**08. Remover membro**
-
-| **Campo**                    | **Tipo**         | **Restrições**                  | **Valor default** |
-|------------------------------|------------------|---------------------------------|-------------------|
-| Membro a Remover             | Seleção única    | obrigatório                     |                   |
-| Motivo da Remoção            | Área de texto    | até 300 caracteres              |                   |
-| Data da Remoção              | Data             | automática                      | data atual        |
-| Notificar Membro             | Seleção única    | sim / não                       | sim               |
-| Transferir Responsabilidades | Seleção única    | sim / não                       | não               |
-
-| **Comandos** | **Destino**   | **Tipo** |
-|--------------|--------------|----------|
-| Remover      | Grupo ativo  | default  |
-| Cancelar     | Grupo ativo  | cancel   |
-
-
-**09. Alterar líder/coordenador**
-
-| **Campo**            | **Tipo**         | **Restrições**            | **Valor default** |
-|----------------------|------------------|---------------------------|-------------------|
-| Novo Líder           | Seleção única    | obrigatório               |                   |
-| Líder Anterior       | Caixa de texto   | somente leitura           |                   |
-| Data da Transição    | Data             | automática                | data atual        |
-| Motivo da Alteração  | Área de texto    | até 300 caracteres        |                   |
-| Notificar Grupo      | Seleção única    | sim / não                 | sim               |
-
-| **Comandos** | **Destino**   | **Tipo** |
-|--------------|--------------|----------|
-| Confirmar    | Grupo ativo  | default  |
-| Cancelar     | Grupo ativo  | cancel   |
+| **Comandos** | **Destino**       | **Tipo** |
+|--------------|------------------|----------|
+| Finalizar    | Fim              | default  |
 
 #### Wireframes
 
