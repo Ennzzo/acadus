@@ -4,7 +4,7 @@ O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação,
 
 #### Modelo BPMN
 
-![Modelo BPMN do PROCESSO de Gerenciamento de grupos](images/gerenciamento_grupos.png "Modelo BPMN do Processo de Gerenciamento de grupos.")
+![Modelo BPMN do PROCESSO de Gerenciamento de grupos](images/gerenciamento_equipe_bpmn.svg "Modelo BPMN do Processo de Gerenciamento de grupos.")
 
 #### Detalhamento das atividades
 
