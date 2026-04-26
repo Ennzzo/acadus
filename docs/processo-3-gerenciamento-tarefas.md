@@ -54,7 +54,7 @@ O processo se encerra quando a tarefa é validada ou excluída.
 
 ![Tela de Cadastro](images/wireframe_processo_3-2.png)
 
-**03. Visualizar tarefas (acesso ao sistema)**
+**03. Visualizar tarefas**
 
 | **Campo**        | **Tipo**       | **Restrições**                         | **Valor default** |
 |------------------|---------------|----------------------------------------|-------------------|
@@ -68,7 +68,7 @@ O processo se encerra quando a tarefa é validada ou excluída.
 
 ![Tela de Acesso ao Sistema de Gerenciamento de Tarefas](images/wireframe_processo_3-3.png)
 
-**04. Criar tarefa**
+**04. Criar tarefa (Líder de equipe)**
 
 | **Campo**        | **Tipo**         | **Restrições**                                   | **Valor default** |
 |------------------|------------------|--------------------------------------------------|-------------------|
@@ -106,7 +106,7 @@ O processo se encerra quando a tarefa é validada ou excluída.
 
 ![Tela de Edição de Tarefas - Visualização do Líder](images/wireframe_processo_3-4.png)
 
-**06. Executar tarefa / Enviar para validação**
+**06. Executar tarefa / Enviar para validação (Membro de equipe)**
 
 | **Campo**        | **Tipo**         | **Restrições**                        | **Valor default** |
 |------------------|------------------|---------------------------------------|-------------------|
@@ -123,7 +123,7 @@ O processo se encerra quando a tarefa é validada ou excluída.
 
 ![Tela de Visualização de Tarefas - Visualização do Membro](images/wireframe_processo_3-5.png)
 
-**07. Validar tarefas**
+**07. Validar tarefas (Líder de equipe)**
 
 | **Campo**  | **Tipo**         | **Restrições**         | **Valor default** |
 |------------|------------------|------------------------|-------------------|
