@@ -4,7 +4,7 @@ O processo de Chat tem como objetivo centralizar a comunicação entre os membro
 
 #### Modelo BPMN
 
-![Modelo BPMN do Processo de Acompanhamento com Quadro Kanban](images/bpnm_processo_4-1.svg.svg "Modelo BPMN do Processo de Acompanhamento com Quadro Kanban")
+![Modelo BPMN do Processo de Acompanhamento com Quadro Kanban](images/chat_bpmn.svg "Modelo BPMN do Processo de Interação no Chat")
 
 #### Detalhamento das atividades
 
