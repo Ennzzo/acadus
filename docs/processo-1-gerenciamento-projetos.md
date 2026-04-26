@@ -35,6 +35,10 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 | aplicarFiltro | Visualizar projetos | default |
 | limparFiltro | Visualizar projetos | cancel |
 
+**01.1 Wireframe**
+
+![Wireframe Tela de Visualizar Projetos](images/processo_1/Processo_1_VISUALIZAR_PROJETOS.png "Wireframe Tela de Visualizar Projetos")
+
 
 **02. Criar projeto**
 
@@ -49,6 +53,9 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 | salvarProjeto | Visualizar projetos | default |
 | cancelarOperacao | Visualizar projetos | cancel |
 
+**02.1 Wireframe**
+
+![Wireframe Tela de Criar Projeto](images/processo_1/Processo_1_NOVO_PROJETO.png "Wireframe Tela de Criar Projeto")
 
 **03. Editar projeto**
 
@@ -63,6 +70,10 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 | cancelarOperacao | Visualizar projetos | cancel |
 
 
+**03.1 Wireframe**
+
+![Wireframe Tela de Editar Projeto](images/processo_1/Processo_1_EDITAR_PROJETO.png "Wireframe Tela de Editar Projeto")
+
 **04. Excluir projeto**
 
 | **Campo** | **Tipo** | **Restrições** | **Valor default** |
@@ -74,6 +85,9 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 | confirmarExclusao | Visualizar projetos | default |
 | cancelarOperacao | Visualizar projetos | cancel |
 
+**04.1 Wireframe**
+
+![Wireframe Tela de Excluir Projeto](images/processo_1/Processo_1_EXCLUIR_PROJETO.png "Wireframe Tela de Excluir Projeto")
 
 **05. Acessar projeto**
 
