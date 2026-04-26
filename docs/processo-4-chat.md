@@ -110,7 +110,7 @@ O processo de Chat tem como objetivo centralizar a comunicação entre os membro
 
 | **Comandos** | **Destino** | **Tipo** |
 |--------------|-------------|----------|
-| Confirmar    | Fim         | default  |
+| Confirmar    | Visualizar Projetos        | default  |
 
 **Wireframe**
 
