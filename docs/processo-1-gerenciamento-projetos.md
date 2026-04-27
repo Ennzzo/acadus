@@ -98,3 +98,8 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 | **Comandos** | **Destino** | **Tipo** |
 | --- | --- | --- |
 | abrirProjeto | Detalhes do projeto | default |
+
+
+**05.1 Wireframe**
+
+![Wireframe Tela de Acessar Projeto](images/processo_1/Processo_1_VISUALIZAR_PROJETO.png "Wireframe Tela de Acessar Projeto")
