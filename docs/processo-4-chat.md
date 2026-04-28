@@ -23,7 +23,7 @@ O processo de Chat tem como objetivo centralizar a comunicação entre os membro
 
 **01.1 Wireframe**
 
-![Wireframe Tela de Acessar Chat](images/processo_4/PROCESSO_2_VISUALIZAR_PROJETO_PARA_ACESSAR_CHAT.png "Wireframe Tela de Acessar Chat")
+![Wireframe Tela de Acessar Chat](images/processo_4/PROCESSO_4_VISUALIZAR_PROJETO_PARA_ACESSAR_CHAT.png "Wireframe Tela de Acessar Chat")
 
 **01.2 Wireframe**
 
