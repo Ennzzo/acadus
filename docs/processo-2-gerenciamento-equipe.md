@@ -1,10 +1,10 @@
-### 3.3.2 Processo 2 – Gestão de Grupos / Times
+### 3.3.2 Processo 2 – Gerenciamento de Equipe
 
 O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação, organização e manutenção de grupos de trabalho, permitindo a definição de líderes, convite de membros, aprovação de entradas, remoção de membros e estruturação de subgrupos ou squads. Oportunidades de melhoria incluem reduzir o tempo de formação de times, aumentar a transparência na composição dos grupos e garantir a governança adequada sobre as equipes.
 
 #### Modelo BPMN
 
-![Modelo BPMN do PROCESSO de Gerenciamento de grupos](images/gerenciamento_equipe_bpmn.svg "Modelo BPMN do Processo de Gerenciamento de grupos.")
+![Modelo BPMN do Processo de Gerenciamento de Equipe](images/gerenciamento_equipe_bpmn.svg)
 
 #### Detalhamento das atividades
 
@@ -81,7 +81,7 @@ O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação,
 | Confirmar    | Se restar membros: Visualizar equipe / Se vazio: Excluir equipe             | default  |
 | Cancelar     | Visualizar equipe                                                           | cancel   |
 
-![Wireframe Tela de Remover Membro](images/processo_2/PROCESSO_2_CONFIRMAR_REMOCAO_MEMBRO.) 
+![Wireframe Tela de Remover Membro](images/processo_2/PROCESSO_2_CONFIRMAR_REMOCAO_MEMBRO.png) 
 
 **06. Editar equipe**
 

@@ -14,7 +14,7 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 
 #### Modelo BPMN
 
-![Modelo BPMN do Processo de Gerenciamento de Projetos](images/gerenciamento_projetos.svg "Modelo BPMN do Processo de Gerenciamento de Projetos")
+![Modelo BPMN do Processo de Gerenciamento de Projetos](images/gerenciamento_projetos.svg)
 
 #### Detalhamento das atividades
 

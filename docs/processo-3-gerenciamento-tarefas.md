@@ -18,7 +18,7 @@ O processo se encerra quando a tarefa é validada ou excluída.
 
 #### Modelo BPMN
 
-![Modelo BPMN do Processo de Gerenciamento de Tarefas](images/gerenciamento_tarefas.png "Modelo BPMN do Processo de Gerenciamento de Tarefas")
+![Modelo BPMN do Processo de Gerenciamento de Tarefas](images/gerenciamento_tarefas.png)
 
 #### Detalhamento das atividades
 
