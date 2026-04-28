@@ -69,7 +69,7 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 
 **01.1 Wireframe**
 
-![Wireframe Tela de Visualizar Projetos](images/processo_1/PROCESSO_1_VISUALIZAR_PROJETOS.png "Wireframe Tela de Visualizar Projetos")
+![Wireframe Tela de Visualizar Projetos](images/processo_1/PROCESSO_1_VISUALIZAR_PROJETOS.png)
 
 
 **02. Criar projeto**
@@ -87,7 +87,7 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 
 **02.1 Wireframe**
 
-![Wireframe Tela de Criar Projeto](images/processo_1/PROCESSO_1_NOVO_PROJETO.png "Wireframe Tela de Criar Projeto")
+![Wireframe Tela de Criar Projeto](images/processo_1/PROCESSO_1_NOVO_PROJETO.png)
 
 **03. Editar projeto**
 
@@ -104,7 +104,7 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 
 **03.1 Wireframe**
 
-![Wireframe Tela de Editar Projeto](images/processo_1/PROCESSO_1_EDITAR_PROJETO.png "Wireframe Tela de Editar Projeto")
+![Wireframe Tela de Editar Projeto](images/processo_1/PROCESSO_1_EDITAR_PROJETO.png)
 
 **04. Excluir projeto**
 
@@ -119,7 +119,7 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 
 **04.1 Wireframe**
 
-![Wireframe Tela de Excluir Projeto](images/processo_1/PROCESSO_1_EXCLUIR_PROJETO.png "Wireframe Tela de Excluir Projeto")
+![Wireframe Tela de Excluir Projeto](images/processo_1/PROCESSO_1_EXCLUIR_PROJETO.png)
 
 **05. Acessar projeto**
 
@@ -134,4 +134,4 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 
 **05.1 Wireframe**
 
-![Wireframe Tela de Acessar Projeto](images/processo_1/PROCESSO_1_VISUALIZAR_PROJETO.png "Wireframe Tela de Acessar Projeto")
+![Wireframe Tela de Acessar Projeto](images/processo_1/PROCESSO_1_VISUALIZAR_PROJETO.png)

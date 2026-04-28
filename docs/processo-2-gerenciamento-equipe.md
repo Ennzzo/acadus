@@ -58,7 +58,7 @@ O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação,
 
 
 **03.1 Wireframe**
-![Wireframe Tela de Aceitar Convite](images/processo_2/PROCESSO_2_MODAL_CONVITE_MEMBRO.png "Wireframe Tela de Aceitar Convite")  
+![Wireframe Tela de Aceitar Convite](images/processo_2/PROCESSO_2_MODAL_CONVITE_MEMBRO.png)  
 
 
 **04. Visualizar equipe**
@@ -76,7 +76,7 @@ O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação,
 | Sair/Fechar         | Fim                | default  |
 
 **04.1 Wireframe**
-![Wireframe Tela de Visualizar Equipe](images/processo_2/PROCESSO_2_VISUALIZAR_MEMBROS.png "Wireframe Tela de Visualizar Equipe")
+![Wireframe Tela de Visualizar Equipe](images/processo_2/PROCESSO_2_VISUALIZAR_MEMBROS.png)
 
 **05. Remover membro**
 
@@ -91,7 +91,7 @@ O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação,
 | Cancelar     | Visualizar equipe                                                           | cancel   |
 
 **05.1 Wireframe**
-![Wireframe Tela de Remover Membro](images/processo_2/PROCESSO_2_CONFIRMAR_REMOCAO_MEMBRO.png "Wireframe Tela de Remover Membro") 
+![Wireframe Tela de Remover Membro](images/processo_2/PROCESSO_2_CONFIRMAR_REMOCAO_MEMBRO.) 
 
 
 **06. Editar equipe**
@@ -107,7 +107,7 @@ O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação,
 | Cancelar     | Visualizar equipe | cancel   |
 
 **06.1 Wireframe**
-![Wireframe Tela de Remover Membro](images/processo_2/PROCESSO_2_EDITAR_EQUIPE.png "Wireframe Tela de Remover Membro") 
+![Wireframe Tela de Remover Membro](images/processo_2/PROCESSO_2_EDITAR_EQUIPE.png) 
 
 
 **07. Excluir equipe**
@@ -122,7 +122,7 @@ O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação,
 | Cancelar     | Visualizar equipe| cancel   |
 
 **07.1 Wireframe**
-![Wireframe Tela de Remover Membro](images/processo_2/PROCESSO_2_CONFIRMAR_EXCLUIR_EQUIPE.png "Wireframe Tela de Remover Membro") 
+![Wireframe Tela de Remover Membro](images/processo_2/PROCESSO_2_CONFIRMAR_EXCLUIR_EQUIPE.png) 
 
 
 **08. Excluir grupo (automático)**

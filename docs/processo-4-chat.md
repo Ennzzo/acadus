@@ -23,11 +23,11 @@ O processo de Chat tem como objetivo centralizar a comunicação entre os membro
 
 **01.1 Wireframe**
 
-![Wireframe Tela de Acessar Chat](images/processo_4/PROCESSO_4_VISUALIZAR_PROJETO_PARA_ACESSAR_CHAT.png "Wireframe Tela de Acessar Chat")
+![Wireframe Tela de Acessar Chat](images/processo_4/PROCESSO_4_VISUALIZAR_PROJETO_PARA_ACESSAR_CHAT.png)
 
 **01.2 Wireframe**
 
-![Wireframe Tela de Modal Tipo Chat](images/processo_4/PROCESSO_4_MODAL_TIPO_CHAT.png "Wireframe Tela de Modal Tipo Chat")
+![Wireframe Tela de Modal Tipo Chat](images/processo_4/PROCESSO_4_MODAL_TIPO_CHAT.png)
 
 **02. Visualizar chat**
 
@@ -46,7 +46,7 @@ O processo de Chat tem como objetivo centralizar a comunicação entre os membro
 
 **02.1 Wireframe**
 
-![Wireframe Tela de Visualizar Chat](images/processo_4/PROCESSO_4_VISUALIZAR_CHAT.png "Wireframe Tela de Visualizar Chat")
+![Wireframe Tela de Visualizar Chat](images/processo_4/PROCESSO_4_VISUALIZAR_CHAT.png)
 
 
 **03. Enviar mensagem**
@@ -63,7 +63,7 @@ O processo de Chat tem como objetivo centralizar a comunicação entre os membro
 
 **03.1 Wireframe**
 
-![Wireframe Tela de Enviar Mensagem](images/processo_4/PROCESSO_4_VISUALIZAR_CHAT.png "Wireframe Tela de Enviar Mensagem")
+![Wireframe Tela de Enviar Mensagem](images/processo_4/PROCESSO_4_VISUALIZAR_CHAT.png)
 
 **04. Bloquear membro**
 
@@ -80,12 +80,12 @@ O processo de Chat tem como objetivo centralizar a comunicação entre os membro
 
 **04.1 Wireframe**
 
-![Wireframe Tela de Editar Membro](images/processo_4/PROCESSO_4_EDITAR_MEMBRO.png "Wireframe Tela de Editar Membro")
+![Wireframe Tela de Editar Membro](images/processo_4/PROCESSO_4_EDITAR_MEMBRO.png)
 
 
 **04.2 Wireframe**
 
-![Wireframe Tela de Bloquear Membro](images/processo_4/PROCESSO_4_BLOQUEAR_MEMBRO.png "Wireframe Tela de Bloquear Membro")
+![Wireframe Tela de Bloquear Membro](images/processo_4/PROCESSO_4_BLOQUEAR_MEMBRO.png)
 
 
 **05. Desbloquear membro**
