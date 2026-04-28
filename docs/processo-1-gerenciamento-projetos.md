@@ -50,7 +50,7 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 
 ![Tela de Cadastro](images/processo_1/PROCESSO_1_CADASTRO.png)
 
-**01. Visualizar projetos**
+**03. Visualizar projetos**
 
 | **Campo** | **Tipo** | **Restrições** | **Valor default** |
 | --- | --- | --- | --- |
@@ -67,12 +67,9 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 | aplicarFiltro | Visualizar projetos | default |
 | limparFiltro | Visualizar projetos | cancel |
 
-**01.1 Wireframe**
-
 ![Wireframe Tela de Visualizar Projetos](images/processo_1/PROCESSO_1_VISUALIZAR_PROJETOS.png)
 
-
-**02. Criar projeto**
+**04. Criar projeto**
 
 | **Campo** | **Tipo** | **Restrições** | **Valor default** |
 | --- | --- | --- | --- |
@@ -83,13 +80,11 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 | **Comandos** | **Destino** | **Tipo** |
 | --- | --- | --- |
 | salvarProjeto | Visualizar projetos | default |
-| cancelarOperacao | Visualizar projetos | cancel |
-
-**02.1 Wireframe**
+| cancelarOperacao | Visualizar projetos | cancel 
 
 ![Wireframe Tela de Criar Projeto](images/processo_1/PROCESSO_1_NOVO_PROJETO.png)
 
-**03. Editar projeto**
+**05. Editar projeto**
 
 | **Campo** | **Tipo** | **Restrições** | **Valor default** |
 | --- | --- | --- | --- |
@@ -101,12 +96,9 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 | salvarAlteracoes | Visualizar projetos | default |
 | cancelarOperacao | Visualizar projetos | cancel |
 
-
-**03.1 Wireframe**
-
 ![Wireframe Tela de Editar Projeto](images/processo_1/PROCESSO_1_EDITAR_PROJETO.png)
 
-**04. Excluir projeto**
+**06. Excluir projeto**
 
 | **Campo** | **Tipo** | **Restrições** | **Valor default** |
 | --- | --- | --- | --- |
@@ -117,11 +109,9 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 | confirmarExclusao | Visualizar projetos | default |
 | cancelarOperacao | Visualizar projetos | cancel |
 
-**04.1 Wireframe**
-
 ![Wireframe Tela de Excluir Projeto](images/processo_1/PROCESSO_1_EXCLUIR_PROJETO.png)
 
-**05. Acessar projeto**
+**07. Acessar projeto**
 
 | **Campo** | **Tipo** | **Restrições** | **Valor default** |
 | --- | --- | --- | --- |
@@ -130,8 +120,5 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 | **Comandos** | **Destino** | **Tipo** |
 | --- | --- | --- |
 | abrirProjeto | Detalhes do projeto | default |
-
-
-**05.1 Wireframe**
 
 ![Wireframe Tela de Acessar Projeto](images/processo_1/PROCESSO_1_VISUALIZAR_PROJETO.png)
