@@ -55,3 +55,33 @@ O processo de Chat tem como objetivo centralizar a comunicação entre os membro
 | Cancelar     | Visualizar chat    | cancel   |
 
 ![Wireframe Tela de Enviar Mensagem](images/processo_4/PROCESSO_4_VISUALIZAR_CHAT.png)
+**04. Bloquear membro**
+
+| **Campo**            | **Tipo**         | **Restrições**                  | **Valor default** |
+|----------------------|------------------|---------------------------------|-------------------|
+| Membro               | Seleção única    | obrigatório                     |                   |
+| Motivo               | Área de texto    | opcional                        |                   |
+| Tempo de bloqueio    | Seleção única    | temporário / permanente         | temporário        |
+
+| **Comandos** | **Destino**      | **Tipo** |
+|--------------|-----------------|----------|
+| Confirmar    | Atualizar chat  | default  |
+| Cancelar     | Visualizar chat | cancel   |
+
+![Wireframe Tela de Editar Membro](images/processo_4/PROCESSO_4_EDITAR_MEMBRO.png)
+
+![Wireframe Tela de Bloquear Membro](images/processo_4/PROCESSO_4_BLOQUEAR_MEMBRO.png)
+
+**05. Desbloquear membro**
+
+| **Campo**        | **Tipo**         | **Restrições** | **Valor default** |
+|------------------|------------------|----------------|-------------------|
+| Membro           | Seleção única    | obrigatório    |                   |
+
+| **Comandos** | **Destino**      | **Tipo** |
+|--------------|-----------------|----------|
+| Confirmar    | Atualizar chat  | default  |
+| Cancelar     | Visualizar chat | cancel   |
+
+![Wireframe Tela de Desbloquear Membro](images/processo_4/PROCESSO_4_DESBLOQUEAR_MEMBRO.png)
+
