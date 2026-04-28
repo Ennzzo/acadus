@@ -18,6 +18,38 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 
 #### Detalhamento das atividades
 
+**01. Acessar sistema**
+
+| **Campo**              | **Tipo**         | **Restrições**                          | **Valor default** |
+|------------------------|------------------|------------------------------------------|-------------------|
+| E-mail/Usuário        | Caixa de texto   | obrigatório; formato válido              |                   |
+| Senha                 | Caixa de texto   | obrigatório                              |                   |
+
+| **Comandos** | **Destino**        | **Tipo** |
+|--------------|-------------------|----------|
+| entrar       | Visualizar projetos| default  |
+| criarConta   | Cadastro          | default  |
+
+![Tela de Login](images/processo_1/PROCESSO_1_LOGIN.png)
+
+**02. Cadastro**
+
+| **Campo**              | **Tipo**         | **Restrições**                          | **Valor default** |
+|------------------------|------------------|------------------------------------------|-------------------|
+| Nome                  | Caixa de texto   | obrigatório                              |                   |
+| Sobrenome             | Caixa de texto   | obrigatório                              |                   |
+| E-mail                | Caixa de texto   | obrigatório; formato válido              |                   |
+| Senha                 | Caixa de texto   | mínimo 6 caracteres                      |                   |
+| Confirmar senha       | Caixa de texto   | deve ser igual à senha                   |                   |
+| Aceitar termos        | Booleano         | obrigatório (true)                       | false             |
+
+| **Comandos** | **Destino**         | **Tipo** |
+|--------------|--------------------|----------|
+| criarConta  | Visualizar projetos | default  |
+| cancelarOperacao     | Acessar sistema    | cancel   |
+
+![Tela de Cadastro](images/processo_1/PROCESSO_1_CADASTRO.png)
+
 **01. Visualizar projetos**
 
 | **Campo** | **Tipo** | **Restrições** | **Valor default** |

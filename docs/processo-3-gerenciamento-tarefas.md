@@ -34,7 +34,7 @@ O processo se encerra quando a tarefa é validada ou excluída.
 | Entrar       | Visualizar tarefas| default  |
 | Criar conta  | Cadastro          | default  |
 
-![Tela de Login](images/wireframe_processo_3-1.png)
+![Tela de Login](images/processo_3/PROCESSO_3_LOGIN.png)
 
 **02. Cadastro**
 
@@ -52,7 +52,7 @@ O processo se encerra quando a tarefa é validada ou excluída.
 | Criar conta  | Visualizar tarefas | default  |
 | Cancelar     | Acessar sistema    | cancel   |
 
-![Tela de Cadastro](images/wireframe_processo_3-2.png)
+![Tela de Cadastro](images/processo_3/PROCESSO_3_CADASTRO.png)
 
 **03. Visualizar tarefas**
 
@@ -66,7 +66,7 @@ O processo se encerra quando a tarefa é validada ou excluída.
 | Abrir tarefa       | Visualizar tarefa  | default  |
 | Adicionar tarefa   | Criar tarefa       | default  |
 
-![Tela de Acesso ao Sistema de Gerenciamento de Tarefas](images/wireframe_processo_3-3.png)
+![Tela de Acesso ao Sistema de Gerenciamento de Tarefas](images/processo_3/PROCESSO_3_VISUALIZAR_TAREFAS.png)
 
 **04. Criar tarefa (Líder de equipe)**
 
@@ -84,7 +84,7 @@ O processo se encerra quando a tarefa é validada ou excluída.
 | Salvar       | Visualizar tarefas  | default  |
 | Cancelar     | Visualizar tarefas  | cancel   |
 
-![Tela de Criar Tarefas](images/wireframe_processo_3-7.png)
+![Tela de Criar Tarefas](images/processo_3/PROCESSO_3_CRIAR_TAREFA.png)
 
 **05. Visualizar tarefa / Editar tarefa (Líder de equipe)**
 
@@ -104,7 +104,7 @@ O processo se encerra quando a tarefa é validada ou excluída.
 | Mover para lixeira    | Excluir tarefa           | default  |
 | Fechar                | Visualizar tarefas       | cancel   |
 
-![Tela de Edição de Tarefas - Visualização do Líder](images/wireframe_processo_3-4.png)
+![Tela de Edição de Tarefas - Visualização do Líder](images/processo_3/PROCESSO_3_EDITAR_TAREFA.png)
 
 **06. Executar tarefa / Enviar para validação (Membro de equipe)**
 
@@ -121,7 +121,7 @@ O processo se encerra quando a tarefa é validada ou excluída.
 | Enviar para validação         | Enviar para validação       | default  |
 | Fechar                | Visualizar tarefas       | cancel   |
 
-![Tela de Visualização de Tarefas - Visualização do Membro](images/wireframe_processo_3-5.png)
+![Tela de Visualização de Tarefas - Visualização do Membro](images/processo_3/PROCESSO_3_ENVIAR_VALIDACAO.png)
 
 **07. Validar tarefas (Líder de equipe)**
 
@@ -135,7 +135,7 @@ O processo se encerra quando a tarefa é validada ou excluída.
 | Validar tarefa     | Fim (tarefa validada)          | default  |
 | Solicitar ajustes  | Ajustar tarefa                 | default  |
 
-![Tela de Validação de Tarefas - Visualização do Líder](images/wireframe_processo_3-6.png)
+![Tela de Validação de Tarefas - Visualização do Líder](images/processo_3/PROCESSO_3_VALIDAR_TAREFA.png)
 
 
 
