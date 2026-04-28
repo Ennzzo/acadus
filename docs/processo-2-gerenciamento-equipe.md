@@ -20,10 +20,8 @@ O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação,
 | Criar        | Convidar membros     | default  |
 | Cancelar     | Fim do processo      | cancel   |
 
-**01.1 Wireframe**
-
-![Wireframe Tela de Criar Equipe](images/processo_2/PROCESSO_2_CRIAR_EQUIPE.png "Wireframe Tela de Criar Equipe")
-![Wireframe Tela de Visualizar Projeto Editar Equipe](images/processo_2/PROCESSO_2_VISUALIZAR_PROJETO_EDITAR_EQUIPE.png "Wireframe Tela de Visualizar Projeto Editar Equipe")
+![Wireframe Tela de Criar Equipe](images/processo_2/PROCESSO_2_CRIAR_EQUIPE.png)
+![Wireframe Tela de Visualizar Projeto Editar Equipe](images/processo_2/PROCESSO_2_VISUALIZAR_PROJETO_EDITAR_EQUIPE.png)
 
 
 **02. Convidar membros**
@@ -39,11 +37,9 @@ O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação,
 | Enviar convite    | Aceitar convite?         | default  |
 | Voltar            | Visualizar equipe        | cancel   |
 
-**02.1 Wireframe**
-![Wireframe Tela de Visualizar para Convidar Membros](images/processo_2/PROCESSO_2_VISUALIZAR_MEMBROS.png "Wireframe Tela de Visualizar para Convidar Membros")
+![Wireframe Tela de Visualizar para Convidar Membros](images/processo_2/PROCESSO_2_VISUALIZAR_MEMBROS.png)
 
-**02.2 Wireframe**
-![Wireframe Tela de Convidar Membros](images/processo_2/PROCESSO_2_CONVIDAR_MEMBRO.png "Wireframe Tela de Convidar Membros")
+![Wireframe Tela de Convidar Membros](images/processo_2/PROCESSO_2_CONVIDAR_MEMBRO.png)
 
 **03. Aceitar convite?**
 
@@ -55,11 +51,7 @@ O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação,
 |--------------|--------------------------------------------------|----------|
 | Confirmar    | Sim: Visualizar equipe / Não: Fim do processo    | default  |
 
-
-
-**03.1 Wireframe**
 ![Wireframe Tela de Aceitar Convite](images/processo_2/PROCESSO_2_MODAL_CONVITE_MEMBRO.png)  
-
 
 **04. Visualizar equipe**
 
@@ -75,7 +67,6 @@ O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação,
 | Excluir equipe      | Excluir equipe     | default  |
 | Sair/Fechar         | Fim                | default  |
 
-**04.1 Wireframe**
 ![Wireframe Tela de Visualizar Equipe](images/processo_2/PROCESSO_2_VISUALIZAR_MEMBROS.png)
 
 **05. Remover membro**
@@ -90,9 +81,7 @@ O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação,
 | Confirmar    | Se restar membros: Visualizar equipe / Se vazio: Excluir equipe             | default  |
 | Cancelar     | Visualizar equipe                                                           | cancel   |
 
-**05.1 Wireframe**
 ![Wireframe Tela de Remover Membro](images/processo_2/PROCESSO_2_CONFIRMAR_REMOCAO_MEMBRO.) 
-
 
 **06. Editar equipe**
 
@@ -106,9 +95,7 @@ O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação,
 | Salvar       | Visualizar equipe | default  |
 | Cancelar     | Visualizar equipe | cancel   |
 
-**06.1 Wireframe**
 ![Wireframe Tela de Remover Membro](images/processo_2/PROCESSO_2_EDITAR_EQUIPE.png) 
-
 
 **07. Excluir equipe**
 
@@ -121,9 +108,7 @@ O processo de Gestão de Grupos / Times tem como objetivo facilitar a criação,
 | Confirmar    | Fim do processo  | default  |
 | Cancelar     | Visualizar equipe| cancel   |
 
-**07.1 Wireframe**
 ![Wireframe Tela de Remover Membro](images/processo_2/PROCESSO_2_CONFIRMAR_EXCLUIR_EQUIPE.png) 
-
 
 **08. Excluir grupo (automático)**
 

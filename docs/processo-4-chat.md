@@ -44,10 +44,7 @@ O processo de Chat tem como objetivo centralizar a comunicação entre os membro
 | Desbloquear membro  | Desbloquear membro | default  |
 | Sair                | Fim                | default  |
 
-**02.1 Wireframe**
-
 ![Wireframe Tela de Visualizar Chat](images/processo_4/PROCESSO_4_VISUALIZAR_CHAT.png)
-
 
 **03. Enviar mensagem**
 
@@ -60,8 +57,6 @@ O processo de Chat tem como objetivo centralizar a comunicação entre os membro
 |--------------|--------------------|----------|
 | Enviar       | Atualizar chat     | default  |
 | Cancelar     | Visualizar chat    | cancel   |
-
-**03.1 Wireframe**
 
 ![Wireframe Tela de Enviar Mensagem](images/processo_4/PROCESSO_4_VISUALIZAR_CHAT.png)
 
@@ -78,15 +73,9 @@ O processo de Chat tem como objetivo centralizar a comunicação entre os membro
 | Confirmar    | Atualizar chat  | default  |
 | Cancelar     | Visualizar chat | cancel   |
 
-**04.1 Wireframe**
-
 ![Wireframe Tela de Editar Membro](images/processo_4/PROCESSO_4_EDITAR_MEMBRO.png)
 
-
-**04.2 Wireframe**
-
 ![Wireframe Tela de Bloquear Membro](images/processo_4/PROCESSO_4_BLOQUEAR_MEMBRO.png)
-
 
 **05. Desbloquear membro**
 
@@ -99,10 +88,7 @@ O processo de Chat tem como objetivo centralizar a comunicação entre os membro
 | Confirmar    | Atualizar chat  | default  |
 | Cancelar     | Visualizar chat | cancel   |
 
-
-**05.1 Wireframe**
-
-![Wireframe Tela de Desbloquear Membro](images/processo_4/PROCESSO_4_DESBLOQUEAR_MEMBRO.png "Wireframe Tela de Desbloquear Membro")
+![Wireframe Tela de Desbloquear Membro](images/processo_4/PROCESSO_4_DESBLOQUEAR_MEMBRO.png)
 
 
 
