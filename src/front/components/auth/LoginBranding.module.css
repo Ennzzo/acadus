@@ -1,0 +1,119 @@
+.panel {
+  flex: 1;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3rem 2.5rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+/* ── Text ──────────────────────────────────────── */
+.text {}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.15;
+  margin-bottom: 0.75rem;
+}
+
+.subtitle {
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* ── Illustration ──────────────────────────────── */
+.illustration {
+  position: relative;
+  height: 13rem;
+}
+
+/* Document card */
+.docCard {
+  position: absolute;
+  right: 1rem;
+  top: 0;
+  width: 10rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 0.75rem;
+  padding: 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.docLine {
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: #e5e7eb;
+}
+
+.docLineShort {
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: #e5e7eb;
+  width: 60%;
+}
+
+/* Magnifying glass */
+.lupa {
+  position: absolute;
+  left: 2.5rem;
+  top: 3.5rem;
+}
+
+.lupaCircle {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid #1e1b4b;
+  border-radius: 9999px;
+}
+
+.lupaHandle {
+  width: 1rem;
+  height: 3px;
+  background: #1e1b4b;
+  border-radius: 9999px;
+  transform: rotate(45deg) translateX(1.25rem) translateY(-0.6rem);
+}
+
+/* Avatar */
+.avatar {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.avatarHead {
+  width: 1.5rem;
+  height: 1.5rem;
+  background: #1e1b4b;
+  border-radius: 9999px;
+}
+
+.avatarBody {
+  width: 0;
+  height: 0;
+  border-left: 1.25rem solid transparent;
+  border-right: 1.25rem solid transparent;
+  border-top: 2.5rem solid #1e1b4b;
+  border-radius: 0.25rem;
+}
+
+/* Phone icon */
+.phone {
+  position: absolute;
+  left: 0.5rem;
+  bottom: 0.5rem;
+  font-size: 1.5rem;
+  opacity: 0.8;
+}
