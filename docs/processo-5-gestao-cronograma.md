@@ -72,15 +72,18 @@ Como oportunidade de melhoria, destaca-se a centralização das informações te
 
 ![Wireframe](images/CALENDARIO-2.png)
 
-## 04. Excluir evento (modal de confirmação)
+## 04. Detalhes do evento (modal somente leitura)
 
-| Campo / Elemento     | Tipo          | Restrições                                           | Valor default          |
-| -------------------- | ------------- | ---------------------------------------------------- | ---------------------- |
-| Mensagem de confirmação | Texto     | somente leitura; "Deseja realmente excluir o evento [nome do evento]?" | baseado no evento selecionado |
+| Campo / Elemento    | Tipo           | Restrições                                           | Valor default          |
+| ------------------- | -------------- | ---------------------------------------------------- | ---------------------- |
+| Nome do Evento      | Texto          | somente leitura                                     | nome do evento         |
+| Data                | Texto          | somente leitura                                     | data do evento         |
+| Responsável         | Texto          | somente leitura; exibe nome do membro responsável   | responsável definido (ou "Não definido") |
+| Descrição           | Texto (área)   | somente leitura; exibição com quebra de linha       | descrição do evento (ou vazio) |
 
 | Comando             | Destino                  | Tipo                   |
 | ------------------- | ------------------------ | ---------------------- |
-| Sim, excluir        | Remover evento e atualizar calendário | perigo (destacado) |
-| Não / Cancelar      | Fechar modal sem excluir | cancel                 |
+| Editar evento       | Abrir modal **Editar evento** (pré‑carregado) | default |
+| Fechar / X         | Voltar ao calendário     | cancel                 |
 
 ![Wireframe](images/CALENDARIO-4.png)
