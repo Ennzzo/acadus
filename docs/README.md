@@ -104,6 +104,8 @@ A proposta consiste no desenvolvimento de uma aplicação web que centralize as 
 
 [PROCESSO 4 - Chat](processo-4-chat.md)
 
+[PROCESSO 5 - Gestão de Cronograma e Prazos](processo-5-gestao-cronograma.md)
+
 ## 4. Projeto da solução
 
 [Projeto da solução](solution-design.md)

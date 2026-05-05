@@ -1,6 +1,6 @@
 ### 3.3.1 Processo 1 – Gerenciamento de Projetos
 
-O gerenciamento de projetos tem como objetivo permitir a criação, edição, exclusão e acesso aos projetos acadêmicos pelos usuários do sistema, de acordo com seus respectivos papéis (líder ou membro).
+O processo de Gerenciamento de Projetos tem como objetivo permitir a criação, edição, exclusão e acesso aos projetos acadêmicos pelos usuários do sistema, de acordo com seus respectivos papéis (líder ou membro).
 
 Esse fluxo tem início com o acesso do usuário ao sistema, sendo necessário realizar o login ou, caso ainda não possua cadastro, efetuar o cadastro informando os dados solicitados. Após a autenticação, o usuário é direcionado para a tela de visualização de projetos, na qual são exibidos todos os projetos aos quais está vinculado.
 
