@@ -12,12 +12,75 @@ Como oportunidade de melhoria, destaca-se a centralização das informações te
 
 #### Modelo BPMN
 
-![Modelo BPMN do Processo de Gestão de Cronograma e Prazos](images/gestao_cronograma.svg)
+![Modelo BPMN do Processo de Gestão de Cronograma e Prazos](images/gestao_cronograma.png)
 
 #### Detalhamento das atividades
 
 **01. Atividade 1**
+## 01. Visualizar eventos no calendário (grade principal)
 
+| Campo / Elemento          | Tipo          | Restrições                                           | Valor default          |
+| ------------------------- | ------------- | ---------------------------------------------------- | ---------------------- |
+| Mês/Ano                   | Texto         | somente leitura; alterado via navegação             | mês atual              |
+| Grade do calendário       | Visual (grid) | exibe dias do mês + dias adjacentes (cinza)         |                        |
+| Dias da semana            | Texto         | fixo (Domingo a Sábado)                             |                        |
+| Eventos (dentro do dia)   | Tag/Label     | exibidos com nome do evento                         |                        |
+| Equipe (menu lateral)     | Lista         | exibe equipes disponíveis                           |                        |
 
+| Comando                   | Destino                  | Tipo                   |
+| ------------------------- | ------------------------ | ---------------------- |
+| < (mês anterior)          | Atualizar calendário     | default                |
+| > (próximo mês)           | Atualizar calendário     | default                |
+| Clique em um evento       | Abrir modal edição/visualização | default          |
+| Clique em um dia vazio    | Abrir modal criar evento | default                |
+| Selecionar dia (área do dia) | Exibir eventos do dia em lista (opcional) | default |
 
-![Wireframe](images/processo_5/wireframe-1.png)
+![Wireframe](images/CALENDARIO.png)
+
+## 02. Criar evento (modal ou página)
+
+| Campo               | Tipo           | Restrições                                           | Valor default          |
+| ------------------- | -------------- | ---------------------------------------------------- | ---------------------- |
+| Nome do Evento      | Caixa de texto | obrigatório, máximo 100 caracteres                  | (vazio)                |
+| Data                | Seletor de data| obrigatório; deve ser uma data válida               | dia selecionado no calendário |
+| Membros             | Lista múltipla | opcional; exibe membros da equipe                   | nenhum selecionado     |
+| Descrição           | Área de texto  | opcional; limite 500 caracteres                     | (vazio)                |
+
+| Comando             | Destino                  | Tipo                   |
+| ------------------- | ------------------------ | ---------------------- |
+| Salvar              | Criar evento e atualizar calendário | default       |
+| Cancelar            | Fechar modal / voltar ao calendário | cancel        |
+| X (fechar)          | Fechar modal sem salvar  | cancel                 |
+
+![Wireframe](images/CALENDARIO-3.png)
+
+## 03. Editar evento (modal ou página)
+
+| Campo               | Tipo           | Restrições                                           | Valor default          |
+| ------------------- | -------------- | ---------------------------------------------------- | ---------------------- |
+| Nome do Evento      | Caixa de texto | obrigatório, máximo 100 caracteres                  | valor atual do evento  |
+| Data                | Seletor de data| obrigatório                                         | data atual do evento   |
+| Membros             | Lista múltipla | opcional; exibe membros da equipe                   | membros atuais do evento |
+| Descrição           | Área de texto  | opcional; limite 500 caracteres                     | descrição atual        |
+
+| Comando             | Destino                  | Tipo                   |
+| ------------------- | ------------------------ | ---------------------- |
+| Salvar alterações   | Atualizar evento e calendário | default           |
+| Excluir             | Abrir modal de confirmação de exclusão | perigo (destacado) |
+| Cancelar            | Fechar modal sem salvar  | cancel                 |
+| X (fechar)          | Fechar modal sem salvar  | cancel                 |
+
+![Wireframe](images/CALENDARIO-2.png)
+
+## 04. Excluir evento (modal de confirmação)
+
+| Campo / Elemento     | Tipo          | Restrições                                           | Valor default          |
+| -------------------- | ------------- | ---------------------------------------------------- | ---------------------- |
+| Mensagem de confirmação | Texto     | somente leitura; "Deseja realmente excluir o evento [nome do evento]?" | baseado no evento selecionado |
+
+| Comando             | Destino                  | Tipo                   |
+| ------------------- | ------------------------ | ---------------------- |
+| Sim, excluir        | Remover evento e atualizar calendário | perigo (destacado) |
+| Não / Cancelar      | Fechar modal sem excluir | cancel                 |
+
+![Wireframe](images/CALENDARIO-4.png)
