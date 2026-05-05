@@ -102,7 +102,7 @@ A proposta consiste no desenvolvimento de uma aplicação web que centralize as 
 
 [PROCESSO 3 - Gerenciamento de Tarefas](docs/processo-3-gerenciamento-tarefas.md)
 
-[PROCESSO 4 - Chat](docs/processo-4-chat.md)
+[PROCESSO 4 - Comunicação de Equipe](docs/processo-4-chat.md)
 
 [PROCESSO 5 - Gestão de Cronograma e Prazos](docs/processo-5-gestao-cronograma.md)
 
