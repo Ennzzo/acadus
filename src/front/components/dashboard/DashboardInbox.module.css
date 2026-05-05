@@ -1,0 +1,13 @@
+.wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.tabBar {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0 0.25rem;
+  flex-shrink: 0;
+}
