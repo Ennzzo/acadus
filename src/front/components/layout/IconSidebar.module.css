@@ -1,0 +1,143 @@
+.sidebar {
+  width: 3.75rem;
+  min-width: 3.75rem;
+  background: #1a1a2e;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.875rem 0;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ── Logo ──────────────────────────────────────── */
+.logo {
+  width: 2.125rem;
+  height: 2.125rem;
+  border-radius: 0.5rem;
+  background: linear-gradient(135deg, #7c3aed, #9333ea);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.4);
+}
+
+.logoText {
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.toggleBtn {
+  width: 2.125rem;
+  height: 2.125rem;
+  background: transparent;
+  border: none;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.toggleBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #e0e0f0;
+}
+
+/* ── Nav ───────────────────────────────────────── */
+.nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.125rem;
+}
+
+.bottomList {
+  margin-top: auto;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.6rem 0;
+  width: 100%;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.35);
+  transition: color 0.15s;
+  position: relative;
+}
+
+.item:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.item:hover::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 60%;
+  background: #7c3aed;
+  border-radius: 0 2px 2px 0;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.label {
+  font-size: 0.5rem;
+  text-align: center;
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+/* ── User avatar ───────────────────────────────── */
+.userAvatar {
+  width: 1.875rem;
+  height: 1.875rem;
+  border-radius: 9999px;
+  background: #7c3aed;
+  color: #fff;
+  font-size: 0.5625rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.5rem auto;
+  cursor: pointer;
+  border: 2px solid rgba(255,255,255,0.15);
+  transition: border-color 0.15s;
+}
+
+.userAvatar:hover {
+  border-color: #a78bfa;
+}
