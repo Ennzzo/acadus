@@ -34,6 +34,7 @@ Como oportunidade de melhoria, destaca-se a centralização das informações te
 | Clique em um evento       | Abrir modal edição/visualização | default          |
 | Clique em um dia vazio    | Abrir modal criar evento | default                |
 | Selecionar dia (área do dia) | Exibir eventos do dia em lista (opcional) | default |
+
 ![Wireframe](images/CALENDARIO.png)
 
 ## 02. Criar evento (modal ou página)
@@ -50,6 +51,7 @@ Como oportunidade de melhoria, destaca-se a centralização das informações te
 | Salvar              | Criar evento e atualizar calendário | default       |
 | Cancelar            | Fechar modal / voltar ao calendário | cancel        |
 | X (fechar)          | Fechar modal sem salvar  | cancel                 |
+
 ![Wireframe](images/CALENDARIO-3.png)
 
 ## 03. Editar evento (modal ou página)
@@ -67,6 +69,7 @@ Como oportunidade de melhoria, destaca-se a centralização das informações te
 | Excluir             | Abrir modal de confirmação de exclusão | perigo (destacado) |
 | Cancelar            | Fechar modal sem salvar  | cancel                 |
 | X (fechar)          | Fechar modal sem salvar  | cancel                 |
+
 ![Wireframe](images/CALENDARIO-2.png)
 
 ## 04. Excluir evento (modal de confirmação)
@@ -79,4 +82,5 @@ Como oportunidade de melhoria, destaca-se a centralização das informações te
 | ------------------- | ------------------------ | ---------------------- |
 | Sim, excluir        | Remover evento e atualizar calendário | perigo (destacado) |
 | Não / Cancelar      | Fechar modal sem excluir | cancel                 |
+
 ![Wireframe](images/CALENDARIO-4.png)
