@@ -15,7 +15,48 @@ Como oportunidade de melhoria, destaca-se a centralização das informações te
 ![Modelo BPMN do Processo de Gestão de Cronograma e Prazos](images/gestao_cronograma.png)
 
 #### Detalhamento das atividades
+# Detalhamento das atividades
 
+## 03. Visualizar calendário
+
+| Campo              | Tipo               | Restrições                                           | Valor default          |
+| ------------------ | ------------------ | ---------------------------------------------------- | ---------------------- |
+| Mês/Ano            | Texto              | somente leitura; alterado via navegação             | mês atual              |
+| Grade do calendário | Visual (grid)      | exibe dias do mês; inclui dias adjacentes (cinza)   |                        |
+| Dias da semana     | Texto              | fixo (Domingo a Sábado)                             |                        |
+| Eventos            | Tag/Label          | exibidos dentro do dia correspondente               |                        |
+| Equipe (menu lateral) | Lista           | exibe equipes disponíveis                           |                        |
+
+| Comandos               | Destino            | Tipo                   |
+| ---------------------- | ------------------ | ---------------------- |
+| < (mês anterior)       | Atualizar calendário | default                |
+| > (próximo mês)        | Atualizar calendário | default                |
+| Adicionar evento       | Criar evento         | default                |
+| Selecionar dia         | Visualizar evento(s) | default                |
+
+## 04. Criar / Visualizar evento
+
+| Campo               | Tipo           | Restrições                                                 | Valor default            |
+| ------------------- | -------------- | ---------------------------------------------------------- | ------------------------ |
+| Nome do Evento      | Caixa de texto | obrigatório                                                |                          |
+| Data                | Texto/Data     | obrigatório; vinculado ao dia selecionado                  | data selecionada         |
+| Membros             | Lista          | opcional; exibe membros da equipe                          | nenhum                   |
+| Descrição           | Área de texto  | opcional; limite sugerido (ex: 500 caracteres)             |                          |
+
+| Comandos            | Destino            | Tipo                   |
+| ------------------- | ------------------ | ---------------------- |
+| Editar              | Habilitar edição    | default                |
+| Salvar              | Atualizar evento    | default                |
+| X (fechar)          | Voltar ao calendário | cancel                 |
+
+## 05. Interação com eventos no calendário
+
+| Ação                                 | Comportamento                                                      |
+| ------------------------------------ | ------------------------------------------------------------------ |
+| Clique em um evento                  | Abre modal de visualização/edição do evento                        |
+| Clique em um dia vazio               | Permite criação de novo evento                                     |
+| Hover no evento (Opcional)           | destacar visualmente                                               |
+| Dias fora do mês                     | Exibidos com menor destaque visual (desabilitados)                 |
 **01. Atividade 1**
 
 
