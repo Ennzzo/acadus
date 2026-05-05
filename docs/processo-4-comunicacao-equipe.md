@@ -1,6 +1,6 @@
-### 3.3.4 Processo 4 – Chat
+### 3.3.4 Processo 4 – Comunicação da equipe
 
-O processo de Chat tem como objetivo centralizar a comunicação entre os membros da equipe e, quando necessário, com o professor, proporcionando um canal direto e organizado para troca de mensagens no contexto do projeto. Por meio dele, os usuários podem compartilhar informações, esclarecer dúvidas e alinhar atividades de forma rápida, sem depender de ferramentas externas.
+O processo de comunicação da equipe tem como objetivo centralizar a comunicação entre os membros da equipe e, quando necessário, com o professor, proporcionando um canal direto e organizado para troca de mensagens no contexto do projeto. Por meio dele, os usuários podem compartilhar informações, esclarecer dúvidas e alinhar atividades de forma rápida, sem depender de ferramentas externas.
 
 #### Modelo BPMN
 
