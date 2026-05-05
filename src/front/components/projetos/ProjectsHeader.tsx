@@ -1,30 +1,41 @@
+import { Projeto, StatusProjeto } from "@/types/projeto";
 import styles from "./ProjectsHeader.module.css";
 
 interface ProjectsHeaderProps {
-  total: number;
+  projetos: Projeto[];
+  onNewProject?: () => void;
 }
 
-const stats = [
-  { label: "Em andamento", value: 2, color: styles.dotBlue },
-  { label: "Concluídos", value: 2, color: styles.dotGreen },
-  { label: "Pendentes", value: 1, color: styles.dotYellow },
-  { label: "Atrasados", value: 1, color: styles.dotRed },
+const statConfig: { status: StatusProjeto; label: string; colorClass: string }[] = [
+  { status: "EM_ANDAMENTO", label: "Em andamento", colorClass: "dotBlue" },
+  { status: "CONCLUIDO",    label: "Concluídos",    colorClass: "dotGreen" },
+  { status: "PENDENTE",     label: "Pendentes",     colorClass: "dotYellow" },
+  { status: "ATRASADO",     label: "Atrasados",     colorClass: "dotRed" },
 ];
 
-export default function ProjectsHeader({ total }: ProjectsHeaderProps) {
+export default function ProjectsHeader({ projetos, onNewProject }: ProjectsHeaderProps) {
+  const total = projetos.length;
+
+  const counts = statConfig.map((cfg) => ({
+    ...cfg,
+    value: projetos.filter((p) => p.status === cfg.status).length,
+  }));
+
   return (
     <div className={styles.header}>
       <div className={styles.titleRow}>
         <div>
           <h1 className={styles.title}>Meus Projetos</h1>
-          <p className={styles.subtitle}>{total} projetos no total</p>
+          <p className={styles.subtitle}>{total} {total === 1 ? "projeto" : "projetos"} no total</p>
         </div>
-        <button className={styles.newBtn}>+ Novo Projeto</button>
+        <button className={styles.newBtn} onClick={onNewProject} id="btn-novo-projeto">
+          + Novo Projeto
+        </button>
       </div>
       <div className={styles.stats}>
-        {stats.map(({ label, value, color }) => (
+        {counts.map(({ label, value, colorClass }) => (
           <div key={label} className={styles.stat}>
-            <span className={`${styles.dot} ${color}`} />
+            <span className={`${styles.dot} ${styles[colorClass]}`} />
             <span className={styles.statValue}>{value}</span>
             <span className={styles.statLabel}>{label}</span>
           </div>

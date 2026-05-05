@@ -11,6 +11,15 @@
   overflow-y: auto;
 }
 
+.listaContent {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
 .placeholder {
   flex: 1;
   display: flex;
@@ -19,3 +28,4 @@
   color: #9ca3af;
   font-size: 14px;
 }
+

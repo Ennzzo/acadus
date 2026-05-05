@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import ProjectViewTabs, { ProjectView } from "@/components/projetos/ProjectViewTabs";
-import ProjectOverviewBanner from "@/components/projetos/ProjectOverviewBanner";
+import ProjectDetailOverview from "@/components/projetos/ProjectDetailOverview";
 import ProjectListTable from "@/components/projetos/ProjectListTable";
 import ProjectWidgets from "@/components/projetos/ProjectWidgets";
 import { ProjetoDetalhe } from "@/types/projeto";
@@ -20,20 +20,17 @@ export default function ProjectManagementView({ projeto }: ProjectManagementView
       <ProjectViewTabs activeView={view} onChange={setView} />
 
       {view === "overview" && (
-        <div className={styles.overviewContent}>
-          <ProjectOverviewBanner />
+        <ProjectDetailOverview projeto={projeto} />
+      )}
+
+      {view === "lista" && (
+        <div className={styles.listaContent}>
           <ProjectListTable listas={projeto.listas} />
           <ProjectWidgets
             membros={projeto.membros}
             totalTarefas={projeto.totalTarefas}
             tarefasConcluidas={projeto.tarefasConcluidas}
           />
-        </div>
-      )}
-
-      {view === "lista" && (
-        <div className={styles.placeholder}>
-          <span>Vista de Lista — em breve</span>
         </div>
       )}
 
@@ -63,3 +60,4 @@ export default function ProjectManagementView({ projeto }: ProjectManagementView
     </div>
   );
 }
+
