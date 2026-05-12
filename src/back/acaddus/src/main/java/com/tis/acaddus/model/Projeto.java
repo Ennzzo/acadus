@@ -1,10 +1,17 @@
 public class Projeto {
 
     private int id;
-    private String nomeProjeto;
+    private String nome;
     private String descricao;
     private LocalDate dataCriacao;
-    private StatusProjetoEnum status;
-    private UsuarioModel usuario;
+    private EStatusProjeto status;
+    private Usuario usuario;
 
+
+    public void criarProjeto() {}
+    public void editarProjeto() {}
+    public void excluirProjeto() {}
+    public List<Projeto> visualizarProjetos() {}
+    public List<Projeto> aplicarFiltro() {}
+    public void limparFiltro() {}
 }

@@ -6,4 +6,7 @@ public class Usuario {
     private String email;
     private String senha;
 
+
+    public login(String email, String senha){}
+    public cadastro(String email, String senha,String sobrenome, String senha){}
 }
