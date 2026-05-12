@@ -1,5 +1,6 @@
 package com.tis.acaddus.model;
 
+import com.tis.acaddus.dto.ProjetoDTO;
 import com.tis.acaddus.model.EStatusProjeto;
 import com.tis.acaddus.model.Usuario;
 
@@ -80,4 +81,14 @@ public class Projeto {
         return resposta;
     }
 
+    public ProjetoDTO dto() {
+
+        return new ProjetoDTO(
+                id,
+                nome,
+                descricao,
+                dataCriacao,
+                status
+        );
+    }
 }

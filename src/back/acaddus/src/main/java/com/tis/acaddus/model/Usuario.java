@@ -1,5 +1,7 @@
 package com.tis.acaddus.model;
 
+import com.tis.acaddus.dto.UsuarioDTO;
+
 public class Usuario {
 
     private static int ULTIMO_ID;
@@ -58,6 +60,16 @@ public class Usuario {
 
         return String.format(
                 "Usuário: %s %s | Email: %s",
+                nome,
+                sobrenome,
+                email
+        );
+    }
+
+    public UsuarioDTO dto() {
+
+        return new UsuarioDTO(
+                id,
                 nome,
                 sobrenome,
                 email
