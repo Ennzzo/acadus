@@ -1,10 +1,10 @@
-package com.tis.acaddus;
+package com.tis.acadus;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AcaddusApplicationTests {
+class AcadusApplicationTests {
 
 	@Test
 	void contextLoads() {

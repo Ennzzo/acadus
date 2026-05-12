@@ -1,13 +1,13 @@
-package com.tis.acaddus;
+package com.tis.acadus;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AcaddusApplication {
+public class AcadusApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AcaddusApplication.class, args);
+		SpringApplication.run(AcadusApplication.class, args);
 	}
 
 }
