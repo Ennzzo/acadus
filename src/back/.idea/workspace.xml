@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a12b45ca-a3cf-42bf-bc6e-9dd17391726a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acaddus/src/main/java/com/tis/acaddus/model/Projeto.java" beforeDir="false" afterPath="$PROJECT_DIR$/acaddus/src/main/java/com/tis/acaddus/model/Projeto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acaddus/src/main/java/com/tis/acaddus/model/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/acaddus/src/main/java/com/tis/acaddus/model/Usuario.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,9 +25,9 @@
       </MavenGeneralSettings>
     </option>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 8
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
   <component name="ProjectId" id="3DbLC1nb7xke2VDWZgmnN1i1czk" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -40,7 +38,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "D:/Faculdade/Engenharia_de_Software/TIS_Trabalho_Interdisciplinar/plf-es-2026-1-ti2-1381100-Acadus/src/back"
+    "last_opened_file_path": "D:/Faculdade/Engenharia_de_Software/TIS_Trabalho_Interdisciplinar/plf-es-2026-1-ti2-1381100-Acadus/src/back/acaddus"
   }
 }]]></component>
   <component name="RecentsManager">
