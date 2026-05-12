@@ -5,7 +5,7 @@ public class Projeto {
     private String descricao;
     private LocalDate dataCriacao;
     private EStatusProjeto status;
-    private Usuario usuario;
+    private ArrayList<Usuario> usuarios;
 
 
     public void criarProjeto() {}
