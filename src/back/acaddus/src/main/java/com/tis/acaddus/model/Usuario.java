@@ -14,6 +14,7 @@ public class Usuario {
     public int getId() {
         return id;
     }
+    public String getNome() {return nome;}
 
     public Usuario(String nome, String sobrenome, String email, String senha) {
 

@@ -18,6 +18,7 @@ public class Projeto {
     private EStatusProjeto status;
     private ArrayList<Usuario> equipe;
 
+    public int getId() {return id;}
 
     public Projeto(String nome, String descricao) {
 
