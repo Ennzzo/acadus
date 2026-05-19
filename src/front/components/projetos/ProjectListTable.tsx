@@ -1,8 +1,20 @@
-import { ProjetoLista } from "@/types/projeto";
 import styles from "./ProjectListTable.module.css";
 
 interface ProjectListTableProps {
   listas: ProjetoLista[];
+}
+
+interface ProjetoLista {
+  id: string;
+  nome: string;
+  cor: string;
+  progresso: number;
+  totalTarefas: number;
+  tarefasConcluidas: number;
+  inicio: string | null;
+  termino: string | null;
+  prioridade: string | null;
+  proprietario: string | null;
 }
 
 const prioridadeLabel: Record<string, string> = {

@@ -17,7 +17,7 @@ export default function ProjectFormModal({
   onClose,
   onSave,
 }: ProjectFormModalProps) {
-  const [nome, setNome] = useState(projeto?.nome ?? "");
+  const [nome, setNome] = useState(projeto?.nomeProjeto ?? "");
   const [descricao, setDescricao] = useState(projeto?.descricao ?? "");
   const [errors, setErrors] = useState<{ nome?: string; descricao?: string }>({});
   const nomeRef = useRef<HTMLInputElement>(null);
@@ -70,7 +70,7 @@ export default function ProjectFormModal({
         {/* Header */}
         <div className={styles.header}>
           <h2 className={styles.title} id="modal-title">
-            {isEditar ? `Editar Projeto: ${projeto?.nome}` : "Criar Novo Projeto"}
+            {isEditar ? `Editar Projeto: ${projeto?.nomeProjeto}` : "Criar Novo Projeto"}
           </h2>
           <button className={styles.closeBtn} onClick={onClose} title="Fechar" aria-label="Fechar modal">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
