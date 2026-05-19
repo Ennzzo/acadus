@@ -61,6 +61,14 @@ public class ConviteEquipe {
         return papelSugerido;
     }
 
+    public EStatusConvite getStatus() {
+        return status;
+    }
+
+    public Date getDataEnvio() {
+        return dataEnvio;
+    }
+
     public ConviteEquipeDTO dto() {
 
         return new ConviteEquipeDTO(

@@ -1,0 +1,334 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Fraunces:opsz,wght@9..144,600;700&display=swap");
+
+.page {
+  min-height: 100vh;
+  background: radial-gradient(120% 120% at 10% 0%, #f6f4ff 0%, #f4f8ff 40%, #fbfaf5 100%);
+  color: #111827;
+}
+
+.wrapper {
+  padding: 2rem 2.75rem 3.5rem;
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.heroTitle {
+  font-family: "Fraunces", serif;
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+}
+
+.heroSubtitle {
+  font-family: "Space Grotesk", sans-serif;
+  color: #4b5563;
+  margin-top: 0.35rem;
+}
+
+.heroActions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.primaryBtn,
+.secondaryBtn,
+.ghostBtn {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  padding: 0.65rem 1.1rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.primaryBtn {
+  background: #111827;
+  color: #f9fafb;
+  box-shadow: 0 10px 25px rgba(17, 24, 39, 0.18);
+}
+
+.secondaryBtn {
+  background: #ffffff;
+  color: #111827;
+  border-color: #e5e7eb;
+}
+
+.ghostBtn {
+  background: transparent;
+  color: #111827;
+  border-color: #e5e7eb;
+}
+
+.primaryBtn:hover,
+.secondaryBtn:hover,
+.ghostBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.12);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 1.75rem;
+}
+
+.sidebar {
+  background: #ffffff;
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  border: 1px solid #eef2f7;
+  box-shadow: 0 18px 35px rgba(15, 23, 42, 0.08);
+}
+
+.sidebarTitle {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: 1rem;
+}
+
+.teamList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+}
+
+.teamItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.65rem 0.8rem;
+  border-radius: 0.85rem;
+  border: 1px solid #eef2f7;
+  cursor: pointer;
+  transition: background 0.15s ease, border 0.15s ease;
+}
+
+.teamItemActive {
+  background: #111827;
+  color: #f9fafb;
+  border-color: transparent;
+}
+
+.teamMeta {
+  font-size: 0.75rem;
+  color: inherit;
+  opacity: 0.75;
+}
+
+.loadTeam {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.loadInput {
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  padding: 0.55rem 0.7rem;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  border: 1px solid #eef2f7;
+  box-shadow: 0 18px 35px rgba(15, 23, 42, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cardWide {
+  grid-column: span 2;
+}
+
+.cardTitle {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.cardText {
+  color: #4b5563;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.badgeRow {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.badge {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.75rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.memberList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.memberItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.memberInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: linear-gradient(130deg, #111827, #6366f1);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.memberRole {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.placeholderBox {
+  height: 120px;
+  border-radius: 1rem;
+  background: repeating-linear-gradient(135deg, #f3f4f6, #f3f4f6 12px, #f8fafc 12px, #f8fafc 24px);
+  border: 1px dashed #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 50;
+}
+
+.modal {
+  width: min(520px, 100%);
+  background: #ffffff;
+  border-radius: 1.2rem;
+  padding: 1.5rem;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.2);
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.modalTitle {
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.modalLabel {
+  font-size: 0.85rem;
+  color: #4b5563;
+}
+
+.modalInput,
+.modalSelect,
+.modalTextarea {
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  padding: 0.6rem 0.75rem;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.modalTextarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.85rem;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 0.65rem 0.5rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.inlineHelp {
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 1100px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .contentGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .cardWide {
+    grid-column: span 1;
+  }
+}

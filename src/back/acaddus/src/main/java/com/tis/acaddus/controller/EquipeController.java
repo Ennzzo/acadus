@@ -1,6 +1,8 @@
 package com.tis.acaddus.controller;
 
 import com.tis.acaddus.dto.EquipeDTO;
+import com.tis.acaddus.dto.MembroEquipeDTO;
+import com.tis.acaddus.dto.ConviteEquipeDTO;
 import com.tis.acaddus.model.Equipe;
 import com.tis.acaddus.model.Projeto;
 
@@ -9,6 +11,9 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceUnit;
 
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/equipes")
@@ -98,5 +103,39 @@ public class EquipeController {
         }
 
         return equipe.dto();
+    }
+
+    @GetMapping("/{id}/membros")
+    public List<MembroEquipeDTO> listarMembros(@PathVariable int id) {
+
+        EntityManager manager = emf.createEntityManager();
+
+        Equipe equipe = manager.find(Equipe.class, id);
+
+        if(equipe == null) {
+            return List.of();
+        }
+
+        return equipe.getMembros()
+                .stream()
+                .map(membro -> membro.dto())
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/{id}/convites")
+    public List<ConviteEquipeDTO> listarConvites(@PathVariable int id) {
+
+        EntityManager manager = emf.createEntityManager();
+
+        Equipe equipe = manager.find(Equipe.class, id);
+
+        if(equipe == null) {
+            return List.of();
+        }
+
+        return equipe.getConvites()
+                .stream()
+                .map(convite -> convite.dto())
+                .collect(Collectors.toList());
     }
 }

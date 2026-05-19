@@ -22,3 +22,22 @@ export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise
 
   return response.json() as Promise<T>;
 }
+
+export async function apiFetchText(path: string, init: RequestInit = {}): Promise<string> {
+  const headers = {
+    "Content-Type": "application/json",
+    ...init.headers,
+  };
+
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    ...init,
+    headers,
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || `Erro ${response.status}`);
+  }
+
+  return response.text();
+}

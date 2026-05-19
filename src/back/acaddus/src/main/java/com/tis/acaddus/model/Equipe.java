@@ -44,6 +44,10 @@ public class Equipe {
         return membros;
     }
 
+    public List<ConviteEquipe> getConvites() {
+        return convites;
+    }
+
     public boolean criarEquipe() {
 
         return nome != null
