@@ -7,10 +7,8 @@ interface ProjectsHeaderProps {
 }
 
 const statConfig: { status: StatusProjeto; label: string; colorClass: string }[] = [
-  { status: "EM_ANDAMENTO", label: "Em andamento", colorClass: "dotBlue" },
-  { status: "CONCLUIDO",    label: "Concluídos",    colorClass: "dotGreen" },
-  { status: "PENDENTE",     label: "Pendentes",     colorClass: "dotYellow" },
-  { status: "ATRASADO",     label: "Atrasados",     colorClass: "dotRed" },
+  { status: "ATIVO",     label: "Ativos",     colorClass: "dotBlue" },
+  { status: "CONCLUIDO", label: "Concluídos", colorClass: "dotGreen" },
 ];
 
 export default function ProjectsHeader({ projetos, onNewProject }: ProjectsHeaderProps) {

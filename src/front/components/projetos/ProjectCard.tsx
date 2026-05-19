@@ -9,17 +9,13 @@ interface ProjectCardProps {
 }
 
 const statusLabel: Record<StatusProjeto, string> = {
-  EM_ANDAMENTO: "Em andamento",
+  ATIVO: "Ativo",
   CONCLUIDO: "Concluído",
-  PENDENTE: "Pendente",
-  ATRASADO: "Atrasado",
 };
 
 const statusClass: Record<StatusProjeto, string> = {
-  EM_ANDAMENTO: styles.statusBlue,
+  ATIVO: styles.statusBlue,
   CONCLUIDO: styles.statusGreen,
-  PENDENTE: styles.statusYellow,
-  ATRASADO: styles.statusRed,
 };
 
 function formatDate(iso: string): string {
@@ -65,29 +61,19 @@ export default function ProjectCard({ projeto, onEdit, onDelete }: ProjectCardPr
       <Link href={`/projetos/${projeto.id}`} className={styles.card}>
         <div className={styles.top}>
           <div className={styles.meta}>
-            <span className={styles.disciplina}>{projeto.disciplina}</span>
+            <span className={styles.disciplina}>Projeto</span>
             <span className={`${styles.status} ${statusClass[projeto.status]}`}>
               {statusLabel[projeto.status]}
             </span>
           </div>
-          <h3 className={styles.nome}>{projeto.nome}</h3>
-          <p className={styles.descricao}>{projeto.descricao}</p>
+          <h3 className={styles.nome}>{projeto.nomeProjeto}</h3>
+          <p className={styles.descricao}>{projeto.descricao || "Nenhuma descrição."}</p>
         </div>
 
         <div className={styles.bottom}>
-          <div className={styles.progressRow}>
-            <span className={styles.progressLabel}>Progresso</span>
-            <span className={styles.progressValue}>{projeto.progresso}%</span>
-          </div>
-          <div className={styles.progressBar}>
-            <div
-              className={styles.progressFill}
-              style={{ width: `${projeto.progresso}%` }}
-            />
-          </div>
           <div className={styles.footer}>
-            <span className={styles.professor}>👤 {projeto.professor}</span>
-            <span className={styles.prazo}>📅 {formatDate(projeto.dataEntrega)}</span>
+            <span className={styles.professor}>Status: {statusLabel[projeto.status]}</span>
+            <span className={styles.prazo}>📅 {formatDate(projeto.dataCriacao)}</span>
           </div>
         </div>
       </Link>

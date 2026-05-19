@@ -3,13 +3,11 @@
 import { useState } from "react";
 import ProjectViewTabs, { ProjectView } from "@/components/projetos/ProjectViewTabs";
 import ProjectDetailOverview from "@/components/projetos/ProjectDetailOverview";
-import ProjectListTable from "@/components/projetos/ProjectListTable";
-import ProjectWidgets from "@/components/projetos/ProjectWidgets";
-import { ProjetoDetalhe } from "@/types/projeto";
+import { Projeto } from "@/types/projeto";
 import styles from "./ProjectManagementView.module.css";
 
 interface ProjectManagementViewProps {
-  projeto: ProjetoDetalhe;
+  projeto: Projeto;
 }
 
 export default function ProjectManagementView({ projeto }: ProjectManagementViewProps) {
@@ -21,17 +19,6 @@ export default function ProjectManagementView({ projeto }: ProjectManagementView
 
       {view === "overview" && (
         <ProjectDetailOverview projeto={projeto} />
-      )}
-
-      {view === "lista" && (
-        <div className={styles.listaContent}>
-          <ProjectListTable listas={projeto.listas} />
-          <ProjectWidgets
-            membros={projeto.membros}
-            totalTarefas={projeto.totalTarefas}
-            tarefasConcluidas={projeto.tarefasConcluidas}
-          />
-        </div>
       )}
 
       {view === "quadro" && (

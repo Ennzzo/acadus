@@ -52,7 +52,7 @@ export default function ProjectDeleteModal({
         <h2 className={styles.title}>Excluir projeto</h2>
         <p className={styles.desc}>
           Tem certeza que deseja excluir o projeto{" "}
-          <strong className={styles.nomeProjeto}>&ldquo;{projeto.nome}&rdquo;</strong>?
+          <strong className={styles.nomeProjeto}>&ldquo;{projeto.nomeProjeto}&rdquo;</strong>?
           <br />
           Esta ação não pode ser desfeita.
         </p>

@@ -10,8 +10,8 @@ interface ProjectsToolbarProps {
   onQueryChange: (v: string) => void;
   statusFilter: StatusProjeto | "TODOS";
   onStatusChange: (v: StatusProjeto | "TODOS") => void;
-  sortBy: "nome" | "prazo" | "progresso";
-  onSortChange: (v: "nome" | "prazo" | "progresso") => void;
+  sortBy: "nome" | "criacao";
+  onSortChange: (v: "nome" | "criacao") => void;
   viewMode: ProjectViewMode;
   onViewModeChange: (v: ProjectViewMode) => void;
   total: number;
@@ -20,16 +20,13 @@ interface ProjectsToolbarProps {
 
 const statusOptions: { value: StatusProjeto | "TODOS"; label: string }[] = [
   { value: "TODOS", label: "Todos os status" },
-  { value: "EM_ANDAMENTO", label: "Em andamento" },
+  { value: "ATIVO", label: "Ativo" },
   { value: "CONCLUIDO", label: "Concluído" },
-  { value: "PENDENTE", label: "Pendente" },
-  { value: "ATRASADO", label: "Atrasado" },
 ];
 
-const sortOptions: { value: "nome" | "prazo" | "progresso"; label: string }[] = [
+const sortOptions: { value: "nome" | "criacao"; label: string }[] = [
   { value: "nome", label: "Nome" },
-  { value: "prazo", label: "Prazo" },
-  { value: "progresso", label: "Progresso" },
+  { value: "criacao", label: "Data de criação" },
 ];
 
 export default function ProjectsToolbar({
@@ -95,7 +92,7 @@ export default function ProjectsToolbar({
           id="projetos-sort"
           className={styles.select}
           value={sortBy}
-          onChange={(e) => onSortChange(e.target.value as "nome" | "prazo" | "progresso")}
+          onChange={(e) => onSortChange(e.target.value as "nome" | "criacao")}
         >
           {sortOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>Ordenar: {opt.label}</option>
