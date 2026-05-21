@@ -26,7 +26,6 @@ function formatDate(iso: string): string {
 export default function ProjectCard({ projeto, onEdit, onDelete }: ProjectCardProps) {
   return (
     <div className={styles.cardWrapper}>
-      {/* Botões de ação — aparecem no hover */}
       <div className={styles.cardActions}>
         {onEdit && (
           <button
@@ -73,7 +72,7 @@ export default function ProjectCard({ projeto, onEdit, onDelete }: ProjectCardPr
         <div className={styles.bottom}>
           <div className={styles.footer}>
             <span className={styles.professor}>Status: {statusLabel[projeto.status]}</span>
-            <span className={styles.prazo}>📅 {formatDate(projeto.dataCriacao)}</span>
+            <span className={styles.prazo}>{formatDate(projeto.dataCriacao)}</span>
           </div>
         </div>
       </Link>

@@ -10,9 +10,6 @@
   height: 100%;
 }
 
-/* ── Text ──────────────────────────────────────── */
-.text {}
-
 .title {
   font-size: 2.5rem;
   font-weight: 800;
@@ -26,13 +23,11 @@
   color: rgba(255, 255, 255, 0.75);
 }
 
-/* ── Illustration ──────────────────────────────── */
 .illustration {
   position: relative;
   height: 13rem;
 }
 
-/* Document card */
 .docCard {
   position: absolute;
   right: 1rem;
@@ -60,7 +55,6 @@
   width: 60%;
 }
 
-/* Magnifying glass */
 .lupa {
   position: absolute;
   left: 2.5rem;
@@ -70,19 +64,18 @@
 .lupaCircle {
   width: 2.5rem;
   height: 2.5rem;
-  border: 3px solid #1e1b4b;
+  border: 3px solid #0f172a;
   border-radius: 9999px;
 }
 
 .lupaHandle {
   width: 1rem;
   height: 3px;
-  background: #1e1b4b;
+  background: #0f172a;
   border-radius: 9999px;
   transform: rotate(45deg) translateX(1.25rem) translateY(-0.6rem);
 }
 
-/* Avatar */
 .avatar {
   position: absolute;
   right: 0.5rem;
@@ -96,7 +89,7 @@
 .avatarHead {
   width: 1.5rem;
   height: 1.5rem;
-  background: #1e1b4b;
+  background: #0f172a;
   border-radius: 9999px;
 }
 
@@ -105,15 +98,26 @@
   height: 0;
   border-left: 1.25rem solid transparent;
   border-right: 1.25rem solid transparent;
-  border-top: 2.5rem solid #1e1b4b;
+  border-top: 2.5rem solid #0f172a;
   border-radius: 0.25rem;
 }
 
-/* Phone icon */
 .phone {
   position: absolute;
   left: 0.5rem;
   bottom: 0.5rem;
-  font-size: 1.5rem;
+  width: 1.6rem;
+  height: 2.35rem;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  border-radius: 0.35rem;
   opacity: 0.8;
+}
+
+.phone span {
+  display: block;
+  width: 0.45rem;
+  height: 0.12rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  margin: 1.9rem auto 0;
 }

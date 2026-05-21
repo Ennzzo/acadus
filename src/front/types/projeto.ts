@@ -5,5 +5,6 @@ export interface Projeto {
   nomeProjeto: string;
   descricao?: string | null;
   dataCriacao: string;
+  nomeEquipe?: string | null;
   status: StatusProjeto;
 }

@@ -9,7 +9,7 @@
 }
 
 .gradient {
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%);
+  background: linear-gradient(135deg, #0f172a 0%, #0f172a 50%, #334155 100%);
   border-radius: 1.5rem;
   padding: 5rem 2rem;
   display: flex;
@@ -20,8 +20,22 @@
 
 .icon {
   display: block;
-  font-size: 2rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.12);
   margin-bottom: 1.5rem;
+}
+
+.icon::after {
+  content: "";
+  display: block;
+  width: 1.15rem;
+  height: 1.15rem;
+  border: 2px solid #ffffff;
+  border-radius: 0.35rem;
+  transform: translate(0.55rem, 0.55rem);
 }
 
 .title {

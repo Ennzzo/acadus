@@ -6,7 +6,6 @@
   height: 100%;
 }
 
-/* ── Header ────────────────────────────────────── */
 .title {
   font-size: 2rem;
   font-weight: 700;
@@ -20,7 +19,6 @@
   margin-bottom: 1.75rem;
 }
 
-/* ── Tabs ──────────────────────────────────────── */
 .tabs {
   display: flex;
   gap: 0;
@@ -51,10 +49,9 @@
 
 .tabActive {
   color: #ffffff;
-  border-bottom-color: #7c3aed;
+  border-bottom-color: #0f172a;
 }
 
-/* ── Form ──────────────────────────────────────── */
 .form {
   display: flex;
   flex-direction: column;
@@ -91,7 +88,7 @@
 }
 
 .input:focus {
-  border-bottom-color: #7c3aed;
+  border-bottom-color: #0f172a;
 }
 
 .eyeBtn {
@@ -112,7 +109,6 @@
   color: #d1d5db;
 }
 
-/* ── Perfil selector ───────────────────────────── */
 .perfilRow {
   display: flex;
   gap: 0.75rem;
@@ -136,17 +132,16 @@
 }
 
 .perfilBtn:hover {
-  border-color: #7c3aed;
+  border-color: #0f172a;
   color: #c4b5fd;
 }
 
 .perfilActive {
-  background: #7c3aed;
-  border-color: #7c3aed;
+  background: #0f172a;
+  border-color: #0f172a;
   color: #ffffff;
 }
 
-/* ── Actions ───────────────────────────────────── */
 .forgot {
   font-size: 0.8125rem;
   color: #6b7280;
@@ -174,5 +169,5 @@
 }
 
 .submit:hover {
-  background: #7c3aed;
+  background: #0f172a;
 }

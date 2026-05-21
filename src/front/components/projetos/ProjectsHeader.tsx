@@ -1,4 +1,4 @@
-import { Projeto, StatusProjeto } from "@/types/projeto";
+import { Projeto } from "@/types/projeto";
 import styles from "./ProjectsHeader.module.css";
 
 interface ProjectsHeaderProps {
@@ -6,18 +6,10 @@ interface ProjectsHeaderProps {
   onNewProject?: () => void;
 }
 
-const statConfig: { status: StatusProjeto; label: string; colorClass: string }[] = [
-  { status: "ATIVO",     label: "Ativos",     colorClass: "dotBlue" },
-  { status: "CONCLUIDO", label: "Concluídos", colorClass: "dotGreen" },
-];
-
 export default function ProjectsHeader({ projetos, onNewProject }: ProjectsHeaderProps) {
   const total = projetos.length;
-
-  const counts = statConfig.map((cfg) => ({
-    ...cfg,
-    value: projetos.filter((p) => p.status === cfg.status).length,
-  }));
+  const ativos = projetos.filter((p) => p.status === "ATIVO").length;
+  const concluidos = projetos.filter((p) => p.status === "CONCLUIDO").length;
 
   return (
     <div className={styles.header}>
@@ -31,13 +23,16 @@ export default function ProjectsHeader({ projetos, onNewProject }: ProjectsHeade
         </button>
       </div>
       <div className={styles.stats}>
-        {counts.map(({ label, value, colorClass }) => (
-          <div key={label} className={styles.stat}>
-            <span className={`${styles.dot} ${styles[colorClass]}`} />
-            <span className={styles.statValue}>{value}</span>
-            <span className={styles.statLabel}>{label}</span>
-          </div>
-        ))}
+        <div className={styles.stat}>
+          <span className={`${styles.dot} ${styles.dotBlue}`} />
+          <span className={styles.statValue}>{ativos}</span>
+          <span className={styles.statLabel}>Ativos</span>
+        </div>
+        <div className={styles.stat}>
+          <span className={`${styles.dot} ${styles.dotGreen}`} />
+          <span className={styles.statValue}>{concluidos}</span>
+          <span className={styles.statLabel}>Concluídos</span>
+        </div>
       </div>
     </div>
   );

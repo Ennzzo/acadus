@@ -1,0 +1,286 @@
+.page {
+  padding: 1.5rem;
+  background: #f8fafc;
+  min-height: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.header h2,
+.modalHeader h2 {
+  font-size: 1.125rem;
+  color: #0f172a;
+}
+
+.header p,
+.message,
+.empty p {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.errorMsg {
+  color: #b91c1c;
+  font-size: 0.8125rem;
+}
+
+.primaryBtn,
+.secondaryBtn,
+.textBtn,
+.actions button,
+.modalHeader button {
+  border-radius: 0.5rem;
+  border: 1px solid #dbe3ee;
+  background: #ffffff;
+  color: #334155;
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.primaryBtn {
+  background: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
+  padding: 0.55rem 0.9rem;
+  font-weight: 600;
+}
+
+.secondaryBtn,
+.textBtn,
+.modalHeader button {
+  padding: 0.5rem 0.8rem;
+}
+
+.textBtn {
+  border: none;
+  padding: 0;
+  color: #475569;
+}
+
+.empty {
+  padding: 2rem;
+  border: 1px dashed #cbd5e1;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  text-align: center;
+}
+
+.empty h3 {
+  color: #0f172a;
+  margin-bottom: 0.25rem;
+}
+
+.empty button {
+  margin-top: 1rem;
+}
+
+.list {
+  display: grid;
+  gap: 0.875rem;
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.card h3 {
+  margin-top: 0.35rem;
+  color: #0f172a;
+  font-size: 1rem;
+}
+
+.status {
+  display: inline-flex;
+  border-radius: 999px;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.PENDENTE { background: #f1f5f9; color: #475569; }
+.EM_ANDAMENTO { background: #dbeafe; color: #1d4ed8; }
+.EM_VALIDACAO { background: #fef3c7; color: #92400e; }
+.APROVADA { background: #dcfce7; color: #15803d; }
+.AJUSTES { background: #fee2e2; color: #b91c1c; }
+
+.description,
+.comment,
+.attachment {
+  color: #475569;
+  font-size: 0.875rem;
+  margin-top: 0.75rem;
+}
+
+.comment {
+  padding: 0.7rem;
+  border-radius: 0.5rem;
+  background: #f8fafc;
+}
+
+.checklist {
+  display: grid;
+  gap: 0.35rem;
+  list-style: none;
+  margin-top: 0.85rem;
+}
+
+.checklist li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #475569;
+  font-size: 0.875rem;
+}
+
+.attachment,
+.fileName {
+  color: #64748b;
+  font-size: 0.8125rem;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  color: #64748b;
+  font-size: 0.8125rem;
+  margin-top: 0.85rem;
+}
+
+.progressRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.9rem;
+}
+
+.progressBar {
+  height: 0.45rem;
+  flex: 1;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progressBar span {
+  display: block;
+  height: 100%;
+  background: #0f172a;
+}
+
+.progressRow strong {
+  color: #334155;
+  font-size: 0.8125rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 1rem;
+}
+
+.actions button {
+  padding: 0.45rem 0.7rem;
+}
+
+.dangerBtn {
+  color: #b91c1c !important;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.35);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1rem;
+  z-index: 50;
+}
+
+.modal {
+  width: min(38rem, 100%);
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1.5rem 4rem rgba(15, 23, 42, 0.18);
+  padding: 1.25rem;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.modalHeader,
+.modalActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.modal label {
+  display: grid;
+  gap: 0.35rem;
+  color: #334155;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.modal input,
+.modal textarea,
+.modal select {
+  width: 100%;
+  border: 1px solid #dbe3ee;
+  border-radius: 0.5rem;
+  padding: 0.6rem 0.7rem;
+  font: inherit;
+  color: #0f172a;
+  background: #ffffff;
+}
+
+.modal textarea {
+  resize: vertical;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.modalActions {
+  justify-content: flex-end;
+}
+
+@media (max-width: 720px) {
+  .header,
+  .cardTop,
+  .modalHeader,
+  .modalActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+}

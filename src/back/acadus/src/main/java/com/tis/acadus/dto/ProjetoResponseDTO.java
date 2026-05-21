@@ -14,5 +14,6 @@ public class ProjetoResponseDTO {
     private String nomeProjeto;
     private String descricao;
     private LocalDate dataCriacao;
+    private String nomeEquipe;
     private StatusProjeto status;
 }

@@ -28,7 +28,9 @@ export default function LoginBranding() {
           <div className={styles.avatarHead} />
           <div className={styles.avatarBody} />
         </div>
-        <div className={styles.phone}>📱</div>
+        <div className={styles.phone}>
+          <span />
+        </div>
       </div>
     </div>
   );

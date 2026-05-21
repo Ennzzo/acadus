@@ -58,8 +58,7 @@ public class UsuarioService {
         repository.delete(usuario);
     }
 
-    public UsuarioResponseDTO converterParaDTO(
-            Usuario usuario) {
+    public UsuarioResponseDTO toDto(Usuario usuario) {
 
         return UsuarioResponseDTO.builder()
                 .id(usuario.getId())

@@ -40,7 +40,7 @@ public class UsuarioController {
 
         Usuario usuario = service.buscarUsuarioPorId(id);
 
-        return service.converterParaDTO(usuario);
+        return service.toDto(usuario);
     }
 
     @PostMapping
@@ -49,7 +49,7 @@ public class UsuarioController {
 
         Usuario usuario = service.criarUsuario(dto);
 
-        return service.converterParaDTO(usuario);
+        return service.toDto(usuario);
     }
 
     @PutMapping("/{id}")
@@ -59,7 +59,7 @@ public class UsuarioController {
 
         Usuario usuario = service.editarUsuario(id, dto);
 
-        return service.converterParaDTO(usuario);
+        return service.toDto(usuario);
     }
 
     @DeleteMapping("/{id}")

@@ -11,8 +11,8 @@
   width: 4rem;
   height: 4rem;
   border-radius: 1rem;
-  background: #f5f3ff;
-  color: #7c3aed;
+  background: #f8fafc;
+  color: #0f172a;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -37,7 +37,7 @@
 .clearBtn {
   padding: 0.5rem 1.25rem;
   border-radius: 0.5rem;
-  background: #7c3aed;
+  background: #0f172a;
   color: #fff;
   font-size: 0.875rem;
   font-weight: 600;
@@ -47,5 +47,5 @@
 }
 
 .clearBtn:hover {
-  background: #6d28d9;
+  background: #1e293b;
 }

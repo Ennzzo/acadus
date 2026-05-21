@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Projeto } from "@/types/projeto";
 import styles from "./ProjectDeleteModal.module.css";
 
 interface ProjectDeleteModalProps {
   projeto: Projeto;
   onClose: () => void;
-  onConfirm: () => void;
+  onConfirm: () => Promise<void> | void;
 }
 
 export default function ProjectDeleteModal({
@@ -15,7 +15,9 @@ export default function ProjectDeleteModal({
   onClose,
   onConfirm,
 }: ProjectDeleteModalProps) {
-  // fecha com Escape
+  const [error, setError] = useState("");
+  const [deleting, setDeleting] = useState(false);
+
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
@@ -24,9 +26,17 @@ export default function ProjectDeleteModal({
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  function handleConfirm() {
-    onConfirm();
-    onClose();
+  async function handleConfirm() {
+    try {
+      setDeleting(true);
+      setError("");
+      await onConfirm();
+      onClose();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Não foi possível excluir o projeto.");
+    } finally {
+      setDeleting(false);
+    }
   }
 
   return (
@@ -38,7 +48,6 @@ export default function ProjectDeleteModal({
       aria-label="Confirmar exclusão"
     >
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        {/* Ícone de aviso */}
         <div className={styles.iconBox}>
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="3 6 5 6 21 6" />
@@ -48,7 +57,6 @@ export default function ProjectDeleteModal({
           </svg>
         </div>
 
-        {/* Título */}
         <h2 className={styles.title}>Excluir projeto</h2>
         <p className={styles.desc}>
           Tem certeza que deseja excluir o projeto{" "}
@@ -57,7 +65,6 @@ export default function ProjectDeleteModal({
           Esta ação não pode ser desfeita.
         </p>
 
-        {/* Confirmação */}
         <div className={styles.confirmation}>
           <span className={styles.confirmLabel}>Confirmar exclusão?</span>
           <div className={styles.options}>
@@ -84,18 +91,20 @@ export default function ProjectDeleteModal({
           </div>
         </div>
 
-        {/* Actions */}
+        {error && <p className={styles.errorMsg}>{error}</p>}
+
         <div className={styles.actions}>
           <button
             id="btn-confirmar-exclusao"
             className={styles.deleteBtn}
             onClick={handleConfirm}
+            disabled={deleting}
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="3 6 5 6 21 6" />
               <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
             </svg>
-            Confirmar exclusão
+            {deleting ? "Excluindo..." : "Confirmar exclusão"}
           </button>
           <button
             id="btn-cancelar-exclusao"

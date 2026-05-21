@@ -6,9 +6,9 @@ import styles from "./ProjectFormModal.module.css";
 
 interface ProjectFormModalProps {
   mode: "criar" | "editar";
-  projeto?: Projeto; // preenchido no modo editar
+  projeto?: Projeto;
   onClose: () => void;
-  onSave: (dados: { nome: string; descricao: string }) => void;
+  onSave: (dados: { nome: string; descricao: string }) => Promise<void> | void;
 }
 
 export default function ProjectFormModal({
@@ -20,14 +20,14 @@ export default function ProjectFormModal({
   const [nome, setNome] = useState(projeto?.nomeProjeto ?? "");
   const [descricao, setDescricao] = useState(projeto?.descricao ?? "");
   const [errors, setErrors] = useState<{ nome?: string; descricao?: string }>({});
+  const [submitError, setSubmitError] = useState("");
+  const [saving, setSaving] = useState(false);
   const nomeRef = useRef<HTMLInputElement>(null);
 
-  // foca no primeiro campo ao abrir
   useEffect(() => {
     nomeRef.current?.focus();
   }, []);
 
-  // fecha com Escape
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
@@ -50,11 +50,19 @@ export default function ProjectFormModal({
     return Object.keys(errs).length === 0;
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!validate()) return;
-    onSave({ nome: nome.trim(), descricao: descricao.trim() });
-    onClose();
+    try {
+      setSaving(true);
+      setSubmitError("");
+      await onSave({ nome: nome.trim(), descricao: descricao.trim() });
+      onClose();
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "Não foi possível salvar o projeto.");
+    } finally {
+      setSaving(false);
+    }
   }
 
   const isEditar = mode === "editar";
@@ -67,7 +75,6 @@ export default function ProjectFormModal({
   return (
     <div className={styles.overlay} onClick={onClose} aria-modal="true" role="dialog" aria-label={isEditar ? "Editar projeto" : "Criar novo projeto"}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        {/* Header */}
         <div className={styles.header}>
           <h2 className={styles.title} id="modal-title">
             {isEditar ? `Editar Projeto: ${projeto?.nomeProjeto}` : "Criar Novo Projeto"}
@@ -79,9 +86,7 @@ export default function ProjectFormModal({
           </button>
         </div>
 
-        {/* Form */}
         <form className={styles.form} onSubmit={handleSubmit} noValidate>
-          {/* Nome */}
           <div className={styles.field}>
             <label htmlFor="modal-nome" className={styles.label}>
               Nome do Projeto <span className={styles.required}>*</span>
@@ -100,7 +105,6 @@ export default function ProjectFormModal({
             <span className={styles.charCount}>{nome.length}/100</span>
           </div>
 
-          {/* Descrição */}
           <div className={styles.field}>
             <label htmlFor="modal-descricao" className={styles.label}>
               Descrição <span className={styles.optional}>(opcional)</span>
@@ -118,7 +122,8 @@ export default function ProjectFormModal({
             <span className={styles.charCount}>{descricao.length}/500</span>
           </div>
 
-          {/* Data de criação (só no criar) */}
+          {submitError && <span className={styles.errorMsg}>{submitError}</span>}
+
           {!isEditar && (
             <div className={styles.field}>
               <label className={styles.label}>Data de criação</label>
@@ -132,13 +137,12 @@ export default function ProjectFormModal({
             </div>
           )}
 
-          {/* Actions */}
           <div className={styles.actions}>
-            <button type="submit" id="btn-salvar-projeto" className={styles.saveBtn}>
+            <button type="submit" id="btn-salvar-projeto" className={styles.saveBtn} disabled={saving}>
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="20 6 9 17 4 12" />
               </svg>
-              {isEditar ? "Salvar alterações" : "Salvar projeto"}
+              {saving ? "Salvando..." : isEditar ? "Salvar alterações" : "Salvar projeto"}
             </button>
             <button type="button" id="btn-cancelar-operacao" className={styles.cancelBtn} onClick={onClose}>
               Cancelar

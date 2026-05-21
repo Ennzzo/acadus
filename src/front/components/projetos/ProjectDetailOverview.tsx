@@ -18,12 +18,9 @@ function formatDate(iso: string): string {
 export default function ProjectDetailOverview({ projeto }: ProjectDetailOverviewProps) {
   return (
     <div className={styles.wrapper}>
-      {/* ── Título ─────────────────────────────── */}
       <h1 className={styles.titulo}>{projeto.nomeProjeto}</h1>
 
-      {/* ── Conteúdo principal (3 colunas) ─────── */}
       <div className={styles.mainGrid}>
-        {/* Col 1: imagem / capa */}
         <div className={styles.coverBox}>
           <div className={styles.coverPlaceholder}>
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round">
@@ -35,7 +32,6 @@ export default function ProjectDetailOverview({ projeto }: ProjectDetailOverview
           </div>
         </div>
 
-        {/* Col 2: descrição */}
         <div className={styles.descBox}>
           <p className={styles.descLabel}>Descrição:</p>
           <p className={styles.descText}>
@@ -43,19 +39,15 @@ export default function ProjectDetailOverview({ projeto }: ProjectDetailOverview
           </p>
         </div>
 
-        {/* Col 3: status */}
         <div className={styles.equipeBox}>
           <h2 className={styles.equipeTitle}>Status</h2>
           <p className={styles.descText}>{statusLabel[projeto.status]}</p>
         </div>
       </div>
 
-      {/* ── Divisor ────────────────────────────── */}
       <hr className={styles.divider} />
 
-      {/* ── Metadados ──────────────────────────── */}
       <div className={styles.metaGrid}>
-        {/* Data de criacao */}
         <div className={styles.metaField}>
           <label className={styles.metaLabel}>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

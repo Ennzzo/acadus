@@ -4,14 +4,15 @@ import { StatusProjeto } from "@/types/projeto";
 import styles from "./ProjectsToolbar.module.css";
 
 export type ProjectViewMode = "cards" | "tabela";
+export type SortBy = "nome" | "criacao";
 
 interface ProjectsToolbarProps {
   query: string;
   onQueryChange: (v: string) => void;
   statusFilter: StatusProjeto | "TODOS";
   onStatusChange: (v: StatusProjeto | "TODOS") => void;
-  sortBy: "nome" | "criacao";
-  onSortChange: (v: "nome" | "criacao") => void;
+  sortBy: SortBy;
+  onSortChange: (v: SortBy) => void;
   viewMode: ProjectViewMode;
   onViewModeChange: (v: ProjectViewMode) => void;
   total: number;
@@ -24,7 +25,7 @@ const statusOptions: { value: StatusProjeto | "TODOS"; label: string }[] = [
   { value: "CONCLUIDO", label: "Concluído" },
 ];
 
-const sortOptions: { value: "nome" | "criacao"; label: string }[] = [
+const sortOptions: { value: SortBy; label: string }[] = [
   { value: "nome", label: "Nome" },
   { value: "criacao", label: "Data de criação" },
 ];
@@ -43,7 +44,6 @@ export default function ProjectsToolbar({
 }: ProjectsToolbarProps) {
   return (
     <div className={styles.toolbar}>
-      {/* Search */}
       <label className={styles.searchBox}>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="11" cy="11" r="8" />
@@ -66,7 +66,6 @@ export default function ProjectsToolbar({
         )}
       </label>
 
-      {/* Status filter */}
       <div className={styles.selectWrapper}>
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.selectIcon}>
           <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
@@ -83,7 +82,6 @@ export default function ProjectsToolbar({
         </select>
       </div>
 
-      {/* Sort */}
       <div className={styles.selectWrapper}>
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.selectIcon}>
           <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="15" y2="12" /><line x1="3" y1="18" x2="9" y2="18" />
@@ -92,7 +90,7 @@ export default function ProjectsToolbar({
           id="projetos-sort"
           className={styles.select}
           value={sortBy}
-          onChange={(e) => onSortChange(e.target.value as "nome" | "criacao")}
+          onChange={(e) => onSortChange(e.target.value as SortBy)}
         >
           {sortOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>Ordenar: {opt.label}</option>
@@ -100,12 +98,10 @@ export default function ProjectsToolbar({
         </select>
       </div>
 
-      {/* Results count */}
       <span className={styles.count}>
         {filtered === total ? `${total} projetos` : `${filtered} de ${total}`}
       </span>
 
-      {/* View mode toggle */}
       <div className={styles.toggleGroup} role="group" aria-label="Modo de visualização">
         <button
           id="view-cards"

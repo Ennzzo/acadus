@@ -37,7 +37,6 @@ export default function ProjectsTableView({ projetos }: ProjectsTableViewProps) 
           {projetos.map((projeto) => {
             return (
               <tr key={projeto.id} className={styles.row}>
-                {/* Nome */}
                 <td className={styles.tdNome}>
                   <Link href={`/projetos/${projeto.id}`} className={styles.nomeLink}>
                     <span className={styles.nomeIcon}>
@@ -49,19 +48,16 @@ export default function ProjectsTableView({ projetos }: ProjectsTableViewProps) 
                   </Link>
                 </td>
 
-                {/* Status */}
                 <td>
                   <span className={`${styles.statusBadge} ${statusClass[projeto.status]}`}>
                     {statusLabel[projeto.status]}
                   </span>
                 </td>
 
-                {/* Criacao */}
                 <td className={styles.tdPrazo}>
                   {formatDate(projeto.dataCriacao)}
                 </td>
 
-                {/* Ações */}
                 <td className={styles.tdAcoes}>
                   <Link href={`/projetos/${projeto.id}`} className={styles.openBtn} title="Abrir projeto">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

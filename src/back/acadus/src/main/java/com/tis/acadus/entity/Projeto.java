@@ -43,6 +43,9 @@ public class Projeto {
     @Column(nullable = false)
     private LocalDate dataCriacao;
 
+    @Column(length = 100)
+    private String nomeEquipe;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusProjeto status;
