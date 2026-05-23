@@ -3,12 +3,15 @@ package com.tis.acadus.service;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.tis.acadus.dto.ProjetoRequestDTO;
 import com.tis.acadus.dto.ProjetoResponseDTO;
 import com.tis.acadus.entity.Projeto;
 import com.tis.acadus.entity.enums.StatusProjeto;
 import com.tis.acadus.repository.ProjetoRepository;
 
+@Service
 public class ProjetoService {
     private final ProjetoRepository repository;
 
@@ -29,7 +32,7 @@ public class ProjetoService {
     public Projeto criarProjeto(ProjetoRequestDTO dto) {
 
         Projeto projeto = Projeto.builder()
-                .nomeProjeto(dto.getNomeProjeto())
+                .nome(dto.getNome())
                 .descricao(dto.getDescricao())
                 .dataCriacao(LocalDate.now())
                 .status(StatusProjeto.ATIVO)
@@ -42,7 +45,7 @@ public class ProjetoService {
 
         Projeto projeto = buscarProjetoPorId(id);
 
-        projeto.setNomeProjeto(dto.getNomeProjeto());
+        projeto.setNome(dto.getNome());
         projeto.setDescricao(dto.getDescricao());
 
         return repository.save(projeto);
@@ -59,7 +62,7 @@ public class ProjetoService {
 
         return ProjetoResponseDTO.builder()
                 .id(projeto.getId())
-                .nomeProjeto(projeto.getNomeProjeto())
+                .nome(projeto.getNome())
                 .descricao(projeto.getDescricao())
                 .dataCriacao(projeto.getDataCriacao())
                 .status(projeto.getStatus())
