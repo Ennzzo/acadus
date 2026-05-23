@@ -11,7 +11,7 @@ import lombok.Data;
 @Builder
 public class ProjetoResponseDTO {
     private Long id;
-    private String nomeProjeto;
+    private String nome;
     private String descricao;
     private LocalDate dataCriacao;
     private StatusProjeto status;

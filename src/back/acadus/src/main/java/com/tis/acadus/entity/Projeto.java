@@ -35,23 +35,20 @@ public class Projeto {
     private Long id;
 
     @Column(nullable = false, length = 100)
-    private String nomeProjeto;
+    private String nome;
 
     @Column(length = 500)
     private String descricao;
 
     @Column(nullable = false)
-    private LocalDate dataCriacao;
+    @Builder.Default
+    private LocalDate dataCriacao = LocalDate.now();
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusProjeto status;
 
     @ManyToMany
-    @JoinTable(
-        name = "projeto_usuario",
-        joinColumns = @JoinColumn(name = "projeto_id"),
-        inverseJoinColumns = @JoinColumn(name = "usuario_id")
-    )
+    @JoinTable(name = "projeto_usuario", joinColumns = @JoinColumn(name = "projeto_id"), inverseJoinColumns = @JoinColumn(name = "usuario_id"))
     private List<Usuario> equipe;
 }
