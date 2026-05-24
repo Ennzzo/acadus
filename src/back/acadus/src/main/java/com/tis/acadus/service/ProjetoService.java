@@ -13,24 +13,28 @@ import com.tis.acadus.repository.ProjetoRepository;
 
 @Service
 public class ProjetoService {
+
     private final ProjetoRepository repository;
 
     public ProjetoService(ProjetoRepository repository) {
         this.repository = repository;
     }
 
-    public List<Projeto> listarProjetos() {
-        return repository.findAll();
+    public List<ProjetoResponseDTO> listarProjetos() {
+        return repository.findAll()
+                .stream()
+                .map(this::converterParaDTO)
+                .toList();
     }
 
-    public Projeto buscarProjetoPorId(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Projeto não encontrado."));
+    public ProjetoResponseDTO buscarProjetoPorId(Long id) {
+        Projeto projeto = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
+
+        return converterParaDTO(projeto);
     }
 
-    public Projeto criarProjeto(ProjetoRequestDTO dto) {
-
+    public ProjetoResponseDTO criarProjeto(ProjetoRequestDTO dto) {
         Projeto projeto = Projeto.builder()
                 .nome(dto.getNome())
                 .descricao(dto.getDescricao())
@@ -38,24 +42,24 @@ public class ProjetoService {
                 .status(StatusProjeto.ATIVO)
                 .build();
 
-        return repository.save(projeto);
+        Projeto salvo = repository.save(projeto);
+
+        return converterParaDTO(salvo);
     }
 
-    public Projeto editarProjeto(Long id, ProjetoRequestDTO dto) {
+    public ProjetoResponseDTO editarProjeto(Long id, ProjetoRequestDTO dto) {
 
-        Projeto projeto = buscarProjetoPorId(id);
+        Projeto projeto = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
 
         projeto.setNome(dto.getNome());
         projeto.setDescricao(dto.getDescricao());
 
-        return repository.save(projeto);
+        return converterParaDTO(repository.save(projeto));
     }
 
     public void excluirProjeto(Long id) {
-
-        Projeto projeto = buscarProjetoPorId(id);
-
-        repository.delete(projeto);
+        repository.deleteById(id);
     }
 
     public ProjetoResponseDTO converterParaDTO(Projeto projeto) {
@@ -68,5 +72,4 @@ public class ProjetoService {
                 .status(projeto.getStatus())
                 .build();
     }
-
 }
