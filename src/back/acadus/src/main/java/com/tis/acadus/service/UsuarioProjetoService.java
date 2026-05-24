@@ -18,20 +18,26 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class UsuarioProjetoService {
-
-        private final UsuarioProjetoRepository repository;
+        private final UsuarioProjetoRepository usuarioProjetoRepository;
         private final UsuarioRepository usuarioRepository;
         private final ProjetoRepository projetoRepository;
 
-        public List<UsuarioProjetoResponseDTO> listar() {
-                return repository.findAll()
+        public List<UsuarioProjetoResponseDTO> listarUsuariosProjetos() {
+                return usuarioProjetoRepository.findAll()
                                 .stream()
                                 .map(this::converterParaDTO)
                                 .toList();
         }
 
-        public UsuarioProjetoResponseDTO criar(UsuarioProjetoRequestDTO dto) {
+        public UsuarioProjetoResponseDTO buscarUsuarioProjetoPorId(Long id) {
+                UsuarioProjeto usuarioProjeto = usuarioProjetoRepository.findById(id)
+                                .orElseThrow(() -> new RuntimeException(
+                                                "Vínculo usuário-projeto não encontrado"));
 
+                return converterParaDTO(usuarioProjeto);
+        }
+
+        public UsuarioProjetoResponseDTO criarUsuariosProjetos(UsuarioProjetoRequestDTO dto) {
                 Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
                                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
@@ -44,13 +50,17 @@ public class UsuarioProjetoService {
                                 .papel(dto.getPapel())
                                 .build();
 
-                UsuarioProjeto salvo = repository.save(usuarioProjeto);
+                UsuarioProjeto salvo = usuarioProjetoRepository.save(usuarioProjeto);
 
                 return converterParaDTO(salvo);
         }
 
-        public void remover(Long id) {
-                repository.deleteById(id);
+        public void excluirUsuariosProjetos(Long id) {
+                UsuarioProjeto usuarioProjeto = usuarioProjetoRepository.findById(id)
+                                .orElseThrow(() -> new RuntimeException(
+                                                "Vínculo usuário-projeto não encontrado"));
+
+                usuarioProjetoRepository.delete(usuarioProjeto);
         }
 
         public UsuarioProjetoResponseDTO converterParaDTO(

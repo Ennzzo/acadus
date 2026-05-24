@@ -17,16 +17,14 @@ import com.tis.acadus.dto.ProjetoResponseDTO;
 import com.tis.acadus.service.ProjetoService;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/projetos")
 @CrossOrigin("*")
+@RequiredArgsConstructor
 public class ProjetoController {
     private final ProjetoService service;
-
-    public ProjetoController(ProjetoService service) {
-        this.service = service;
-    }
 
     @GetMapping
     public List<ProjetoResponseDTO> listarProjetos() {
@@ -39,15 +37,12 @@ public class ProjetoController {
     }
 
     @PostMapping
-    public ProjetoResponseDTO criarProjeto(
-            @RequestBody @Valid ProjetoRequestDTO dto) {
+    public ProjetoResponseDTO criarProjeto(@RequestBody @Valid ProjetoRequestDTO dto) {
         return service.criarProjeto(dto);
     }
 
     @PutMapping("/{id}")
-    public ProjetoResponseDTO editarProjeto(
-            @PathVariable Long id,
-            @RequestBody @Valid ProjetoRequestDTO dto) {
+    public ProjetoResponseDTO editarProjeto(@PathVariable Long id, @RequestBody @Valid ProjetoRequestDTO dto) {
         return service.editarProjeto(id, dto);
     }
 

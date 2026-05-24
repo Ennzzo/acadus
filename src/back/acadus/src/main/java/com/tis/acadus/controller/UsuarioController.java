@@ -17,16 +17,14 @@ import com.tis.acadus.dto.UsuarioResponseDTO;
 import com.tis.acadus.service.UsuarioService;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/usuarios")
 @CrossOrigin("*")
+@RequiredArgsConstructor
 public class UsuarioController {
     private final UsuarioService service;
-
-    public UsuarioController(UsuarioService service) {
-        this.service = service;
-    }
 
     @GetMapping
     public List<UsuarioResponseDTO> listarUsuarios() {

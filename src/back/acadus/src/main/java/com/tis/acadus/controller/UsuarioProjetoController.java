@@ -19,25 +19,25 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/usuario-projeto")
+@RequestMapping("/usuarios-projetos")
 @CrossOrigin("*")
 @RequiredArgsConstructor
 public class UsuarioProjetoController {
     private final UsuarioProjetoService service;
 
     @GetMapping
-    public List<UsuarioProjetoResponseDTO> listar() {
-        return service.listar();
+    public List<UsuarioProjetoResponseDTO> listarUsuariosProjetos() {
+        return service.listarUsuariosProjetos();
     }
 
     @PostMapping
-    public UsuarioProjetoResponseDTO criar(
+    public UsuarioProjetoResponseDTO criarUsuariosProjetos(
             @RequestBody @Valid UsuarioProjetoRequestDTO dto) {
-        return service.criar(dto);
+        return service.criarUsuariosProjetos(dto);
     }
 
     @DeleteMapping("/{id}")
-    public void remover(@PathVariable Long id) {
-        service.remover(id);
+    public void excluirUsuariosProjetos(@PathVariable Long id) {
+        service.excluirUsuariosProjetos(id);
     }
 }

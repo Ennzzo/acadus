@@ -9,23 +9,22 @@ import com.tis.acadus.dto.UsuarioResponseDTO;
 import com.tis.acadus.entity.Usuario;
 import com.tis.acadus.repository.UsuarioRepository;
 
-@Service
-public class UsuarioService {
-    private final UsuarioRepository repository;
+import lombok.RequiredArgsConstructor;
 
-    public UsuarioService(UsuarioRepository repository) {
-        this.repository = repository;
-    }
+@Service
+@RequiredArgsConstructor
+public class UsuarioService {
+    private final UsuarioRepository usuarioRepository;
 
     public List<UsuarioResponseDTO> listarUsuarios() {
-        return repository.findAll()
+        return usuarioRepository.findAll()
                 .stream()
                 .map(this::converterParaDTO)
                 .toList();
     }
 
     public UsuarioResponseDTO buscarUsuarioPorId(Long id) {
-        Usuario usuario = repository.findById(id)
+        Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         return converterParaDTO(usuario);
@@ -39,13 +38,13 @@ public class UsuarioService {
                 .senha(dto.getSenha())
                 .build();
 
-        Usuario salvo = repository.save(usuario);
+        Usuario salvo = usuarioRepository.save(usuario);
 
         return converterParaDTO(salvo);
     }
 
     public UsuarioResponseDTO editarUsuario(Long id, UsuarioRequestDTO dto) {
-        Usuario usuario = repository.findById(id)
+        Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         usuario.setNome(dto.getNome());
@@ -53,16 +52,17 @@ public class UsuarioService {
         usuario.setEmail(dto.getEmail());
         usuario.setSenha(dto.getSenha());
 
-        return converterParaDTO(repository.save(usuario));
+        return converterParaDTO(usuarioRepository.save(usuario));
     }
 
     public void excluirUsuario(Long id) {
-        repository.deleteById(id);
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        usuarioRepository.delete(usuario);
     }
 
-    public UsuarioResponseDTO converterParaDTO(
-            Usuario usuario) {
-
+    public UsuarioResponseDTO converterParaDTO(Usuario usuario) {
         return UsuarioResponseDTO.builder()
                 .id(usuario.getId())
                 .nome(usuario.getNome())

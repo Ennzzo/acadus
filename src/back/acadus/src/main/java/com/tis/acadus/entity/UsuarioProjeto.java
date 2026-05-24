@@ -27,13 +27,13 @@ public class UsuarioProjeto {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_usuario")
+    @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
 
     @ManyToOne
-    @JoinColumn(name = "id_projeto")
+    @JoinColumn(name = "id_projeto", nullable = false)
     private Projeto projeto;
 
-    @Column(length = 50)
+    @Column(nullable = false, length = 50)
     private String papel;
 }

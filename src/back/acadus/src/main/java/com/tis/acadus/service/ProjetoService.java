@@ -11,24 +11,22 @@ import com.tis.acadus.entity.Projeto;
 import com.tis.acadus.entity.enums.StatusProjeto;
 import com.tis.acadus.repository.ProjetoRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class ProjetoService {
-
-    private final ProjetoRepository repository;
-
-    public ProjetoService(ProjetoRepository repository) {
-        this.repository = repository;
-    }
+    private final ProjetoRepository projetoRepository;
 
     public List<ProjetoResponseDTO> listarProjetos() {
-        return repository.findAll()
+        return projetoRepository.findAll()
                 .stream()
                 .map(this::converterParaDTO)
                 .toList();
     }
 
     public ProjetoResponseDTO buscarProjetoPorId(Long id) {
-        Projeto projeto = repository.findById(id)
+        Projeto projeto = projetoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
 
         return converterParaDTO(projeto);
@@ -42,28 +40,30 @@ public class ProjetoService {
                 .status(StatusProjeto.ATIVO)
                 .build();
 
-        Projeto salvo = repository.save(projeto);
+        Projeto salvo = projetoRepository.save(projeto);
 
         return converterParaDTO(salvo);
     }
 
     public ProjetoResponseDTO editarProjeto(Long id, ProjetoRequestDTO dto) {
 
-        Projeto projeto = repository.findById(id)
+        Projeto projeto = projetoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
 
         projeto.setNome(dto.getNome());
         projeto.setDescricao(dto.getDescricao());
 
-        return converterParaDTO(repository.save(projeto));
+        return converterParaDTO(projetoRepository.save(projeto));
     }
 
     public void excluirProjeto(Long id) {
-        repository.deleteById(id);
+        Projeto projeto = projetoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Projeto não encontrado"));
+
+        projetoRepository.delete(projeto);
     }
 
     public ProjetoResponseDTO converterParaDTO(Projeto projeto) {
-
         return ProjetoResponseDTO.builder()
                 .id(projeto.getId())
                 .nome(projeto.getNome())

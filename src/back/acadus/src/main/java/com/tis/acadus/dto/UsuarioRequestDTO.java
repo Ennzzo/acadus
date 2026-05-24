@@ -6,15 +6,16 @@ import lombok.Data;
 
 @Data
 public class UsuarioRequestDTO {
-    @NotBlank
+    @NotBlank(message = "O nome é obrigatório")
     private String nome;
 
-    @NotBlank
+    @NotBlank(message = "O sobrenome é obrigatório")
     private String sobrenome;
 
-    @Email
+    @NotBlank(message = "O email é obrigatório")
+    @Email(message = "O email informado é inválido")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "A senha é obrigatória")
     private String senha;
 }
