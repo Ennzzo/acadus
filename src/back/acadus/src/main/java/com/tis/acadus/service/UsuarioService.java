@@ -17,18 +17,21 @@ public class UsuarioService {
         this.repository = repository;
     }
 
-    public List<Usuario> listarUsuarios() {
-        return repository.findAll();
+    public List<UsuarioResponseDTO> listarUsuarios() {
+        return repository.findAll()
+                .stream()
+                .map(this::converterParaDTO)
+                .toList();
     }
 
-    public Usuario buscarUsuarioPorId(Long id) {
+    public UsuarioResponseDTO buscarUsuarioPorId(Long id) {
+        Usuario usuario = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+        return converterParaDTO(usuario);
     }
 
-    public Usuario criarUsuario(UsuarioRequestDTO dto) {
-
+    public UsuarioResponseDTO criarUsuario(UsuarioRequestDTO dto) {
         Usuario usuario = Usuario.builder()
                 .nome(dto.getNome())
                 .sobrenome(dto.getSobrenome())
@@ -36,26 +39,25 @@ public class UsuarioService {
                 .senha(dto.getSenha())
                 .build();
 
-        return repository.save(usuario);
+        Usuario salvo = repository.save(usuario);
+
+        return converterParaDTO(salvo);
     }
 
-    public Usuario editarUsuario(Long id, UsuarioRequestDTO dto) {
-
-        Usuario usuario = buscarUsuarioPorId(id);
+    public UsuarioResponseDTO editarUsuario(Long id, UsuarioRequestDTO dto) {
+        Usuario usuario = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         usuario.setNome(dto.getNome());
         usuario.setSobrenome(dto.getSobrenome());
         usuario.setEmail(dto.getEmail());
         usuario.setSenha(dto.getSenha());
 
-        return repository.save(usuario);
+        return converterParaDTO(repository.save(usuario));
     }
 
     public void excluirUsuario(Long id) {
-
-        Usuario usuario = buscarUsuarioPorId(id);
-
-        repository.delete(usuario);
+        repository.deleteById(id);
     }
 
     public UsuarioResponseDTO converterParaDTO(

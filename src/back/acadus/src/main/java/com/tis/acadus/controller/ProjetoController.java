@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tis.acadus.dto.ProjetoRequestDTO;
 import com.tis.acadus.dto.ProjetoResponseDTO;
-import com.tis.acadus.entity.Projeto;
 import com.tis.acadus.service.ProjetoService;
 
 import jakarta.validation.Valid;
@@ -30,39 +29,30 @@ public class ProjetoController {
     }
 
     @GetMapping
-    public List<Projeto> listarProjetos() {
+    public List<ProjetoResponseDTO> listarProjetos() {
         return service.listarProjetos();
     }
 
     @GetMapping("/{id}")
     public ProjetoResponseDTO buscarProjetoPorId(@PathVariable Long id) {
-        Projeto projeto = service.buscarProjetoPorId(id);
-
-        return service.converterParaDTO(projeto);
+        return service.buscarProjetoPorId(id);
     }
 
     @PostMapping
     public ProjetoResponseDTO criarProjeto(
             @RequestBody @Valid ProjetoRequestDTO dto) {
-
-        Projeto projeto = service.criarProjeto(dto);
-
-        return service.converterParaDTO(projeto);
+        return service.criarProjeto(dto);
     }
 
     @PutMapping("/{id}")
     public ProjetoResponseDTO editarProjeto(
             @PathVariable Long id,
             @RequestBody @Valid ProjetoRequestDTO dto) {
-
-        Projeto projeto = service.editarProjeto(id, dto);
-
-        return service.converterParaDTO(projeto);
+        return service.editarProjeto(id, dto);
     }
 
     @DeleteMapping("/{id}")
     public void excluirProjeto(@PathVariable Long id) {
-
         service.excluirProjeto(id);
     }
 }

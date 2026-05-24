@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tis.acadus.dto.UsuarioRequestDTO;
 import com.tis.acadus.dto.UsuarioResponseDTO;
-import com.tis.acadus.entity.Usuario;
 import com.tis.acadus.service.UsuarioService;
 
 import jakarta.validation.Valid;
@@ -30,36 +29,27 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public List<Usuario> listarUsuarios() {
+    public List<UsuarioResponseDTO> listarUsuarios() {
         return service.listarUsuarios();
     }
 
     @GetMapping("/{id}")
     public UsuarioResponseDTO buscarUsuarioPorId(
             @PathVariable Long id) {
-
-        Usuario usuario = service.buscarUsuarioPorId(id);
-
-        return service.converterParaDTO(usuario);
+        return service.buscarUsuarioPorId(id);
     }
 
     @PostMapping
     public UsuarioResponseDTO criarUsuario(
             @RequestBody @Valid UsuarioRequestDTO dto) {
-
-        Usuario usuario = service.criarUsuario(dto);
-
-        return service.converterParaDTO(usuario);
+        return service.criarUsuario(dto);
     }
 
     @PutMapping("/{id}")
     public UsuarioResponseDTO editarUsuario(
             @PathVariable Long id,
             @RequestBody @Valid UsuarioRequestDTO dto) {
-
-        Usuario usuario = service.editarUsuario(id, dto);
-
-        return service.converterParaDTO(usuario);
+        return service.editarUsuario(id, dto);
     }
 
     @DeleteMapping("/{id}")
