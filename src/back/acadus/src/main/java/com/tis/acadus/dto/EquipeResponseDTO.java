@@ -11,5 +11,6 @@ public class EquipeResponseDTO {
     private Long projetoId;
     private String nomeProjeto;
     private String nomeEquipe;
+    private String liderEmail;
     private List<MembroEquipeResponseDTO> membros;
 }

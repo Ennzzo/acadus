@@ -19,22 +19,30 @@ public class TarefaRequestDTO {
     @Size(max = 500, message = "A descrição deve ter no máximo 500 caracteres")
     private String descricao;
 
-    @Size(max = 100, message = "O responsável deve ter no máximo 100 caracteres")
+    @Size(max = 1000, message = "O responsável deve ter no máximo 1000 caracteres")
     private String responsavel;
 
+    @Size(max = 80, message = "A coluna deve ter no máximo 80 caracteres")
+    private String coluna;
+
+    private Boolean excluida;
+
     private LocalDate prazo;
+
+    @Size(max = 5, message = "A hora deve ter no máximo 5 caracteres")
+    private String horaPrazo;
 
     @Min(value = 0, message = "O progresso mínimo é 0")
     @Max(value = 100, message = "O progresso máximo é 100")
     private Integer progresso;
 
-    @Size(max = 300, message = "O comentário deve ter no máximo 300 caracteres")
+    @Size(max = 5000, message = "O comentário deve ter no máximo 5000 caracteres")
     private String comentario;
 
-    @Size(max = 1000, message = "O checklist deve ter no máximo 1000 caracteres")
+    @Size(max = 5000, message = "O checklist deve ter no máximo 5000 caracteres")
     private String checklist;
 
-    @Size(max = 150, message = "O nome do anexo deve ter no máximo 150 caracteres")
+    @Size(max = 20000000, message = "Os anexos estão muito grandes")
     private String anexo;
 
     private StatusTarefa status;

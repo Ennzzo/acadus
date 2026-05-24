@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/lib/api";
+import { getCurrentUser, getSelectedProjectId, setSelectedProjectId } from "@/lib/auth";
+import { toast } from "@/lib/toast";
 import { Projeto, StatusProjeto } from "@/types/projeto";
 import ProjectsHeader from "@/components/projetos/ProjectsHeader";
 import ProjectsToolbar, { ProjectViewMode, SortBy } from "@/components/projetos/ProjectsToolbar";
 import ProjectList from "@/components/projetos/ProjectList";
-import ProjectFormModal from "@/components/projetos/ProjectFormModal";
+import ProjectFormModal, { ProjectFormData } from "@/components/projetos/ProjectFormModal";
 import ProjectDeleteModal from "@/components/projetos/ProjectDeleteModal";
 import styles from "./styles.module.css";
 
@@ -65,29 +67,55 @@ export default function ProjetosPage() {
     setSortBy("nome");
   }
 
-  async function criarProjeto(dados: { nome: string; descricao: string }) {
-    const payload = { nomeProjeto: dados.nome, descricao: dados.descricao || null };
+  async function criarProjeto(dados: ProjectFormData) {
+    const usuario = getCurrentUser();
+    if (!usuario) {
+      throw new Error("Faça login para criar projetos.");
+    }
+
+    const payload = {
+      nomeProjeto: dados.nome,
+      descricao: dados.descricao || null,
+      liderEmail: usuario.email,
+      status: dados.status,
+      capaUrl: dados.capaUrl,
+    };
     const created = await apiFetch<Projeto>("/projetos", {
       method: "POST",
       body: JSON.stringify(payload),
     });
     setProjetos((prev) => [...prev, created]);
+    setSelectedProjectId(created.id);
+    toast.success("Projeto criado.");
   }
 
-  async function editarProjeto(dados: { nome: string; descricao: string }) {
+  async function editarProjeto(dados: ProjectFormData) {
     if (modal.type !== "editar") return;
-    const payload = { nomeProjeto: dados.nome, descricao: dados.descricao || null };
+    const payload = {
+      nomeProjeto: dados.nome,
+      descricao: dados.descricao || null,
+      status: dados.status,
+      capaUrl: dados.capaUrl,
+    };
     const updated = await apiFetch<Projeto>(`/projetos/${modal.projeto.id}`, {
       method: "PUT",
       body: JSON.stringify(payload),
     });
     setProjetos((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
+    toast.success("Projeto atualizado.");
   }
 
   async function excluirProjeto() {
     if (modal.type !== "excluir") return;
     await apiFetch(`/projetos/${modal.projeto.id}`, { method: "DELETE" });
-    setProjetos((prev) => prev.filter((p) => p.id !== modal.projeto.id));
+    setProjetos((prev) => {
+      const next = prev.filter((p) => p.id !== modal.projeto.id);
+      if (getSelectedProjectId() === modal.projeto.id && next[0]) {
+        setSelectedProjectId(next[0].id);
+      }
+      return next;
+    });
+    toast.success("Projeto excluído.");
   }
 
   return (

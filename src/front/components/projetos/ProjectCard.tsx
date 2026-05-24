@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { setSelectedProjectId } from "@/lib/auth";
 import { Projeto, StatusProjeto } from "@/types/projeto";
 import styles from "./ProjectCard.module.css";
 
@@ -57,7 +58,17 @@ export default function ProjectCard({ projeto, onEdit, onDelete }: ProjectCardPr
         )}
       </div>
 
-      <Link href={`/projetos/${projeto.id}`} className={styles.card}>
+      <Link
+        href={`/projetos/${projeto.id}`}
+        className={styles.card}
+        onClick={() => setSelectedProjectId(projeto.id)}
+      >
+        {projeto.capaUrl && (
+          <span
+            className={styles.cover}
+            style={{ backgroundImage: `url(${projeto.capaUrl})` }}
+          />
+        )}
         <div className={styles.top}>
           <div className={styles.meta}>
             <span className={styles.disciplina}>Projeto</span>
@@ -71,7 +82,7 @@ export default function ProjectCard({ projeto, onEdit, onDelete }: ProjectCardPr
 
         <div className={styles.bottom}>
           <div className={styles.footer}>
-            <span className={styles.professor}>Status: {statusLabel[projeto.status]}</span>
+            <span className={styles.professor}>{projeto.liderEmail || "Sem líder"}</span>
             <span className={styles.prazo}>{formatDate(projeto.dataCriacao)}</span>
           </div>
         </div>

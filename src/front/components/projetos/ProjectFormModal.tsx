@@ -1,14 +1,21 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Projeto } from "@/types/projeto";
+import { Projeto, StatusProjeto } from "@/types/projeto";
 import styles from "./ProjectFormModal.module.css";
+
+export interface ProjectFormData {
+  nome: string;
+  descricao: string;
+  status: StatusProjeto;
+  capaUrl: string | null;
+}
 
 interface ProjectFormModalProps {
   mode: "criar" | "editar";
   projeto?: Projeto;
   onClose: () => void;
-  onSave: (dados: { nome: string; descricao: string }) => Promise<void> | void;
+  onSave: (dados: ProjectFormData) => Promise<void> | void;
 }
 
 export default function ProjectFormModal({
@@ -19,6 +26,8 @@ export default function ProjectFormModal({
 }: ProjectFormModalProps) {
   const [nome, setNome] = useState(projeto?.nomeProjeto ?? "");
   const [descricao, setDescricao] = useState(projeto?.descricao ?? "");
+  const [status, setStatus] = useState<StatusProjeto>(projeto?.status ?? "ATIVO");
+  const [capaUrl, setCapaUrl] = useState<string | null>(projeto?.capaUrl ?? null);
   const [errors, setErrors] = useState<{ nome?: string; descricao?: string }>({});
   const [submitError, setSubmitError] = useState("");
   const [saving, setSaving] = useState(false);
@@ -56,13 +65,36 @@ export default function ProjectFormModal({
     try {
       setSaving(true);
       setSubmitError("");
-      await onSave({ nome: nome.trim(), descricao: descricao.trim() });
+      await onSave({
+        nome: nome.trim(),
+        descricao: descricao.trim(),
+        status,
+        capaUrl,
+      });
       onClose();
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : "Não foi possível salvar o projeto.");
     } finally {
       setSaving(false);
     }
+  }
+
+  function handleCover(file?: File) {
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setSubmitError("Escolha um arquivo de imagem.");
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      setSubmitError("A imagem deve ter no máximo 2MB.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => setCapaUrl(String(reader.result));
+    reader.readAsDataURL(file);
   }
 
   const isEditar = mode === "editar";
@@ -99,7 +131,7 @@ export default function ProjectFormModal({
               value={nome}
               onChange={(e) => setNome(e.target.value)}
               maxLength={100}
-              placeholder="Ex: TCC de Engenharia de Software"
+              placeholder="Nome do projeto"
             />
             {errors.nome && <span className={styles.errorMsg}>{errors.nome}</span>}
             <span className={styles.charCount}>{nome.length}/100</span>
@@ -116,11 +148,57 @@ export default function ProjectFormModal({
               onChange={(e) => setDescricao(e.target.value)}
               maxLength={500}
               rows={4}
-              placeholder="Descreva o projeto brevemente…"
+              placeholder="Descrição do projeto"
             />
             {errors.descricao && <span className={styles.errorMsg}>{errors.descricao}</span>}
             <span className={styles.charCount}>{descricao.length}/500</span>
           </div>
+
+          <div className={isEditar ? styles.inlineFields : styles.field}>
+            {isEditar && (
+              <div className={styles.field}>
+                <label htmlFor="modal-status" className={styles.label}>
+                  Status
+                </label>
+                <select
+                  id="modal-status"
+                  className={styles.input}
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value as StatusProjeto)}
+                >
+                  <option value="ATIVO">Ativo</option>
+                  <option value="CONCLUIDO">Concluído</option>
+                </select>
+              </div>
+            )}
+
+            <div className={styles.field}>
+              <span className={styles.label}>
+                Capa <span className={styles.optional}>(opcional)</span>
+              </span>
+              <label className={styles.uploadBox} htmlFor="modal-capa">
+                <span className={styles.uploadIcon}>+</span>
+                <span>{capaUrl ? "Trocar imagem de capa" : "Adicionar imagem de capa"}</span>
+                <small>PNG, JPG ou WEBP até 2MB</small>
+              </label>
+              <input
+                id="modal-capa"
+                type="file"
+                className={styles.fileInput}
+                accept="image/*"
+                onChange={(e) => handleCover(e.target.files?.[0])}
+              />
+            </div>
+          </div>
+
+          {capaUrl && (
+            <div className={styles.coverPreview}>
+              <div style={{ backgroundImage: `url(${capaUrl})` }} />
+              <button type="button" onClick={() => setCapaUrl(null)}>
+                Remover capa
+              </button>
+            </div>
+          )}
 
           {submitError && <span className={styles.errorMsg}>{submitError}</span>}
 

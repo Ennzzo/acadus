@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { setSelectedProjectId } from "@/lib/auth";
 import { Projeto, StatusProjeto } from "@/types/projeto";
 import styles from "./ProjectsTableView.module.css";
 
@@ -38,7 +39,11 @@ export default function ProjectsTableView({ projetos }: ProjectsTableViewProps) 
             return (
               <tr key={projeto.id} className={styles.row}>
                 <td className={styles.tdNome}>
-                  <Link href={`/projetos/${projeto.id}`} className={styles.nomeLink}>
+                  <Link
+                    href={`/projetos/${projeto.id}`}
+                    className={styles.nomeLink}
+                    onClick={() => setSelectedProjectId(projeto.id)}
+                  >
                     <span className={styles.nomeIcon}>
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
@@ -59,7 +64,12 @@ export default function ProjectsTableView({ projetos }: ProjectsTableViewProps) 
                 </td>
 
                 <td className={styles.tdAcoes}>
-                  <Link href={`/projetos/${projeto.id}`} className={styles.openBtn} title="Abrir projeto">
+                  <Link
+                    href={`/projetos/${projeto.id}`}
+                    className={styles.openBtn}
+                    title="Abrir projeto"
+                    onClick={() => setSelectedProjectId(projeto.id)}
+                  >
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                       <polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" />

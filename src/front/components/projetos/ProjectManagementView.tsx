@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import ProjectViewTabs, { ProjectView } from "@/components/projetos/ProjectViewTabs";
+import { apiFetch } from "@/lib/api";
+import { toast } from "@/lib/toast";
 import ProjectDetailOverview from "@/components/projetos/ProjectDetailOverview";
-import ProjectTeam from "@/components/projetos/ProjectTeam";
-import ProjectTasks from "@/components/projetos/ProjectTasks";
 import { Projeto } from "@/types/projeto";
+import ProjectFormModal, { ProjectFormData } from "./ProjectFormModal";
 import styles from "./ProjectManagementView.module.css";
 
 interface ProjectManagementViewProps {
@@ -13,22 +13,35 @@ interface ProjectManagementViewProps {
 }
 
 export default function ProjectManagementView({ projeto }: ProjectManagementViewProps) {
-  const [view, setView] = useState<ProjectView>("overview");
+  const [current, setCurrent] = useState(projeto);
+  const [editing, setEditing] = useState(false);
+
+  async function saveProject(dados: ProjectFormData) {
+    const updated = await apiFetch<Projeto>(`/projetos/${current.id}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        nomeProjeto: dados.nome,
+        descricao: dados.descricao || null,
+        status: dados.status,
+        capaUrl: dados.capaUrl,
+      }),
+    });
+
+    setCurrent(updated);
+    toast.success("Projeto atualizado.");
+  }
 
   return (
     <div className={styles.container}>
-      <ProjectViewTabs activeView={view} onChange={setView} />
+      <ProjectDetailOverview projeto={current} onEdit={() => setEditing(true)} />
 
-      {view === "overview" && (
-        <ProjectDetailOverview projeto={projeto} />
-      )}
-
-      {view === "equipe" && (
-        <ProjectTeam projetoId={projeto.id} />
-      )}
-
-      {view === "tarefas" && (
-        <ProjectTasks projetoId={projeto.id} />
+      {editing && (
+        <ProjectFormModal
+          mode="editar"
+          projeto={current}
+          onClose={() => setEditing(false)}
+          onSave={saveProject}
+        />
       )}
     </div>
   );

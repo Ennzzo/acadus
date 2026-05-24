@@ -12,3 +12,17 @@
   flex-direction: column;
   min-width: 0;
 }
+
+@media (max-width: 760px) {
+  .shell {
+    display: block;
+    height: 100dvh;
+  }
+
+  .main {
+    height: 100dvh;
+    padding-top: 4rem;
+    padding-bottom: 0;
+    box-sizing: border-box;
+  }
+}

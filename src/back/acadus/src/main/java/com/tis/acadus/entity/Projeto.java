@@ -14,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -45,6 +46,13 @@ public class Projeto {
 
     @Column(length = 100)
     private String nomeEquipe;
+
+    @Column(length = 150)
+    private String liderEmail;
+
+    @Lob
+    @Column(columnDefinition = "MEDIUMTEXT")
+    private String capaUrl;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

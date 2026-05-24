@@ -1,0 +1,130 @@
+.page {
+  min-height: 100%;
+  padding: 1.5rem;
+  background: #f8fafc;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.header h2 {
+  color: #0f172a;
+  font-size: 1.125rem;
+}
+
+.header p,
+.message,
+.empty p,
+.card p,
+.card span,
+.card small {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.header select {
+  border: 1px solid #dbe3ee;
+  border-radius: 0.55rem;
+  background: #ffffff;
+  color: #0f172a;
+  font: inherit;
+  font-size: 0.875rem;
+  padding: 0.55rem 0.75rem;
+}
+
+.empty,
+.card {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: #ffffff;
+}
+
+.empty {
+  padding: 2rem;
+  text-align: center;
+}
+
+.empty h3,
+.card h3 {
+  color: #0f172a;
+}
+
+.list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.card {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1rem;
+}
+
+.card span {
+  display: inline-flex;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+.card small {
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.card h3 {
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.actions button,
+.actions a {
+  border: 1px solid #dbe3ee;
+  border-radius: 0.5rem;
+  background: #ffffff;
+  color: #334155;
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.actions button:first-child,
+.actions a {
+  background: #0f172a;
+  border-color: #0f172a;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+@media (max-width: 720px) {
+  .card {
+    flex-direction: column;
+  }
+
+  .header {
+    flex-direction: column;
+  }
+
+  .header select {
+    width: 100%;
+  }
+
+  .actions {
+    justify-content: flex-start;
+  }
+}

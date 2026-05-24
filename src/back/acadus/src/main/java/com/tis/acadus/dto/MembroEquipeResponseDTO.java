@@ -16,6 +16,9 @@ public class MembroEquipeResponseDTO {
     private String email;
     private PapelMembro papel;
     private String mensagem;
+    private Boolean transferenciaPendente;
+    private Boolean bloqueado;
+    private String motivoBloqueio;
     private StatusConvite status;
     private LocalDate dataConvite;
 }

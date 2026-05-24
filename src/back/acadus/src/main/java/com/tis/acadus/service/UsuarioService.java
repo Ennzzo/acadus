@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.tis.acadus.dto.LoginRequestDTO;
 import com.tis.acadus.dto.UsuarioRequestDTO;
 import com.tis.acadus.dto.UsuarioResponseDTO;
 import com.tis.acadus.entity.Usuario;
@@ -28,6 +29,10 @@ public class UsuarioService {
     }
 
     public Usuario criarUsuario(UsuarioRequestDTO dto) {
+        repository.findByEmail(dto.getEmail())
+                .ifPresent(usuario -> {
+                    throw new RuntimeException("E-mail já cadastrado.");
+                });
 
         Usuario usuario = Usuario.builder()
                 .nome(dto.getNome())
@@ -37,6 +42,17 @@ public class UsuarioService {
                 .build();
 
         return repository.save(usuario);
+    }
+
+    public Usuario login(LoginRequestDTO dto) {
+        Usuario usuario = repository.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new RuntimeException("E-mail ou senha inválidos."));
+
+        if (!usuario.getSenha().equals(dto.getSenha())) {
+            throw new RuntimeException("E-mail ou senha inválidos.");
+        }
+
+        return usuario;
     }
 
     public Usuario editarUsuario(Long id, UsuarioRequestDTO dto) {

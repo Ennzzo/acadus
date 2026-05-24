@@ -7,6 +7,9 @@ export interface MembroEquipe {
   email: string;
   papel: PapelMembro;
   mensagem?: string | null;
+  transferenciaPendente?: boolean;
+  bloqueado?: boolean;
+  motivoBloqueio?: string | null;
   status: StatusConvite;
   dataConvite: string;
 }
@@ -15,5 +18,6 @@ export interface Equipe {
   projetoId: number;
   nomeProjeto: string;
   nomeEquipe?: string | null;
+  liderEmail?: string | null;
   membros: MembroEquipe[];
 }

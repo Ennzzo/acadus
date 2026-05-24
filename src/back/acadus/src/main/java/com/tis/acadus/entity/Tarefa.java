@@ -13,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -39,21 +40,33 @@ public class Tarefa {
     @Column(length = 500)
     private String descricao;
 
-    @Column(length = 100)
+    @Column(length = 1000)
     private String responsavel;
 
+    @Column(length = 80)
+    private String coluna;
+
+    @Column
+    private Boolean excluida;
+
     private LocalDate prazo;
+
+    @Column(length = 5)
+    private String horaPrazo;
 
     @Column(nullable = false)
     private Integer progresso;
 
-    @Column(length = 300)
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String comentario;
 
-    @Column(length = 1000)
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String checklist;
 
-    @Column(length = 150)
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String anexo;
 
     @Enumerated(EnumType.STRING)

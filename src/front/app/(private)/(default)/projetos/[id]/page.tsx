@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/lib/api";
+import { setSelectedProjectId } from "@/lib/auth";
 import { Projeto } from "@/types/projeto";
 import ProjectPageHeader from "@/components/projetos/ProjectPageHeader";
 import ProjectManagementView from "@/components/projetos/ProjectManagementView";
@@ -21,6 +22,7 @@ export default function ProjetoDetailPage() {
         setLoading(true);
         const data = await apiFetch<Projeto>(`/projetos/${params.id}`, { cache: "no-store" });
         setProjeto(data);
+        setSelectedProjectId(data.id);
         setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Não foi possível abrir o projeto.");

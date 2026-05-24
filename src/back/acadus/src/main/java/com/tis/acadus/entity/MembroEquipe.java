@@ -44,6 +44,15 @@ public class MembroEquipe {
     @Column(length = 300)
     private String mensagem;
 
+    @Column
+    private Boolean transferenciaPendente;
+
+    @Column
+    private Boolean bloqueado;
+
+    @Column(length = 300)
+    private String motivoBloqueio;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusConvite status;
