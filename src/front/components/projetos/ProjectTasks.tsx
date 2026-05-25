@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, MouseEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, MouseEvent, PointerEvent, useEffect, useMemo, useRef, useState } from "react";
 import { apiFetch } from "@/lib/api";
 import { getCurrentUser } from "@/lib/auth";
 import { toast } from "@/lib/toast";
@@ -54,6 +54,14 @@ type Anexo = {
   tipo: string;
   mime?: string;
   data?: string;
+};
+
+type DragItem = {
+  type: "task" | "column";
+  id: string;
+  startX: number;
+  startY: number;
+  moved: boolean;
 };
 
 const defaultColumn = "A fazer";
@@ -243,9 +251,27 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
   const [restoreTaskColumn, setRestoreTaskColumn] = useState("");
   const [editingComment, setEditingComment] = useState<string | null>(null);
   const [commentEditText, setCommentEditText] = useState("");
+  const touchDrag = useRef<DragItem | null>(null);
+  const ignoreClick = useRef(false);
+  const [dragging, setDragging] = useState<DragItem | null>(null);
 
   const isLeader = Boolean(usuario?.email && (!equipe?.liderEmail || equipe.liderEmail === usuario.email));
-  const membros = equipe?.membros.filter((membro) => membro.status === "ACEITO") ?? [];
+  const membros = useMemo(() => {
+    const aceitos = equipe?.membros.filter((membro) => membro.status === "ACEITO") ?? [];
+    if (!usuario || aceitos.some((membro) => membro.email === usuario.email)) return aceitos;
+
+    return [
+      {
+        id: -1,
+        projetoId,
+        email: usuario.email,
+        papel: "LIDER" as const,
+        status: "ACEITO" as const,
+        dataConvite: "1970-01-01",
+      },
+      ...aceitos,
+    ];
+  }, [equipe, projetoId, usuario]);
   const selectedProgress = progress(checklist);
   const locked = selected?.status === "APROVADA";
   const selectedMembers = draft.responsavel.split(",").map((item) => item.trim()).filter(Boolean);
@@ -358,6 +384,65 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
       next.splice(to, 0, column);
       return next;
     });
+  }
+
+  function startTouchDrag(event: PointerEvent, type: "task" | "column", id: string) {
+    if (event.pointerType === "mouse") return;
+    if ((event.target as HTMLElement).closest("button,input,textarea,select")) return;
+
+    touchDrag.current = {
+      type,
+      id,
+      startX: event.clientX,
+      startY: event.clientY,
+      moved: false,
+    };
+    setDragging(null);
+    event.currentTarget.setPointerCapture(event.pointerId);
+  }
+
+  function moveTouchDrag(event: PointerEvent) {
+    const item = touchDrag.current;
+    if (!item || event.pointerType === "mouse") return;
+
+    const moved = Math.abs(event.clientX - item.startX) > 8 || Math.abs(event.clientY - item.startY) > 8;
+    if (!moved && !item.moved) return;
+
+    item.moved = true;
+    ignoreClick.current = true;
+    setDragging({ ...item });
+  }
+
+  function endTouchDrag(event: PointerEvent) {
+    const item = touchDrag.current;
+    if (!item || event.pointerType === "mouse") return;
+
+    touchDrag.current = null;
+    setDragging(null);
+
+    if (!item.moved) return;
+
+    const target = document.elementFromPoint(event.clientX, event.clientY) as HTMLElement | null;
+    const trash = target?.closest("[data-trash='true']");
+    const columnTarget = target?.closest("[data-column-id]") as HTMLElement | null;
+
+    if (trash) {
+      if (item.type === "task") void sendToTrash(Number(item.id), "task");
+      if (item.type === "column") void sendToTrash(item.id, "column");
+    } else if (columnTarget) {
+      const targetId = columnTarget.dataset.columnId;
+      const targetName = columnTarget.dataset.columnName;
+
+      if (item.type === "column" && targetId) moveColumn(item.id, targetId);
+      if (item.type === "task" && targetName) {
+        const tarefa = tarefas.find((task) => task.id === Number(item.id));
+        if (tarefa) void moveTask(tarefa, targetName);
+      }
+    }
+
+    window.setTimeout(() => {
+      ignoreClick.current = false;
+    }, 80);
   }
 
   async function createTask(event: FormEvent, coluna: string) {
@@ -762,8 +847,14 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
           {board.map((coluna) => (
             <section
               key={coluna.id}
-              className={styles.column}
+              className={`${styles.column} ${dragging?.type === "column" && dragging.id === coluna.id ? styles.dragging : ""}`}
+              data-column-id={coluna.id}
+              data-column-name={coluna.nome}
               draggable
+              onPointerDown={(event) => startTouchDrag(event, "column", coluna.id)}
+              onPointerMove={moveTouchDrag}
+              onPointerUp={endTouchDrag}
+              onPointerCancel={endTouchDrag}
               onDragStart={(event) => {
                 event.dataTransfer.effectAllowed = "move";
                 event.dataTransfer.setData("column", coluna.id);
@@ -790,13 +881,26 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
                 {coluna.tarefas.map((tarefa) => (
                   <article
                     key={tarefa.id}
-                    className={`${styles.card} ${tarefa.status === "APROVADA" ? styles.doneCard : ""}`}
+                    className={`${styles.card} ${tarefa.status === "APROVADA" ? styles.doneCard : ""} ${dragging?.type === "task" && dragging.id === String(tarefa.id) ? styles.dragging : ""}`}
                     draggable
+                    onPointerDown={(event) => {
+                      event.stopPropagation();
+                      startTouchDrag(event, "task", String(tarefa.id));
+                    }}
+                    onPointerMove={moveTouchDrag}
+                    onPointerUp={endTouchDrag}
+                    onPointerCancel={endTouchDrag}
                     onDragStart={(event) => {
                       event.stopPropagation();
                       event.dataTransfer.setData("task", String(tarefa.id));
                     }}
-                    onClick={() => openTask(tarefa)}
+                    onClick={(event) => {
+                      if (ignoreClick.current) {
+                        event.preventDefault();
+                        return;
+                      }
+                      openTask(tarefa);
+                    }}
                   >
                     <strong>{tarefa.nome}</strong>
                     <div className={styles.cardFooter}>
@@ -893,6 +997,7 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
 
           <div
             className={styles.dropTrash}
+            data-trash="true"
             onClick={() => setTrashOpen(true)}
             onDragOver={(event) => event.preventDefault()}
             onDrop={(event) => {
@@ -1032,6 +1137,7 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
                         onChange={(event) => toggleChecklist(item.id, event.target.checked)}
                       />
                       <input
+                        className={styles.checkTextInput}
                         value={item.texto}
                         disabled={locked}
                         onChange={(event) => changeChecklistText(item.id, event.target.value)}
@@ -1050,7 +1156,7 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
                   ))}
                   {!locked && (
                     <div className={styles.addCheck}>
-                      <input value={newChecklist} onChange={(event) => setNewChecklist(event.target.value)} placeholder="Novo item" />
+                      <input className={styles.checkTextInput} value={newChecklist} onChange={(event) => setNewChecklist(event.target.value)} placeholder="Novo item" />
                       <button onClick={addChecklistItem} aria-label="Adicionar item ao checklist">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M12 5v14" />
