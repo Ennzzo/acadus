@@ -102,21 +102,21 @@ A proposta consiste no desenvolvimento de uma aplicação web que centralize as 
 
 [PROCESSO 3 - Gerenciamento de Tarefas](docs/processo-3-gerenciamento-tarefas.md)
 
-[PROCESSO 4 - Comunicação de Equipe](docs/processo-4-chat.md)
+[PROCESSO 4 - Comunicação de Equipe](docs/processo-4-comunicacao-equipe.md)
 
 [PROCESSO 5 - Gestão de Cronograma e Prazos](docs/processo-5-gestao-cronograma.md)
 
 ## 4. Projeto da solução
 
-[Projeto da solução](solution-design.md)
+[Projeto da solução](docs/solution-design.md)
 
 ## 5. Indicadores de desempenho
 
-[Indicadores de desempenho dos processos](performance-indicators.md)
+[Indicadores de desempenho dos processos](docs/performance-indicators.md)
 
 ## 6. Interface do sistema
 
-[Documentação da interface do sistema](interface.md)
+[Documentação da interface do sistema](docs/interface.md)
 
 ## 7. Conclusão
 
