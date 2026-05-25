@@ -30,19 +30,6 @@ public class UsuarioService {
         return converterParaDTO(usuario);
     }
 
-    public UsuarioResponseDTO criarUsuario(UsuarioRequestDTO dto) {
-        Usuario usuario = Usuario.builder()
-                .nome(dto.getNome())
-                .sobrenome(dto.getSobrenome())
-                .email(dto.getEmail())
-                .senha(dto.getSenha())
-                .build();
-
-        Usuario salvo = usuarioRepository.save(usuario);
-
-        return converterParaDTO(salvo);
-    }
-
     public UsuarioResponseDTO editarUsuario(Long id, UsuarioRequestDTO dto) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
