@@ -42,7 +42,6 @@ Os nomes das tabelas e colunas foram mantidos como aparecem no banco de dados pa
 
 | **Campo no banco** | **Tipo** | **Restrições** | **Valor default** |
 |--------------------|----------|----------------|-------------------|
-| id               | Número   | gerado automaticamente | |
 | nome             | Texto    | obrigatório; até 100 caracteres | |
 | sobrenome        | Texto    | obrigatório; até 100 caracteres | |
 | email            | Texto    | obrigatório; formato válido; único; até 150 caracteres | |

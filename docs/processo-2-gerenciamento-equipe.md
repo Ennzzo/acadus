@@ -35,11 +35,7 @@ Os nomes das tabelas e colunas foram mantidos como aparecem no banco de dados pa
 | convidado_por    | Texto    | e-mail do líder que enviou o convite | |
 | papel            | Texto    | novo convidado entra como membro | MEMBRO |
 | status           | Texto    | situação inicial do convite | PENDENTE |
-| data_convite     | Data     | gerada automaticamente | data atual |
-| transferencia_pendente | Booleano | gerado automaticamente | false |
-| bloqueado        | Booleano | gerado automaticamente | false |
-| removido         | Booleano | gerado automaticamente | false |
-| oculto_lista     | Booleano | gerado automaticamente | false |
+| data_convite     | Data     | registra quando o convite foi enviado | data atual |
 | notificacao.tipo | Texto    | identifica a notificação recebida pelo convidado | CONVITE |
 | notificacao.destinatario_email | Texto | e-mail do convidado | |
 | notificacao.referencia_id | Número | identifica o vínculo criado em membro_equipe | |

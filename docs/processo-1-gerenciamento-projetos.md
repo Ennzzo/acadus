@@ -38,7 +38,6 @@ Os nomes das tabelas e colunas foram mantidos como aparecem no banco de dados pa
 
 | **Campo no banco** | **Tipo** | **Restrições** | **Valor default** |
 |--------------------|----------|----------------|-------------------|
-| id               | Número   | gerado automaticamente | |
 | nome             | Texto    | obrigatório; até 100 caracteres | |
 | sobrenome        | Texto    | obrigatório; até 100 caracteres | |
 | email            | Texto    | obrigatório; formato válido; único; até 150 caracteres | |
@@ -78,18 +77,14 @@ Os nomes das tabelas e colunas foram mantidos como aparecem no banco de dados pa
 | projeto.nome_projeto | Texto | obrigatório; 3 a 100 caracteres | |
 | projeto.descricao | Texto | opcional; até 500 caracteres | |
 | projeto.capa_url | Texto | opcional; imagem de capa | |
-| projeto.data_criacao | Data | gerada automaticamente | data atual |
-| projeto.nome_equipe | Texto | gerado automaticamente a partir do nome do projeto | Equipe + nome do projeto |
+| projeto.data_criacao | Data | exibida somente para leitura | data atual |
+| projeto.nome_equipe | Texto | definido a partir do nome do projeto | Equipe + nome do projeto |
 | projeto.lider_email | Texto | e-mail do usuário que criou o projeto | |
 | projeto.status | Texto | valores ATIVO ou CONCLUIDO | ATIVO |
 | membro_equipe.projeto_id | Número | relaciona o líder ao projeto criado | projeto atual |
 | membro_equipe.email | Texto | e-mail do líder | |
 | membro_equipe.papel | Texto | papel inicial do criador | LIDER |
 | membro_equipe.status | Texto | vínculo inicial do criador | ACEITO |
-| membro_equipe.data_convite | Data | gerada automaticamente | data atual |
-| membro_equipe.data_entrada | Data e hora | gerada automaticamente | data e hora atuais |
-| membro_equipe.transferencia_pendente | Booleano | gerado automaticamente | false |
-| membro_equipe.bloqueado | Booleano | gerado automaticamente | false |
 
 | **Comandos** | **Destino** | **Tipo** |
 |--------------|-------------|----------|
@@ -148,7 +143,7 @@ A exclusão remove o registro da tabela projeto e os registros relacionados nas 
 | notificacao.tipo | Texto | identifica o aviso enviado ao líder | SAIDA_EQUIPE |
 | notificacao.destinatario_email | Texto | e-mail do líder atual | |
 | notificacao.projeto_id | Número | identifica o projeto deixado pelo membro | projeto atual |
-| notificacao.data_hora | Data e hora | gerada automaticamente | data e hora atuais |
+| notificacao.data_hora | Data e hora | registra quando o aviso foi criado | data e hora atuais |
 
 | **Comandos** | **Destino** | **Tipo** |
 |--------------|-------------|----------|

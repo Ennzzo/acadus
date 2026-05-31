@@ -52,8 +52,6 @@ Os nomes das tabelas e colunas foram mantidos como aparecem no banco de dados pa
 | Editar mensagem própria | Editar mensagem | default |
 | Excluir mensagem própria | Excluir mensagem | default |
 | Ocultar conversa | Ocultar conversa da lista | default |
-| Bloquear membro | Bloquear membro | default |
-| Desbloquear membro | Desbloquear membro | default |
 | Sair | Fim | default |
 
 ![Wireframe Tela de Visualizar Chat](images/processo_4/PROCESSO_4_VISUALIZAR_CHAT.png)
@@ -68,13 +66,9 @@ Os nomes das tabelas e colunas foram mantidos como aparecem no banco de dados pa
 | tipo_chat        | Texto    | EQUIPE ou PRIVADO:<email>:<email> | EQUIPE |
 | conteudo         | Texto    | obrigatório; até 1000 caracteres | |
 | anexo            | Texto    | opcional; armazena os anexos | |
-| editada          | Booleano | gerado automaticamente | false |
-| excluida         | Booleano | gerado automaticamente | false |
-| data_hora        | Data e hora | gerada automaticamente | data e hora atuais |
 | notificacao.tipo | Texto    | preenchido ao enviar uma mensagem privada | MENSAGEM_PRIVADA |
 | notificacao.destinatario_email | Texto | e-mail do destinatário da conversa privada | |
 | notificacao.remetente_email | Texto | e-mail do autor da mensagem privada | |
-| notificacao.data_hora | Data e hora | gerada automaticamente | data e hora atuais |
 
 | **Comandos** | **Destino** | **Tipo** |
 |--------------|-------------|----------|
@@ -125,32 +119,3 @@ Conversas privadas podem ser ocultadas da lista pelo próprio usuário. Chats de
 |--------------|-------------|----------|
 | Ocultar conversa | Atualizar lista de conversas | default |
 | Cancelar | Visualizar chat | cancel |
-
-**07. Bloquear membro - tabela membro_equipe**
-
-| **Campo no banco** | **Tipo** | **Restrições** | **Valor default** |
-|--------------------|----------|----------------|-------------------|
-| bloqueado        | Booleano | atualizado pelo líder da equipe | true |
-| motivo_bloqueio  | Texto    | opcional; até 300 caracteres | |
-
-| **Comandos** | **Destino** | **Tipo** |
-|--------------|-------------|----------|
-| Confirmar | Atualizar chat | default |
-| Cancelar | Visualizar chat | cancel |
-
-![Wireframe Tela de Editar Membro](images/processo_4/PROCESSO_4_EDITAR_MEMBRO.png)
-![Wireframe Tela de Bloquear Membro](images/processo_4/PROCESSO_4_BLOQUEAR_MEMBRO.png)
-
-**08. Desbloquear membro - tabela membro_equipe**
-
-| **Campo no banco** | **Tipo** | **Restrições** | **Valor default** |
-|--------------------|----------|----------------|-------------------|
-| bloqueado        | Booleano | atualizado pelo líder da equipe | false |
-| motivo_bloqueio  | Texto    | removido automaticamente | vazio |
-
-| **Comandos** | **Destino** | **Tipo** |
-|--------------|-------------|----------|
-| Confirmar | Atualizar chat | default |
-| Cancelar | Visualizar chat | cancel |
-
-![Wireframe Tela de Desbloquear Membro](images/processo_4/PROCESSO_4_DESBLOQUEAR_MEMBRO.png)
