@@ -1,6 +1,7 @@
 package com.tis.acadus.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.tis.acadus.entity.enums.PapelMembro;
 import com.tis.acadus.entity.enums.StatusConvite;
@@ -44,8 +45,15 @@ public class MembroEquipe {
     @Column(length = 300)
     private String mensagem;
 
+    @Column(length = 150)
+    private String convidadoPor;
+
     @Column
     private Boolean transferenciaPendente;
+
+    @Enumerated(EnumType.STRING)
+    @Column
+    private StatusConvite statusTransferencia;
 
     @Column
     private Boolean bloqueado;
@@ -59,6 +67,18 @@ public class MembroEquipe {
 
     @Column(nullable = false)
     private LocalDate dataConvite;
+
+    @Column
+    private LocalDateTime dataEntrada;
+
+    @Column
+    private LocalDateTime dataSaida;
+
+    @Column
+    private Boolean removido;
+
+    @Column
+    private Boolean ocultoLista;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "projeto_id", nullable = false)

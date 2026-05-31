@@ -22,123 +22,149 @@ O processo se encerra quando a tarefa é validada ou excluída.
 
 #### Detalhamento das atividades
 
-**01. Acessar sistema**
+As tabelas e colunas aparecem entre crases para facilitar a conferência no banco de dados.
 
-| **Campo**              | **Tipo**         | **Restrições**                          | **Valor default** |
-|------------------------|------------------|------------------------------------------|-------------------|
-| E-mail/Usuário        | Caixa de texto   | obrigatório; formato válido              |                   |
-| Senha                 | Caixa de texto   | obrigatório                              |                   |
+**01. Acessar sistema - tabela `usuario`**
 
-| **Comandos** | **Destino**        | **Tipo** |
-|--------------|-------------------|----------|
-| Entrar       | Visualizar tarefas| default  |
-| Criar conta  | Cadastro          | default  |
+| **Campo no banco** | **Tipo** | **Restrições** | **Valor default** |
+|--------------------|----------|----------------|-------------------|
+| `email`            | Texto    | obrigatório; usuário deve estar cadastrado | |
+| `senha`            | Texto    | obrigatório; deve corresponder ao usuário | |
+
+| **Comandos** | **Destino** | **Tipo** |
+|--------------|-------------|----------|
+| Entrar | Visualizar tarefas | default |
+| Criar conta | Cadastro | default |
 
 ![Tela de Login](images/processo_3/PROCESSO_3_LOGIN.png)
 
-**02. Cadastro**
+**02. Cadastro - tabela `usuario`**
 
-| **Campo**              | **Tipo**         | **Restrições**                          | **Valor default** |
-|------------------------|------------------|------------------------------------------|-------------------|
-| Nome                  | Caixa de texto   | obrigatório                              |                   |
-| Sobrenome             | Caixa de texto   | obrigatório                              |                   |
-| E-mail                | Caixa de texto   | obrigatório; formato válido              |                   |
-| Senha                 | Caixa de texto   | mínimo 6 caracteres                      |                   |
-| Confirmar senha       | Caixa de texto   | deve ser igual à senha                   |                   |
-| Aceitar termos        | Booleano         | obrigatório (true)                       | false             |
+| **Campo no banco** | **Tipo** | **Restrições** | **Valor default** |
+|--------------------|----------|----------------|-------------------|
+| `id`               | Número   | gerado automaticamente | |
+| `nome`             | Texto    | obrigatório; até 100 caracteres | |
+| `sobrenome`        | Texto    | obrigatório; até 100 caracteres | |
+| `email`            | Texto    | obrigatório; formato válido; único; até 150 caracteres | |
+| `senha`            | Texto    | obrigatório; 6 a 255 caracteres | |
 
-| **Comandos** | **Destino**         | **Tipo** |
-|--------------|--------------------|----------|
-| Criar conta  | Visualizar tarefas | default  |
-| Cancelar     | Acessar sistema    | cancel   |
+| **Comandos** | **Destino** | **Tipo** |
+|--------------|-------------|----------|
+| Criar conta | Visualizar tarefas | default |
+| Cancelar | Acessar sistema | cancel |
 
 ![Tela de Cadastro](images/processo_3/PROCESSO_3_CADASTRO.png)
 
-**03. Visualizar tarefas**
+**03. Visualizar tarefas - tabela `tarefa`**
 
-| **Campo**        | **Tipo**       | **Restrições**                         | **Valor default** |
-|------------------|---------------|----------------------------------------|-------------------|
-| Lista de tarefas | Tabela        | exibe tarefas do projeto do usuário    |                   |
-| Status           | Seleção única | pendente / em progresso / concluída    | pendente          |
+| **Campo no banco** | **Tipo** | **Restrições** | **Valor default** |
+|--------------------|----------|----------------|-------------------|
+| `projeto_id`       | Número   | lista somente tarefas do projeto atual | |
+| `nome`             | Texto    | nome apresentado no quadro | |
+| `coluna`           | Texto    | coluna do quadro onde a tarefa aparece | `A fazer` |
+| `status`           | Texto    | valores `PENDENTE`, `EM_ANDAMENTO`, `EM_VALIDACAO`, `APROVADA` ou `AJUSTES` | `PENDENTE` |
+| `excluida`         | Booleano | tarefas com valor `true` aparecem na lixeira | `false` |
 
-| **Comandos**       | **Destino**         | **Tipo** |
-|--------------------|--------------------|----------|
-| Abrir tarefa       | Visualizar tarefa  | default  |
-| Adicionar tarefa   | Criar tarefa       | default  |
+| **Comandos** | **Destino** | **Tipo** |
+|--------------|-------------|----------|
+| Abrir tarefa | Visualizar ou editar tarefa | default |
+| Adicionar tarefa | Criar tarefa | default |
+| Mover para lixeira | Lixeira de tarefas | default |
 
 ![Tela de Acesso ao Sistema de Gerenciamento de Tarefas](images/processo_3/PROCESSO_3_VISUALIZAR_TAREFAS.png)
 
-**04. Criar tarefa (Líder de equipe)**
+**04. Criar tarefa - tabela `tarefa`**
 
-| **Campo**        | **Tipo**         | **Restrições**                                   | **Valor default** |
-|------------------|------------------|--------------------------------------------------|-------------------|
-| Nome da tarefa   | Caixa de texto   | 3 a 100 caracteres                               |                   |
-| Descrição        | Área de texto    | até 500 caracteres                               |                   |
-| Atribuir membros     | Seleção múltipla | deve selecionar usuários válidos do grupo        |                   |
-| Prazo            | Data             | formato dd-mm-aaaa; data futura                  |                   |
-| Anexos           | Arquivo          | formatos: pdf, jpg, png; máx 5MB                 |                   |
-| Checklist         | Lista de itens (checkbox) | cada item: 10 a 100 caracteres |                |
+| **Campo no banco** | **Tipo** | **Restrições** | **Valor default** |
+|--------------------|----------|----------------|-------------------|
+| `projeto_id`       | Número   | identifica o projeto atual | |
+| `nome`             | Texto    | obrigatório; 3 a 100 caracteres | |
+| `descricao`        | Texto    | opcional; até 500 caracteres | |
+| `responsavel`      | Texto    | opcional; armazena os membros atribuídos | |
+| `coluna`           | Texto    | opcional; até 80 caracteres | `A fazer` |
+| `prazo`            | Data     | opcional | |
+| `hora_prazo`       | Texto    | opcional; até 5 caracteres | |
+| `comentario`       | Texto    | opcional; até 5000 caracteres | |
+| `checklist`        | Texto    | opcional; até 5000 caracteres | |
+| `anexo`            | Texto    | opcional; armazena os anexos | |
+| `progresso`        | Número   | calculado automaticamente a partir do checklist | `0` |
+| `status`           | Texto    | situação inicial da tarefa | `PENDENTE` |
+| `excluida`         | Booleano | indica se a tarefa está na lixeira | `false` |
 
-| **Comandos** | **Destino**          | **Tipo** |
-|--------------|---------------------|----------|
-| Salvar       | Visualizar tarefas  | default  |
-| Cancelar     | Visualizar tarefas  | cancel   |
+| **Comandos** | **Destino** | **Tipo** |
+|--------------|-------------|----------|
+| Salvar | Visualizar tarefas | default |
+| Cancelar | Visualizar tarefas | cancel |
 
 ![Tela de Criar Tarefas](images/processo_3/PROCESSO_3_CRIAR_TAREFA.png)
 
-**05. Visualizar tarefa / Editar tarefa (Líder de equipe)**
+**05. Visualizar ou editar tarefa - tabela `tarefa`**
 
-| **Campo**        | **Tipo**         | **Restrições**                        | **Valor default** |
-|------------------|------------------|---------------------------------------|-------------------|
-| Nome da tarefa   | Caixa de texto   | somente leitura                      |                   |
-| Descrição        | Área de texto    | até 500 caracteres                   |                   |
-| Anexos           | Arquivo          | formatos: pdf, jpg, png; máx 5MB                 |                   |
-| Atribuir membros     | Seleção múltipla | deve selecionar usuários válidos do grupo        |                   |
-| Status           | Seleção única    | pendente / em progresso / concluída  |                   |
-| Progresso        | Número           | 0 a 100 (%)                          | 0                 |
-| Comentário       | Área de texto    | até 300 caracteres                   |                   |
-| Checklist         | Lista de itens (checkbox) | cada item: 10 a 100 caracteres |                |
+| **Campo no banco** | **Tipo** | **Restrições** | **Valor default** |
+|--------------------|----------|----------------|-------------------|
+| `nome`             | Texto    | obrigatório; 3 a 100 caracteres | valor atual |
+| `descricao`        | Texto    | opcional; até 500 caracteres | valor atual |
+| `responsavel`      | Texto    | opcional; armazena os membros atribuídos | valor atual |
+| `coluna`           | Texto    | até 80 caracteres | valor atual |
+| `prazo`            | Data     | opcional | valor atual |
+| `hora_prazo`       | Texto    | opcional; até 5 caracteres | valor atual |
+| `comentario`       | Texto    | opcional; até 5000 caracteres | valor atual |
+| `checklist`        | Texto    | opcional; até 5000 caracteres | valor atual |
+| `anexo`            | Texto    | opcional; armazena os anexos | valor atual |
+| `progresso`        | Número   | recalculado automaticamente a partir do checklist | valor atual |
+| `status`           | Texto    | situação atual da tarefa | valor atual |
 
-| **Comandos**          | **Destino**              | **Tipo** |
-|-----------------------|--------------------------|----------|
-| Mover para lixeira    | Excluir tarefa           | default  |
-| Fechar                | Visualizar tarefas       | cancel   |
+| **Comandos** | **Destino** | **Tipo** |
+|--------------|-------------|----------|
+| Salvar alterações | Visualizar tarefas | default |
+| Enviar para validação | Validação da tarefa | default |
+| Mover para lixeira | Lixeira de tarefas | default |
+| Fechar | Visualizar tarefas | cancel |
 
 ![Tela de Edição de Tarefas - Visualização do Líder](images/processo_3/PROCESSO_3_EDITAR_TAREFA.png)
 
-**06. Executar tarefa / Enviar para validação (Membro de equipe)**
+**06. Mover tarefa para a lixeira - tabela `tarefa`**
 
-| **Campo**        | **Tipo**         | **Restrições**                        | **Valor default** |
-|------------------|------------------|---------------------------------------|-------------------|
-| Descrição        | Área de texto    | até 500 caracteres                   |                   |
-| Progresso        | Número           | 0 a 100 (%)                          | 0                 |
-| Comentário       | Área de texto    | até 300 caracteres                   |                   |
-| Anexos           | Arquivo          | formatos: pdf, jpg, png; máx 5MB     |                   |
-| Checklist         | Lista de itens (checkbox) | cada item: 10 a 100 caracteres |                |
+| **Campo no banco** | **Tipo** | **Restrições** | **Valor default** |
+|--------------------|----------|----------------|-------------------|
+| `excluida`         | Booleano | o registro continua no banco enquanto estiver na lixeira | `true` |
 
-| **Comandos**             | **Destino**                 | **Tipo** |
-|--------------------------|-----------------------------|----------|
-| Enviar para validação         | Enviar para validação       | default  |
-| Fechar                | Visualizar tarefas       | cancel   |
+| **Comandos** | **Destino** | **Tipo** |
+|--------------|-------------|----------|
+| Mover para lixeira | Lixeira de tarefas | default |
+| Restaurar | Visualizar tarefas | default |
+| Excluir definitivamente | Fim do processo da tarefa | default |
+
+Ao restaurar uma tarefa, `excluida` volta para `false`. Ao excluir definitivamente, o registro é removido da tabela `tarefa`.
+
+**07. Executar tarefa e enviar para validação - tabela `tarefa`**
+
+| **Campo no banco** | **Tipo** | **Restrições** | **Valor default** |
+|--------------------|----------|----------------|-------------------|
+| `checklist`        | Texto    | registra os itens marcados pelo membro | valor atual |
+| `progresso`        | Número   | calculado automaticamente a partir do checklist | valor atual |
+| `comentario`       | Texto    | registra comentários e o envio para validação | valor atual |
+| `anexo`            | Texto    | opcional; armazena os anexos | valor atual |
+| `status`           | Texto    | passa para `EM_VALIDACAO` ao enviar | `EM_VALIDACAO` |
+
+| **Comandos** | **Destino** | **Tipo** |
+|--------------|-------------|----------|
+| Enviar para validação | Validar tarefa | default |
+| Fechar | Visualizar tarefas | cancel |
 
 ![Tela de Visualização de Tarefas - Visualização do Membro](images/processo_3/PROCESSO_3_ENVIAR_VALIDACAO.png)
 
-**07. Validar tarefas (Líder de equipe)**
+**08. Validar tarefa - tabela `tarefa`**
 
-| **Campo**  | **Tipo**         | **Restrições**         | **Valor default** |
-|------------|------------------|------------------------|-------------------|
-| Status     | Seleção única    | aprovado / reprovado   |                   |
-| Comentário | Área de texto    | até 300 caracteres     |                   |
+| **Campo no banco** | **Tipo** | **Restrições** | **Valor default** |
+|--------------------|----------|----------------|-------------------|
+| `status`           | Texto    | passa para `APROVADA` ou `AJUSTES`; uma tarefa aprovada também pode ser reaberta como `EM_ANDAMENTO` | valor atual |
+| `comentario`       | Texto    | registra aprovação ou ajustes solicitados | valor atual |
 
-| **Comandos**       | **Destino**                     | **Tipo** |
-|--------------------|--------------------------------|----------|
-| Validar tarefa     | Fim (tarefa validada)          | default  |
-| Solicitar ajustes  | Ajustar tarefa                 | default  |
+| **Comandos** | **Destino** | **Tipo** |
+|--------------|-------------|----------|
+| Aprovar tarefa | Fim do processo da tarefa | default |
+| Solicitar ajustes | Executar tarefa | default |
+| Reabrir tarefa | Executar tarefa | default |
 
 ![Tela de Validação de Tarefas - Visualização do Líder](images/processo_3/PROCESSO_3_VALIDAR_TAREFA.png)
-
-
-
-
-
-

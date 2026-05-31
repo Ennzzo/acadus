@@ -7,6 +7,7 @@ interface ProjectCardProps {
   projeto: Projeto;
   onEdit?: (projeto: Projeto) => void;
   onDelete?: (projeto: Projeto) => void;
+  onLeave?: (projeto: Projeto) => void;
 }
 
 const statusLabel: Record<StatusProjeto, string> = {
@@ -24,7 +25,7 @@ function formatDate(iso: string): string {
   return `${day}/${month}/${year}`;
 }
 
-export default function ProjectCard({ projeto, onEdit, onDelete }: ProjectCardProps) {
+export default function ProjectCard({ projeto, onEdit, onDelete, onLeave }: ProjectCardProps) {
   return (
     <div className={styles.cardWrapper}>
       <div className={styles.cardActions}>
@@ -53,6 +54,20 @@ export default function ProjectCard({ projeto, onEdit, onDelete }: ProjectCardPr
               <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
               <path d="M10 11v6" /><path d="M14 11v6" />
               <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+            </svg>
+          </button>
+        )}
+        {onLeave && (
+          <button
+            className={`${styles.actionIcon} ${styles.actionIconLeave}`}
+            title="Sair do projeto"
+            onClick={(event) => { event.preventDefault(); onLeave(projeto); }}
+            aria-label="Sair do projeto"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10 17l5-5-5-5" />
+              <path d="M15 12H3" />
+              <path d="M21 19V5a2 2 0 0 0-2-2h-6" />
             </svg>
           </button>
         )}

@@ -1,9 +1,10 @@
 "use client";
 
-import { FormEvent, useCallback, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { apiFetch } from "@/lib/api";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, withUser } from "@/lib/auth";
 import { toast } from "@/lib/toast";
+import UserAvatar from "@/components/ui/UserAvatar";
 import { Equipe, MembroEquipe, PapelMembro, StatusConvite } from "@/types/equipe";
 import { Usuario } from "@/types/usuario";
 import styles from "./ProjectTeam.module.css";
@@ -15,17 +16,10 @@ interface ProjectTeamProps {
 const papelLabel: Record<PapelMembro, string> = {
   LIDER: "Líder",
   MEMBRO: "Membro",
-  OBSERVADOR: "Observador",
-};
-
-const statusLabel: Record<StatusConvite, string> = {
-  PENDENTE: "Pendente",
-  ACEITO: "Aceito",
-  RECUSADO: "Recusado",
 };
 
 function formatDate(iso: string) {
-  const [year, month, day] = iso.split("-");
+  const [year, month, day] = iso.slice(0, 10).split("-");
   return `${day}/${month}/${year}`;
 }
 
@@ -33,24 +27,33 @@ function validEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
 }
 
+function sameEmail(first?: string | null, second?: string | null) {
+  return Boolean(first && second && first.toLowerCase() === second.toLowerCase());
+}
+
+function memberName(membro: MembroEquipe) {
+  return [membro.nome, membro.sobrenome].filter(Boolean).join(" ") || "Usuário convidado";
+}
+
 export default function ProjectTeam({ projetoId }: ProjectTeamProps) {
   const [equipe, setEquipe] = useState<Equipe | null>(null);
   const [usuario] = useState<Usuario | null>(() => getCurrentUser());
   const [nomeEquipe, setNomeEquipe] = useState("");
   const [email, setEmail] = useState("");
-  const [papel, setPapel] = useState<PapelMembro>("MEMBRO");
   const [mensagem, setMensagem] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [actionError, setActionError] = useState("");
   const [removing, setRemoving] = useState<MembroEquipe | null>(null);
-  const [confirmDeleteTeam, setConfirmDeleteTeam] = useState(false);
+  const [reinviting, setReinviting] = useState<MembroEquipe | null>(null);
+  const [confirmLeaveTeam, setConfirmLeaveTeam] = useState(false);
   const [motivo, setMotivo] = useState("");
+  const [reinviteMessage, setReinviteMessage] = useState("");
 
   const loadTeam = useCallback(async (showLoading = true) => {
     try {
       if (showLoading) setLoading(true);
-      const data = await apiFetch<Equipe>(`/projetos/${projetoId}/equipe`, { cache: "no-store" });
+      const data = await apiFetch<Equipe>(withUser(`/projetos/${projetoId}/equipe`), { cache: "no-store" });
       setEquipe(data);
       setNomeEquipe(data.nomeEquipe || `Equipe ${data.nomeProjeto}`);
       setError(null);
@@ -69,7 +72,34 @@ export default function ProjectTeam({ projetoId }: ProjectTeamProps) {
     return () => window.clearTimeout(timer);
   }, [loadTeam]);
 
-  const isLeader = Boolean(usuario?.email && (!equipe?.liderEmail || equipe.liderEmail === usuario.email));
+  const isLeader = Boolean(usuario?.email && (!equipe?.liderEmail || sameEmail(equipe.liderEmail, usuario.email)));
+  const latestMembers = useMemo(() => {
+    const members = new Map<string, MembroEquipe>();
+
+    for (const membro of equipe?.membros ?? []) {
+      const key = membro.email.toLowerCase();
+      const saved = members.get(key);
+      if (!saved || membro.id > saved.id) members.set(key, membro);
+    }
+
+    return [...members.values()];
+  }, [equipe?.membros]);
+  const currentMember = latestMembers.find((membro) => sameEmail(membro.email, usuario?.email));
+  const canLeave = currentMember?.status === "ACEITO" && !currentMember.dataSaida && currentMember.papel !== "LIDER";
+  const activeMembers = latestMembers.filter((membro) => membro.status === "ACEITO" && !membro.dataSaida).length;
+  const membros = useMemo(() => {
+    return latestMembers
+      .filter((membro) => !membro.ocultoLista)
+      .sort((first, second) => {
+      if (first.papel !== second.papel) return first.papel === "LIDER" ? -1 : 1;
+
+      const firstIsUser = sameEmail(first.email, usuario?.email);
+      const secondIsUser = sameEmail(second.email, usuario?.email);
+      if (firstIsUser !== secondIsUser) return firstIsUser ? -1 : 1;
+
+      return first.id - second.id;
+    });
+  }, [latestMembers, usuario?.email]);
 
   function updateMember(membro: MembroEquipe) {
     setEquipe((atual) => atual
@@ -77,11 +107,21 @@ export default function ProjectTeam({ projetoId }: ProjectTeamProps) {
       : atual);
   }
 
+  function closeRemoval() {
+    setRemoving(null);
+    setMotivo("");
+  }
+
+  function closeReinvite() {
+    setReinviting(null);
+    setReinviteMessage("");
+  }
+
   async function saveTeam(event: FormEvent) {
     event.preventDefault();
     try {
       setActionError("");
-      const data = await apiFetch<Equipe>(`/projetos/${projetoId}/equipe`, {
+      const data = await apiFetch<Equipe>(withUser(`/projetos/${projetoId}/equipe`), {
         method: "PUT",
         body: JSON.stringify({ nomeEquipe: nomeEquipe.trim() }),
       });
@@ -111,18 +151,16 @@ export default function ProjectTeam({ projetoId }: ProjectTeamProps) {
 
     try {
       setActionError("");
-      const membro = await apiFetch<MembroEquipe>(`/projetos/${projetoId}/equipe/membros`, {
+      const membro = await apiFetch<MembroEquipe>(withUser(`/projetos/${projetoId}/equipe/membros`), {
         method: "POST",
         body: JSON.stringify({
           email: cleanEmail,
-          papel,
           mensagem: mensagem.trim() || null,
         }),
       });
 
       setEquipe((atual) => atual ? { ...atual, membros: [...atual.membros, membro] } : atual);
       setEmail("");
-      setPapel("MEMBRO");
       setMensagem("");
       toast.success("Convite enviado.");
     } catch (err) {
@@ -135,7 +173,7 @@ export default function ProjectTeam({ projetoId }: ProjectTeamProps) {
   async function changeStatus(membro: MembroEquipe, status: StatusConvite) {
     try {
       setActionError("");
-      const updated = await apiFetch<MembroEquipe>(`/equipe/membros/${membro.id}/status`, {
+      const updated = await apiFetch<MembroEquipe>(withUser(`/equipe/membros/${membro.id}/status`), {
         method: "PUT",
         body: JSON.stringify({ status }),
       });
@@ -152,7 +190,7 @@ export default function ProjectTeam({ projetoId }: ProjectTeamProps) {
   async function requestLeadership(membro: MembroEquipe) {
     try {
       setActionError("");
-      const updated = await apiFetch<MembroEquipe>(`/equipe/membros/${membro.id}/lideranca`, {
+      const updated = await apiFetch<MembroEquipe>(withUser(`/equipe/membros/${membro.id}/lideranca`), {
         method: "PUT",
       });
       updateMember(updated);
@@ -167,7 +205,7 @@ export default function ProjectTeam({ projetoId }: ProjectTeamProps) {
   async function answerLeadership(membro: MembroEquipe, action: "aceitar" | "recusar") {
     try {
       setActionError("");
-      await apiFetch<MembroEquipe>(`/equipe/membros/${membro.id}/lideranca/${action}`, {
+      await apiFetch<MembroEquipe>(withUser(`/equipe/membros/${membro.id}/lideranca/${action}`), {
         method: "PUT",
       });
       await loadTeam(false);
@@ -185,12 +223,12 @@ export default function ProjectTeam({ projetoId }: ProjectTeamProps) {
 
     try {
       setActionError("");
-      await apiFetch(`/equipe/membros/${removing.id}`, { method: "DELETE" });
-      setEquipe((atual) => atual
-        ? { ...atual, membros: atual.membros.filter((item) => item.id !== removing.id) }
-        : atual);
-      setRemoving(null);
-      setMotivo("");
+      await apiFetch(withUser(`/equipe/membros/${removing.id}`), {
+        method: "DELETE",
+        body: JSON.stringify({ mensagem: motivo.trim() || null }),
+      });
+      await loadTeam(false);
+      closeRemoval();
       toast.success(removing.status === "PENDENTE" ? "Convite cancelado." : "Membro removido.");
     } catch (err) {
       const message = err instanceof Error ? err.message : "Não foi possível remover o membro.";
@@ -199,24 +237,56 @@ export default function ProjectTeam({ projetoId }: ProjectTeamProps) {
     }
   }
 
-  async function deleteTeam(event: FormEvent) {
+  async function reinvite(event: FormEvent) {
+    event.preventDefault();
+    if (!reinviting) return;
+
+    try {
+      setActionError("");
+      await apiFetch<MembroEquipe>(withUser(`/projetos/${projetoId}/equipe/membros`), {
+        method: "POST",
+        body: JSON.stringify({ email: reinviting.email, mensagem: reinviteMessage.trim() || null }),
+      });
+      await loadTeam(false);
+      closeReinvite();
+      toast.success("Novo convite enviado.");
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Não foi possível enviar um novo convite.";
+      setActionError(message);
+      toast.error(message);
+    }
+  }
+
+  async function hideMember(membro: MembroEquipe) {
+    try {
+      setActionError("");
+      await apiFetch(withUser(`/equipe/membros/${membro.id}/lista`), { method: "DELETE" });
+      await loadTeam(false);
+      toast.success("Membro removido da lista.");
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Não foi possível remover o membro da lista.";
+      setActionError(message);
+      toast.error(message);
+    }
+  }
+
+  async function leaveTeam(event: FormEvent) {
     event.preventDefault();
     try {
       setActionError("");
-      await apiFetch(`/projetos/${projetoId}/equipe`, { method: "DELETE" });
-      setEquipe((atual) => atual ? { ...atual, nomeEquipe: null, membros: [] } : atual);
-      setNomeEquipe(equipe ? `Equipe ${equipe.nomeProjeto}` : "");
-      setConfirmDeleteTeam(false);
-      toast.success("Equipe excluída.");
+      await apiFetch(withUser(`/projetos/${projetoId}/sair`), { method: "PUT" });
+      await loadTeam(false);
+      setConfirmLeaveTeam(false);
+      toast.success("Você saiu da equipe.");
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Não foi possível excluir a equipe.";
+      const message = err instanceof Error ? err.message : "Não foi possível sair da equipe.";
       setActionError(message);
       toast.error(message);
     }
   }
 
   function renderActions(membro: MembroEquipe) {
-    const isCurrentUser = usuario?.email === membro.email;
+    const isCurrentUser = sameEmail(usuario?.email, membro.email);
 
     if (isCurrentUser && membro.status === "PENDENTE") {
       return (
@@ -244,7 +314,7 @@ export default function ProjectTeam({ projetoId }: ProjectTeamProps) {
       );
     }
 
-    if (isLeader && membro.status === "ACEITO" && membro.papel !== "LIDER") {
+    if (isLeader && membro.status === "ACEITO" && !membro.dataSaida && membro.papel !== "LIDER") {
       return (
         <>
           <button onClick={() => requestLeadership(membro)} disabled={membro.transferenciaPendente}>
@@ -257,6 +327,15 @@ export default function ProjectTeam({ projetoId }: ProjectTeamProps) {
       );
     }
 
+    if (isLeader && (membro.status === "RECUSADO" || membro.status === "CANCELADO" || Boolean(membro.dataSaida))) {
+      return (
+        <>
+          <button onClick={() => setReinviting(membro)}>Convidar novamente</button>
+          <button className={styles.dangerBtn} onClick={() => hideMember(membro)}>Remover da lista</button>
+        </>
+      );
+    }
+
     return null;
   }
 
@@ -265,11 +344,11 @@ export default function ProjectTeam({ projetoId }: ProjectTeamProps) {
       <div className={styles.header}>
         <div>
           <h2>Equipe</h2>
-          <p>{equipe?.membros.length ?? 0} membros cadastrados</p>
+          <p>{activeMembers} membros ativos</p>
         </div>
-        {isLeader && (
-          <button className={styles.dangerBtn} onClick={() => setConfirmDeleteTeam(true)} disabled={!equipe || loading}>
-            Excluir equipe
+        {canLeave && (
+          <button className={styles.dangerBtn} onClick={() => setConfirmLeaveTeam(true)} disabled={!equipe || loading}>
+            Sair da equipe
           </button>
         )}
       </div>
@@ -312,14 +391,6 @@ export default function ProjectTeam({ projetoId }: ProjectTeamProps) {
                   />
                 </label>
 
-                <label>
-                  Papel
-                  <select value={papel} onChange={(event) => setPapel(event.target.value as PapelMembro)}>
-                    <option value="MEMBRO">Membro</option>
-                    <option value="OBSERVADOR">Observador</option>
-                  </select>
-                </label>
-
                 <label className={styles.messageField}>
                   Mensagem
                   <textarea
@@ -336,30 +407,41 @@ export default function ProjectTeam({ projetoId }: ProjectTeamProps) {
           )}
 
           <section className={styles.membersPanel}>
-            {equipe.membros.length === 0 ? (
+            {membros.length === 0 ? (
               <div className={styles.empty}>
                 <h3>Nenhum membro na equipe</h3>
                 <p>Convide os participantes para organizar o trabalho do projeto.</p>
               </div>
             ) : (
               <div className={styles.list}>
-                {equipe.membros.map((membro) => (
-                  <article key={membro.id} className={styles.member}>
-                    <div>
-                      <h3>{membro.email}</h3>
-                      <p>{papelLabel[membro.papel]} · Convite em {formatDate(membro.dataConvite)}</p>
-                      {membro.mensagem && <p className={styles.note}>{membro.mensagem}</p>}
+                {membros.map((membro) => (
+                  <article key={membro.id} className={`${styles.member} ${membro.status === "RECUSADO" || membro.status === "CANCELADO" || membro.dataSaida ? styles.frozen : ""}`}>
+                    <span className={styles.avatar}>
+                      <UserAvatar fotoUrl={membro.fotoUrl} nome={membro.nome} email={membro.email} />
+                    </span>
+                    <div className={styles.memberInfo}>
+                      <h3>
+                        {memberName(membro)}
+                        {sameEmail(membro.email, usuario?.email) && <span className={styles.self}> (Eu)</span>}
+                      </h3>
+                      <p>
+                        {membro.email}
+                        {membro.status === "PENDENTE" && ` · Convite em ${formatDate(membro.dataConvite)}`}
+                        {membro.status === "RECUSADO" && ` · Convite recusado em ${formatDate(membro.dataConvite)}`}
+                        {membro.status === "CANCELADO" && ` · Convite cancelado em ${formatDate(membro.dataConvite)}`}
+                        {membro.status === "ACEITO" && !membro.dataSaida && ` · Entrou em ${formatDate(membro.dataEntrada || membro.dataConvite)}`}
+                        {membro.dataSaida && ` · ${membro.removido ? "Removido" : "Saiu"} em ${formatDate(membro.dataSaida)}`}
+                      </p>
                       {membro.transferenciaPendente && <p className={styles.note}>Transferência de liderança pendente</p>}
                     </div>
 
                     <div className={styles.memberSide}>
-                      <span className={`${styles.status} ${styles[membro.status]}`}>
-                        {statusLabel[membro.status]}
+                      <span className={`${styles.role} ${membro.status === "RECUSADO" || membro.status === "CANCELADO" || membro.dataSaida ? styles.INATIVO : styles[membro.papel]}`}>
+                        {membro.status === "RECUSADO" ? "Recusado" : membro.status === "CANCELADO" ? "Cancelado" : membro.dataSaida ? membro.removido ? "Removido" : "Saiu" : papelLabel[membro.papel]}
                       </span>
-
-                      <div className={styles.actions}>
-                        {renderActions(membro)}
-                      </div>
+                    </div>
+                    <div className={styles.actions}>
+                      {renderActions(membro)}
                     </div>
                   </article>
                 ))}
@@ -370,34 +452,59 @@ export default function ProjectTeam({ projetoId }: ProjectTeamProps) {
       )}
 
       {removing && (
-        <div className={styles.overlay} onClick={() => setRemoving(null)}>
+        <div className={styles.overlay} onClick={closeRemoval}>
           <form className={styles.modal} onSubmit={removeMember} onClick={(event) => event.stopPropagation()}>
-            <h2>Remover membro</h2>
+            <h2>{removing.status === "PENDENTE" ? "Cancelar convite" : "Remover membro"}</h2>
             <p>{removing.email}</p>
             <label>
-              Motivo da remoção
+              {removing.status === "PENDENTE" ? "Mensagem para o convidado" : "Mensagem para o membro"}
               <textarea
                 value={motivo}
                 onChange={(event) => setMotivo(event.target.value)}
+                maxLength={300}
                 rows={3}
               />
             </label>
             <div className={styles.modalActions}>
-              <button type="button" onClick={() => setRemoving(null)}>Cancelar</button>
-              <button type="submit" className={styles.dangerBtn}>Confirmar</button>
+              <button type="button" onClick={closeRemoval}>Cancelar</button>
+              <button type="submit" className={styles.dangerBtn}>
+                {removing.status === "PENDENTE" ? "Cancelar convite" : "Confirmar remoção"}
+              </button>
             </div>
           </form>
         </div>
       )}
 
-      {confirmDeleteTeam && (
-        <div className={styles.overlay} onClick={() => setConfirmDeleteTeam(false)}>
-          <form className={styles.modal} onSubmit={deleteTeam} onClick={(event) => event.stopPropagation()}>
-            <h2>Excluir equipe</h2>
-            <p>Esta ação remove a equipe e os membros convidados deste projeto.</p>
+      {reinviting && (
+        <div className={styles.overlay} onClick={closeReinvite}>
+          <form className={styles.modal} onSubmit={reinvite} onClick={(event) => event.stopPropagation()}>
+            <h2>Convidar novamente</h2>
+            <p>{reinviting.email}</p>
+            <label>
+              Mensagem para o convite
+              <textarea
+                value={reinviteMessage}
+                onChange={(event) => setReinviteMessage(event.target.value)}
+                maxLength={300}
+                rows={3}
+              />
+            </label>
             <div className={styles.modalActions}>
-              <button type="button" onClick={() => setConfirmDeleteTeam(false)}>Cancelar</button>
-              <button type="submit" className={styles.dangerBtn}>Confirmar</button>
+              <button type="button" onClick={closeReinvite}>Cancelar</button>
+              <button type="submit" className={styles.primaryBtn}>Enviar convite</button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {confirmLeaveTeam && (
+        <div className={styles.overlay} onClick={() => setConfirmLeaveTeam(false)}>
+          <form className={styles.modal} onSubmit={leaveTeam} onClick={(event) => event.stopPropagation()}>
+            <h2>Sair da equipe</h2>
+            <p>Você também deixará o projeto. Suas mensagens e tarefas continuarão salvas no histórico.</p>
+            <div className={styles.modalActions}>
+              <button type="button" onClick={() => setConfirmLeaveTeam(false)}>Cancelar</button>
+              <button type="submit" className={styles.dangerBtn}>Sair da equipe</button>
             </div>
           </form>
         </div>

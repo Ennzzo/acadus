@@ -12,6 +12,8 @@ export interface Tarefa {
   descricao?: string | null;
   responsavel?: string | null;
   coluna?: string | null;
+  colunaId?: number | null;
+  ordem?: number | null;
   excluida?: boolean;
   prazo?: string | null;
   horaPrazo?: string | null;

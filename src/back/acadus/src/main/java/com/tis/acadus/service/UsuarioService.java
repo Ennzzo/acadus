@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.tis.acadus.dto.LoginRequestDTO;
+import com.tis.acadus.dto.PerfilRequestDTO;
 import com.tis.acadus.dto.UsuarioRequestDTO;
 import com.tis.acadus.dto.UsuarioResponseDTO;
 import com.tis.acadus.entity.Usuario;
@@ -74,6 +75,20 @@ public class UsuarioService {
         repository.delete(usuario);
     }
 
+    public Usuario editarPerfil(Long id, PerfilRequestDTO dto) {
+        Usuario usuario = buscarUsuarioPorId(id);
+
+        usuario.setNome(dto.getNome());
+        usuario.setSobrenome(dto.getSobrenome());
+        usuario.setFotoUrl(dto.getFotoUrl());
+
+        if (dto.getNovaSenha() != null && !dto.getNovaSenha().isBlank()) {
+            usuario.setSenha(dto.getNovaSenha());
+        }
+
+        return repository.save(usuario);
+    }
+
     public UsuarioResponseDTO toDto(Usuario usuario) {
 
         return UsuarioResponseDTO.builder()
@@ -81,6 +96,7 @@ public class UsuarioService {
                 .nome(usuario.getNome())
                 .sobrenome(usuario.getSobrenome())
                 .email(usuario.getEmail())
+                .fotoUrl(usuario.getFotoUrl())
                 .build();
     }
 }

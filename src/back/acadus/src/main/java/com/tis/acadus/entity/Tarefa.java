@@ -37,7 +37,7 @@ public class Tarefa {
     @Column(nullable = false, length = 100)
     private String nome;
 
-    @Column(length = 500)
+    @Column(length = 800)
     private String descricao;
 
     @Column(length = 1000)
@@ -45,6 +45,9 @@ public class Tarefa {
 
     @Column(length = 80)
     private String coluna;
+
+    @Column
+    private Integer ordem;
 
     @Column
     private Boolean excluida;

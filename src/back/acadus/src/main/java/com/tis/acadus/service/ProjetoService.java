@@ -1,6 +1,7 @@
 package com.tis.acadus.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import com.tis.acadus.entity.enums.StatusProjeto;
 import com.tis.acadus.repository.ChatMensagemRepository;
 import com.tis.acadus.repository.MembroEquipeRepository;
 import com.tis.acadus.repository.ProjetoRepository;
+import com.tis.acadus.repository.QuadroColunaRepository;
 import com.tis.acadus.repository.TarefaRepository;
 
 @Service
@@ -24,26 +26,45 @@ public class ProjetoService {
     private final TarefaRepository tarefaRepository;
     private final MembroEquipeRepository membroRepository;
     private final ChatMensagemRepository chatRepository;
+    private final QuadroColunaRepository colunaRepository;
 
     public ProjetoService(
             ProjetoRepository repository,
             TarefaRepository tarefaRepository,
             MembroEquipeRepository membroRepository,
-            ChatMensagemRepository chatRepository) {
+            ChatMensagemRepository chatRepository,
+            QuadroColunaRepository colunaRepository) {
         this.repository = repository;
         this.tarefaRepository = tarefaRepository;
         this.membroRepository = membroRepository;
         this.chatRepository = chatRepository;
+        this.colunaRepository = colunaRepository;
     }
 
-    public List<Projeto> listarProjetos() {
-        return repository.findAll();
+    public List<Projeto> listarProjetos(String email) {
+        if (email == null || email.isBlank()) {
+            return List.of();
+        }
+
+        return membroRepository.findProjetosByEmailAndStatus(email, StatusConvite.ACEITO).stream()
+                .sorted((a, b) -> b.getId().compareTo(a.getId()))
+                .toList();
     }
 
     public Projeto buscarProjetoPorId(Long id) {
         return repository.findById(id)
                 .orElseThrow(() ->
                         new RuntimeException("Projeto não encontrado."));
+    }
+
+    public Projeto buscarProjetoDoUsuario(Long id, String email) {
+        if (email == null || email.isBlank()
+                || !membroRepository.existsByProjetoIdAndEmailIgnoreCaseAndStatusAndDataSaidaIsNull(
+                        id, email, StatusConvite.ACEITO)) {
+            throw new RuntimeException("Projeto não encontrado.");
+        }
+
+        return buscarProjetoPorId(id);
     }
 
     public Projeto criarProjeto(ProjetoRequestDTO dto) {
@@ -69,15 +90,16 @@ public class ProjetoService {
                     .transferenciaPendente(false)
                     .bloqueado(false)
                     .dataConvite(LocalDate.now())
+                    .dataEntrada(LocalDateTime.now())
                     .build());
         }
 
         return salvo;
     }
 
-    public Projeto editarProjeto(Long id, ProjetoRequestDTO dto) {
-
+    public Projeto editarProjeto(Long id, ProjetoRequestDTO dto, String email) {
         Projeto projeto = buscarProjetoPorId(id);
+        conferirLider(projeto, email);
 
         projeto.setNomeProjeto(dto.getNomeProjeto());
         projeto.setDescricao(dto.getDescricao());
@@ -90,14 +112,22 @@ public class ProjetoService {
     }
 
     @Transactional
-    public void excluirProjeto(Long id) {
-
+    public void excluirProjeto(Long id, String email) {
         Projeto projeto = buscarProjetoPorId(id);
+        conferirLider(projeto, email);
 
         tarefaRepository.deleteByProjetoId(id);
+        colunaRepository.deleteByProjetoId(id);
         chatRepository.deleteByProjetoId(id);
         membroRepository.deleteByProjetoId(id);
         repository.delete(projeto);
+    }
+
+    public void conferirLider(Projeto projeto, String email) {
+        if (email == null || projeto.getLiderEmail() == null
+                || !projeto.getLiderEmail().equalsIgnoreCase(email)) {
+            throw new RuntimeException("Somente o líder pode realizar esta ação.");
+        }
     }
 
     public ProjetoResponseDTO toDto(Projeto projeto) {

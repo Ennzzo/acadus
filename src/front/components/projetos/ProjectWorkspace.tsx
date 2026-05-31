@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ReactNode, useEffect, useMemo, useState } from "react";
 import { apiFetch } from "@/lib/api";
-import { getSelectedProjectId, setSelectedProjectId } from "@/lib/auth";
+import { clearSelectedProjectId, getSelectedProjectId, setSelectedProjectId, withUser } from "@/lib/auth";
 import { Projeto } from "@/types/projeto";
 import styles from "./ProjectWorkspace.module.css";
 
@@ -22,7 +22,7 @@ export default function ProjectWorkspace({ title, children }: ProjectWorkspacePr
     async function load() {
       try {
         setLoading(true);
-        const data = await apiFetch<Projeto[]>("/projetos", { cache: "no-store" });
+        const data = await apiFetch<Projeto[]>(withUser("/projetos"), { cache: "no-store" });
         setProjetos(data);
 
         const savedId = getSelectedProjectId();
@@ -32,6 +32,9 @@ export default function ProjectWorkspace({ title, children }: ProjectWorkspacePr
         if (first) {
           setSelectedId(first.id);
           setSelectedProjectId(first.id);
+        } else {
+          setSelectedId(null);
+          clearSelectedProjectId();
         }
 
         setError("");

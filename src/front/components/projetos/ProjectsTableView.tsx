@@ -5,6 +5,8 @@ import styles from "./ProjectsTableView.module.css";
 
 interface ProjectsTableViewProps {
   projetos: Projeto[];
+  currentUserEmail?: string;
+  onLeave: (projeto: Projeto) => void;
 }
 
 const statusLabel: Record<StatusProjeto, string> = {
@@ -22,7 +24,7 @@ function formatDate(iso: string): string {
   return `${day}/${month}/${year}`;
 }
 
-export default function ProjectsTableView({ projetos }: ProjectsTableViewProps) {
+export default function ProjectsTableView({ projetos, currentUserEmail, onLeave }: ProjectsTableViewProps) {
   return (
     <div className={styles.wrapper}>
       <table className={styles.table}>
@@ -64,18 +66,23 @@ export default function ProjectsTableView({ projetos }: ProjectsTableViewProps) 
                 </td>
 
                 <td className={styles.tdAcoes}>
-                  <Link
-                    href={`/projetos/${projeto.id}`}
-                    className={styles.openBtn}
-                    title="Abrir projeto"
-                    onClick={() => setSelectedProjectId(projeto.id)}
-                  >
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                      <polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" />
-                    </svg>
-                    Abrir
-                  </Link>
+                  <div className={styles.actions}>
+                    {projeto.liderEmail !== currentUserEmail && (
+                      <button className={styles.leaveBtn} onClick={() => onLeave(projeto)}>Sair</button>
+                    )}
+                    <Link
+                      href={`/projetos/${projeto.id}`}
+                      className={styles.openBtn}
+                      title="Abrir projeto"
+                      onClick={() => setSelectedProjectId(projeto.id)}
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                        <polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" />
+                      </svg>
+                      Abrir
+                    </Link>
+                  </div>
                 </td>
               </tr>
             );

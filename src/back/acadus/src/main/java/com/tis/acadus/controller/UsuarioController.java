@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tis.acadus.dto.LoginRequestDTO;
+import com.tis.acadus.dto.PerfilRequestDTO;
 import com.tis.acadus.dto.UsuarioRequestDTO;
 import com.tis.acadus.dto.UsuarioResponseDTO;
 import com.tis.acadus.entity.Usuario;
@@ -74,6 +75,14 @@ public class UsuarioController {
         Usuario usuario = service.editarUsuario(id, dto);
 
         return service.toDto(usuario);
+    }
+
+    @PutMapping("/{id}/perfil")
+    public UsuarioResponseDTO editarPerfil(
+            @PathVariable Long id,
+            @RequestBody @Valid PerfilRequestDTO dto) {
+
+        return service.toDto(service.editarPerfil(id, dto));
     }
 
     @DeleteMapping("/{id}")

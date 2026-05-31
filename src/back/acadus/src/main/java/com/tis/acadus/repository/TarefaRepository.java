@@ -13,6 +13,8 @@ public interface TarefaRepository extends JpaRepository<Tarefa, Long> {
 
     List<Tarefa> findByProjetoIdAndExcluidaTrueOrderByIdAsc(Long projetoId);
 
+    List<Tarefa> findByProjetoIdAndColunaOrderByOrdemAscIdAsc(Long projetoId, String coluna);
+
     List<Tarefa> findByResponsavelContainingIgnoreCaseOrderByPrazoAscIdAsc(String responsavel);
 
     void deleteByProjetoId(Long projetoId);

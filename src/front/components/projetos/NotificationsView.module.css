@@ -21,8 +21,8 @@
 .message,
 .empty p,
 .card p,
-.card span,
-.card small {
+.card small,
+.cardDate {
   color: #64748b;
   font-size: 0.875rem;
 }
@@ -60,17 +60,177 @@
 }
 
 .card {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 1rem;
   align-items: flex-start;
   padding: 1rem;
 }
 
-.card span {
+.readCard {
+  border-color: #d7e0eb;
+  background: #f1f5f9;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.cardContent {
+  min-width: 0;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.cardAside {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.cardDate {
+  white-space: nowrap;
+}
+
+.status {
   display: inline-flex;
-  margin-bottom: 0.25rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-style: normal;
   font-weight: 600;
+  padding: 0.16rem 0.42rem;
+}
+
+.PENDENTE {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.ACEITO {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.RECUSADO {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.CANCELADO {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.inviteMessage {
+  margin-top: 0.15rem;
+  border-radius: 0.55rem;
+  background: #f8fafc;
+  padding: 0.65rem 0.75rem;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 180;
+  display: grid;
+  place-items: center;
+  background: rgba(15, 23, 42, 0.35);
+  padding: 1rem;
+}
+
+.modal {
+  width: min(38rem, 100%);
+  display: grid;
+  gap: 0.9rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  padding: 1rem;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.modalHeader span {
+  color: #64748b;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.modalHeader h2 {
+  margin-top: 0.1rem;
+  color: #0f172a;
+  font-size: 1.05rem;
+}
+
+.modalHeader button {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  flex: none;
+  place-items: center;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  background: #ffffff;
+  color: #475569;
+  cursor: pointer;
+  padding: 0;
+}
+
+.modal dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.modal dl div {
+  display: grid;
+  gap: 0.1rem;
+  border-radius: 0.55rem;
+  background: #f8fafc;
+  padding: 0.65rem 0.75rem;
+}
+
+.modal dt {
+  color: #64748b;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.modal dd {
+  overflow-wrap: anywhere;
+  color: #334155;
+  font-size: 0.875rem;
+}
+
+.modal dl small {
+  overflow-wrap: anywhere;
+  color: #64748b;
+  font-size: 0.78rem;
+}
+
+.inviteMessage p {
+  margin-top: 0.25rem;
+  color: #475569;
+  line-height: 1.55;
+  white-space: pre-wrap;
 }
 
 .card small {
@@ -113,7 +273,12 @@
 
 @media (max-width: 720px) {
   .card {
-    flex-direction: column;
+    grid-template-columns: 1fr;
+  }
+
+  .cardAside {
+    width: 100%;
+    align-items: flex-start;
   }
 
   .header {
@@ -126,5 +291,9 @@
 
   .actions {
     justify-content: flex-start;
+  }
+
+  .modal dl {
+    grid-template-columns: 1fr;
   }
 }

@@ -36,7 +36,7 @@ public class ChatMensagem {
     @Column(length = 150)
     private String autorNome;
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, length = 340)
     private String tipoChat;
 
     @Lob
@@ -61,6 +61,6 @@ public class ChatMensagem {
     private LocalDateTime dataHora;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "projeto_id", nullable = false)
+    @JoinColumn(name = "projeto_id")
     private Projeto projeto;
 }

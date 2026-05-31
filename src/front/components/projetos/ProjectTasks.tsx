@@ -2,8 +2,9 @@
 
 import { FormEvent, MouseEvent, PointerEvent, useEffect, useMemo, useRef, useState } from "react";
 import { apiFetch } from "@/lib/api";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, withUser } from "@/lib/auth";
 import { toast } from "@/lib/toast";
+import UserAvatar from "@/components/ui/UserAvatar";
 import { Equipe } from "@/types/equipe";
 import { Tarefa } from "@/types/tarefa";
 import { Usuario } from "@/types/usuario";
@@ -14,24 +15,15 @@ interface ProjectTasksProps {
 }
 
 type Column = {
-  id: string;
+  id: number;
   nome: string;
+  ordem?: number;
 };
 
 type DeletedColumn = {
-  id: string;
+  id: number;
   nome: string;
   tarefas: Tarefa[];
-};
-
-type StoredColumns = {
-  projetoId: number;
-  colunas: Column[];
-};
-
-type StoredDeletedColumns = {
-  projetoId: number;
-  colunas: DeletedColumn[];
 };
 
 type ChecklistItem = {
@@ -74,6 +66,10 @@ function getDeletedColumnsKey(projetoId: number) {
   return `acadus_colunas_lixeira_${projetoId}`;
 }
 
+function getTaskOrderKey(projetoId: number) {
+  return `acadus_tarefas_ordem_${projetoId}`;
+}
+
 function getSavedKey(id: number) {
   return `acadus_tarefa_salva_${id}`;
 }
@@ -87,26 +83,18 @@ function readJson<T>(value: string | null | undefined, fallback: T): T {
   }
 }
 
-function readColumns(projetoId: number) {
-  if (typeof window === "undefined") return [];
-  const data = readJson<StoredColumns | Column[] | null>(localStorage.getItem(getColumnsKey(projetoId)), null);
-  if (!data || Array.isArray(data) || data.projetoId !== projetoId) return [];
-  return data.colunas;
+function errorMessage(err: unknown, fallback: string) {
+  return err instanceof Error && err.message ? err.message : fallback;
 }
 
-function saveColumns(projetoId: number, colunas: Column[]) {
-  localStorage.setItem(getColumnsKey(projetoId), JSON.stringify({ projetoId, colunas }));
+function clearOldBoardState(projetoId: number) {
+  localStorage.removeItem(getColumnsKey(projetoId));
+  localStorage.removeItem(getDeletedColumnsKey(projetoId));
+  localStorage.removeItem(getTaskOrderKey(projetoId));
 }
 
-function readDeletedColumns(projetoId: number) {
-  if (typeof window === "undefined") return [];
-  const data = readJson<StoredDeletedColumns | DeletedColumn[] | null>(localStorage.getItem(getDeletedColumnsKey(projetoId)), null);
-  if (!data || Array.isArray(data) || data.projetoId !== projetoId) return [];
-  return data.colunas;
-}
-
-function saveDeletedColumns(projetoId: number, colunas: DeletedColumn[]) {
-  localStorage.setItem(getDeletedColumnsKey(projetoId), JSON.stringify({ projetoId, colunas }));
+function sortTasks(tarefas: Tarefa[]) {
+  return [...tarefas].sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0) || a.id - b.id);
 }
 
 function parseChecklist(value?: string | null): ChecklistItem[] {
@@ -153,6 +141,18 @@ function formatDate(value: string) {
 function formatDateOnly(value: string) {
   const [year, month, day] = value.split("-");
   return `${day}/${month}/${year}`;
+}
+
+function today() {
+  const date = new Date();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${date.getFullYear()}-${month}-${day}`;
+}
+
+function currentTime() {
+  const date = new Date();
+  return `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
 }
 
 function fileType(name: string) {
@@ -212,19 +212,15 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
   const [equipe, setEquipe] = useState<Equipe | null>(null);
   const [tarefas, setTarefas] = useState<Tarefa[]>([]);
   const [lixeira, setLixeira] = useState<Tarefa[]>([]);
-  const [colunas, setColunas] = useState<Column[]>(() => {
-    if (typeof window === "undefined") return [];
-    return readColumns(projetoId);
-  });
+  const [colunas, setColunas] = useState<Column[]>([]);
   const [columnsProjectId, setColumnsProjectId] = useState(projetoId);
-  const [deletedColumns, setDeletedColumns] = useState<DeletedColumn[]>(() => {
-    if (typeof window === "undefined") return [];
-    return readDeletedColumns(projetoId);
-  });
+  const [deletedColumns, setDeletedColumns] = useState<DeletedColumn[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [newColumn, setNewColumn] = useState(false);
   const [newColumnName, setNewColumnName] = useState("");
+  const [editingColumn, setEditingColumn] = useState<number | null>(null);
+  const [editingColumnName, setEditingColumnName] = useState("");
   const [newTaskColumn, setNewTaskColumn] = useState("");
   const [newTaskName, setNewTaskName] = useState("");
   const [selected, setSelected] = useState<Tarefa | null>(null);
@@ -238,6 +234,7 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
   const [dateOpen, setDateOpen] = useState(false);
   const [trashOpen, setTrashOpen] = useState(false);
   const [adjustOpen, setAdjustOpen] = useState(false);
+  const [approvalOpen, setApprovalOpen] = useState(false);
   const [adjustText, setAdjustText] = useState("");
   const [draft, setDraft] = useState({ descricao: "", prazo: "", horaPrazo: "", responsavel: "" });
   const [dirty, setDirty] = useState(false);
@@ -246,18 +243,24 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
   const [restoreColumn, setRestoreColumn] = useState<DeletedColumn | null>(null);
   const [restoreIds, setRestoreIds] = useState<number[]>([]);
   const [deleteColumn, setDeleteColumn] = useState<DeletedColumn | null>(null);
+  const [trashColumn, setTrashColumn] = useState<Column | null>(null);
   const [deleteTask, setDeleteTask] = useState<Tarefa | null>(null);
   const [restoreTask, setRestoreTask] = useState<Tarefa | null>(null);
   const [restoreTaskColumn, setRestoreTaskColumn] = useState("");
   const [editingComment, setEditingComment] = useState<string | null>(null);
   const [commentEditText, setCommentEditText] = useState("");
+  const [deleteComment, setDeleteComment] = useState<Comentario | null>(null);
+  const [moreChecklist, setMoreChecklist] = useState(false);
+  const [moreComments, setMoreComments] = useState(false);
   const touchDrag = useRef<DragItem | null>(null);
   const ignoreClick = useRef(false);
+  const checklistRef = useRef<HTMLDivElement | null>(null);
+  const commentsRef = useRef<HTMLDivElement | null>(null);
   const [dragging, setDragging] = useState<DragItem | null>(null);
 
   const isLeader = Boolean(usuario?.email && (!equipe?.liderEmail || equipe.liderEmail === usuario.email));
   const membros = useMemo(() => {
-    const aceitos = equipe?.membros.filter((membro) => membro.status === "ACEITO") ?? [];
+    const aceitos = equipe?.membros.filter((membro) => membro.status === "ACEITO" && !membro.dataSaida) ?? [];
     if (!usuario || aceitos.some((membro) => membro.email === usuario.email)) return aceitos;
 
     return [
@@ -274,6 +277,11 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
   }, [equipe, projetoId, usuario]);
   const selectedProgress = progress(checklist);
   const locked = selected?.status === "APROVADA";
+  const awaitingValidation = selected?.status === "EM_VALIDACAO";
+  const awaitingAdjustments = selected?.status === "AJUSTES";
+  const frozen = locked || awaitingValidation || awaitingAdjustments;
+  const canEditDetails = isLeader && !frozen;
+  const canInteract = !frozen;
   const selectedMembers = draft.responsavel.split(",").map((item) => item.trim()).filter(Boolean);
   const selectedMembros = membros.filter((membro) => selectedMembers.includes(membro.email));
   const availableMembros = membros.filter((membro) => !selectedMembers.includes(membro.email));
@@ -281,7 +289,32 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
     () => columnsProjectId === projetoId ? colunas : [],
     [columnsProjectId, colunas, projetoId],
   );
-  const restoreColumns = projectColumns.length > 0 ? projectColumns : [{ id: defaultColumn, nome: defaultColumn }];
+  const restoreColumns = projectColumns;
+
+  useEffect(() => {
+    function update(element: HTMLDivElement | null, setMore: (value: boolean) => void) {
+      if (!element) {
+        setMore(false);
+        return;
+      }
+      setMore(element.scrollTop + element.clientHeight < element.scrollHeight - 2);
+    }
+
+    function updateLists() {
+      update(checklistRef.current, setMoreChecklist);
+      update(commentsRef.current, setMoreComments);
+    }
+
+    const frame = window.requestAnimationFrame(updateLists);
+    const observer = new ResizeObserver(updateLists);
+    if (checklistRef.current) observer.observe(checklistRef.current);
+    if (commentsRef.current) observer.observe(commentsRef.current);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
+  }, [selected, checklist, comments, editingComment]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -289,8 +322,8 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
       setTarefas([]);
       setLixeira([]);
       setSelected(null);
-      setColunas(readColumns(projetoId));
-      setDeletedColumns(readDeletedColumns(projetoId));
+      setColunas([]);
+      setDeletedColumns([]);
       setColumnsProjectId(projetoId);
     }, 0);
 
@@ -298,45 +331,37 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
   }, [projetoId]);
 
   useEffect(() => {
-    if (columnsProjectId !== projetoId) return;
-    saveColumns(projetoId, colunas);
-  }, [colunas, columnsProjectId, projetoId]);
-
-  useEffect(() => {
-    if (columnsProjectId !== projetoId) return;
-    saveDeletedColumns(projetoId, deletedColumns);
-  }, [deletedColumns, columnsProjectId, projetoId]);
-
-  useEffect(() => {
     let cancelled = false;
 
     async function load() {
       try {
         setLoading(true);
-        const [tasks, deleted, team] = await Promise.all([
+        const [tasks, deleted, team, columns, deletedBoardColumns] = await Promise.all([
           apiFetch<Tarefa[]>(`/projetos/${projetoId}/tarefas`, { cache: "no-store" }),
           apiFetch<Tarefa[]>(`/projetos/${projetoId}/tarefas/lixeira`, { cache: "no-store" }),
           apiFetch<Equipe>(`/projetos/${projetoId}/equipe`, { cache: "no-store" }),
+          apiFetch<Column[]>(withUser(`/projetos/${projetoId}/colunas`), { cache: "no-store" }),
+          apiFetch<Column[]>(withUser(`/projetos/${projetoId}/colunas?excluidas=true`), { cache: "no-store" }),
         ]);
 
         if (cancelled) return;
 
-        setTarefas(tasks);
+        setTarefas(sortTasks(tasks));
         setLixeira(deleted);
         setEquipe(team);
         setError("");
-
-        const savedColumns = readColumns(projetoId);
-        const taskNames = Array.from(new Set(tasks.map((task) => task.coluna || defaultColumn)));
-        const missingNames = taskNames.filter((nome) => !savedColumns.some((coluna) => coluna.nome === nome));
-        setColunas([
-          ...savedColumns,
-          ...missingNames.map((nome) => ({ id: nome, nome })),
-        ]);
+        setColunas(columns);
+        setDeletedColumns(deletedBoardColumns.map((column) => ({
+          ...column,
+          tarefas: deleted.filter((task) => (task.coluna || defaultColumn) === column.nome),
+        })));
+        clearOldBoardState(projetoId);
         setColumnsProjectId(projetoId);
       } catch (err) {
         if (cancelled) return;
-        setError(err instanceof Error ? err.message : "Erro ao carregar tarefas.");
+        const message = errorMessage(err, "Erro ao carregar tarefas.");
+        setError(message);
+        toast.error(message);
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -356,8 +381,9 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
     }));
   }, [projectColumns, tarefas]);
 
-  function createColumn(event?: FormEvent) {
+  async function createColumn(event?: FormEvent) {
     event?.preventDefault();
+    if (!isLeader) return;
     const nome = newColumnName.trim();
 
     if (!nome || colunas.length >= 10 || colunas.some((coluna) => coluna.nome.toLowerCase() === nome.toLowerCase())) {
@@ -366,27 +392,65 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
       return;
     }
 
-    setColunas([...colunas, { id: nome, nome }]);
-    setNewColumn(false);
-    setNewColumnName("");
+    try {
+      const created = await apiFetch<Column>(withUser(`/projetos/${projetoId}/colunas`), {
+        method: "POST",
+        body: JSON.stringify({ nome }),
+      });
+      setColunas([...colunas, created]);
+      setNewColumn(false);
+      setNewColumnName("");
+    } catch (err) {
+      toast.error(errorMessage(err, "Não foi possível criar a coluna."));
+    }
   }
 
-  function moveColumn(columnId: string, targetId: string) {
-    if (!columnId || columnId === targetId) return;
+  async function renameColumn(column: Column) {
+    const nome = editingColumnName.trim();
+    setEditingColumn(null);
+    setEditingColumnName("");
 
-    setColunas((items) => {
-      const from = items.findIndex((item) => item.id === columnId);
-      const to = items.findIndex((item) => item.id === targetId);
-      if (from < 0 || to < 0) return items;
+    if (!isLeader || !nome || nome === column.nome) return;
+    if (colunas.some((item) => item.id !== column.id && item.nome.toLowerCase() === nome.toLowerCase())) {
+      toast.error("Já existe uma coluna com este nome.");
+      return;
+    }
 
-      const next = [...items];
-      const [column] = next.splice(from, 1);
-      next.splice(to, 0, column);
-      return next;
-    });
+    try {
+      const updated = await apiFetch<Column>(withUser(`/colunas/${column.id}`), {
+        method: "PUT",
+        body: JSON.stringify({ nome }),
+      });
+      setTarefas((items) => items.map((task) => task.coluna === column.nome ? { ...task, coluna: updated.nome } : task));
+      setColunas((items) => items.map((item) => item.id === column.id ? updated : item));
+    } catch (err) {
+      toast.error(errorMessage(err, "Não foi possível alterar o nome da coluna."));
+    }
+  }
+
+  async function moveColumn(columnId: string, targetId: string) {
+    if (!isLeader || !columnId || columnId === targetId) return;
+
+    const from = colunas.findIndex((item) => item.id === Number(columnId));
+    const to = colunas.findIndex((item) => item.id === Number(targetId));
+    if (from < 0 || to < 0) return;
+    const next = [...colunas];
+    const [column] = next.splice(from, 1);
+    next.splice(to, 0, column);
+    setColunas(next);
+    try {
+      await apiFetch(withUser(`/projetos/${projetoId}/colunas/ordem`), {
+        method: "PUT",
+        body: JSON.stringify({ ids: next.map((item) => item.id) }),
+      });
+    } catch (err) {
+      setColunas(colunas);
+      toast.error(errorMessage(err, "Não foi possível ordenar as colunas."));
+    }
   }
 
   function startTouchDrag(event: PointerEvent, type: "task" | "column", id: string) {
+    if (type === "column" && !isLeader) return;
     if (event.pointerType === "mouse") return;
     if ((event.target as HTMLElement).closest("button,input,textarea,select")) return;
 
@@ -424,11 +488,12 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
 
     const target = document.elementFromPoint(event.clientX, event.clientY) as HTMLElement | null;
     const trash = target?.closest("[data-trash='true']");
+    const taskTarget = target?.closest("[data-task-id]") as HTMLElement | null;
     const columnTarget = target?.closest("[data-column-id]") as HTMLElement | null;
 
     if (trash) {
       if (item.type === "task") void sendToTrash(Number(item.id), "task");
-      if (item.type === "column") void sendToTrash(item.id, "column");
+      if (item.type === "column") askTrashColumn(item.id);
     } else if (columnTarget) {
       const targetId = columnTarget.dataset.columnId;
       const targetName = columnTarget.dataset.columnName;
@@ -436,7 +501,9 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
       if (item.type === "column" && targetId) moveColumn(item.id, targetId);
       if (item.type === "task" && targetName) {
         const tarefa = tarefas.find((task) => task.id === Number(item.id));
-        if (tarefa) void moveTask(tarefa, targetName);
+        const rect = taskTarget?.getBoundingClientRect();
+        const after = rect ? event.clientY > rect.top + rect.height / 2 : false;
+        if (tarefa) void moveTask(tarefa, targetName, Number(taskTarget?.dataset.taskId) || undefined, after);
       }
     }
 
@@ -447,6 +514,7 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
 
   async function createTask(event: FormEvent, coluna: string) {
     event.preventDefault();
+    if (!isLeader) return;
     const nome = newTaskName.trim();
     if (nome.length < 3) {
       setNewTaskColumn("");
@@ -455,7 +523,7 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
     }
 
     try {
-      const created = await apiFetch<Tarefa>(`/projetos/${projetoId}/tarefas`, {
+      const created = await apiFetch<Tarefa>(withUser(`/projetos/${projetoId}/tarefas`), {
         method: "POST",
         body: JSON.stringify({
           nome,
@@ -473,7 +541,7 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
       });
       setTarefas((items) => [...items, created]);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Não foi possível criar a tarefa.");
+      toast.error(errorMessage(err, "Não foi possível criar a tarefa."));
     } finally {
       setNewTaskColumn("");
       setNewTaskName("");
@@ -492,6 +560,9 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
       responsavel: tarefa.responsavel ?? "",
     });
     setDirty(false);
+    setEditingComment(null);
+    setCommentEditText("");
+    setDeleteComment(null);
     setSavedAt(localStorage.getItem(getSavedKey(tarefa.id)));
   }
 
@@ -507,6 +578,11 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
 
     if (nome.length > 100) {
       toast.error("O título da tarefa deve ter no máximo 100 caracteres.");
+      return null;
+    }
+
+    if (draft.descricao.length > 800) {
+      toast.error("A descrição deve ter no máximo 800 caracteres.");
       return null;
     }
 
@@ -526,65 +602,81 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
       ...extra,
     };
 
-    const updated = await apiFetch<Tarefa>(`/tarefas/${selected.id}`, {
-      method: "PUT",
-      body: JSON.stringify(payload),
-    });
+    try {
+      const updated = await apiFetch<Tarefa>(withUser(`/tarefas/${selected.id}`), {
+        method: "PUT",
+        body: JSON.stringify(payload),
+      });
 
-    setSelected(updated);
-    setChecklist(cleanChecklist);
-    setTarefas((items) => items.map((item) => item.id === updated.id ? updated : item));
-    setDirty(false);
-    const saved = new Date().toISOString();
-    localStorage.setItem(getSavedKey(updated.id), saved);
-    setSavedAt(saved);
-    return updated;
+      setSelected(updated);
+      setChecklist(cleanChecklist);
+      setTarefas((items) => items.map((item) => item.id === updated.id ? updated : item));
+      setDirty(false);
+      const saved = new Date().toISOString();
+      localStorage.setItem(getSavedKey(updated.id), saved);
+      setSavedAt(saved);
+      return updated;
+    } catch (err) {
+      toast.error(errorMessage(err, "Não foi possível salvar a tarefa."));
+      return null;
+    }
   }
 
-  async function moveTask(tarefa: Tarefa, coluna: string) {
-    const updated = await apiFetch<Tarefa>(`/tarefas/${tarefa.id}`, {
-      method: "PUT",
-      body: JSON.stringify({
-        nome: tarefa.nome,
-        descricao: tarefa.descricao,
-        responsavel: tarefa.responsavel,
-        coluna,
-        prazo: tarefa.prazo,
-        horaPrazo: tarefa.horaPrazo,
-        comentario: tarefa.comentario,
-        checklist: tarefa.checklist,
-        anexo: tarefa.anexo,
-        status: tarefa.status,
-        progresso: tarefa.progresso,
-        excluida: false,
-      }),
-    });
+  async function moveTask(tarefa: Tarefa, coluna: string, targetId?: number, after = false) {
+    if (targetId === tarefa.id) return;
+    const column = colunas.find((item) => item.nome === coluna);
+    if (!column) return;
+    const destination = tarefas.filter((item) => item.id !== tarefa.id && item.coluna === coluna);
+    const target = targetId ? destination.findIndex((item) => item.id === targetId) : -1;
+    const posicao = target >= 0 ? target + Number(after) : destination.length;
+    try {
+      const updated = await apiFetch<Tarefa>(withUser(`/tarefas/${tarefa.id}/movimento`), {
+        method: "PUT",
+        body: JSON.stringify({ colunaId: column.id, posicao }),
+      });
+      setTarefas((items) => {
+        const next = items.filter((item) => item.id !== updated.id);
+        const index = targetId ? next.findIndex((item) => item.id === targetId) : -1;
+        next.splice(index >= 0 ? index + Number(after) : next.length, 0, updated);
+        return next;
+      });
+    } catch (err) {
+      toast.error(errorMessage(err, "Não foi possível mover a tarefa."));
+    }
+  }
 
-    setTarefas((items) => items.map((item) => item.id === updated.id ? updated : item));
+  function askTrashColumn(id: string) {
+    if (!isLeader) return;
+    const column = colunas.find((item) => item.id === Number(id));
+    if (column) setTrashColumn(column);
   }
 
   async function sendToTrash(id: number | string, type: "task" | "column") {
-    if (type === "column") {
-      const column = colunas.find((item) => item.id === String(id));
-      if (!column) return;
-      const tasks = tarefas.filter((task) => (task.coluna || defaultColumn) === column.nome);
-      for (const task of tasks) {
-        await apiFetch(`/tarefas/${task.id}`, { method: "DELETE" });
+    if (!isLeader) return;
+    try {
+      if (type === "column") {
+        const column = colunas.find((item) => item.id === Number(id));
+        if (!column) return;
+        const tasks = tarefas.filter((task) => (task.coluna || defaultColumn) === column.nome);
+        await apiFetch(withUser(`/colunas/${column.id}`), { method: "DELETE" });
+        setColunas((items) => items.filter((item) => item.id !== column.id));
+        setDeletedColumns((items) => [...items, { ...column, tarefas: tasks }]);
+        setLixeira((items) => [...items, ...tasks.map((task) => ({ ...task, excluida: true }))]);
+        setTarefas((items) => items.filter((task) => (task.coluna || defaultColumn) !== column.nome));
+        return;
       }
-      setColunas((items) => items.filter((item) => item.id !== column.id));
-      setDeletedColumns((items) => [...items, { ...column, tarefas: tasks }]);
-      setLixeira((items) => [...items, ...tasks.map((task) => ({ ...task, excluida: true }))]);
-      setTarefas((items) => items.filter((task) => (task.coluna || defaultColumn) !== column.nome));
+
+      const tarefa = tarefas.find((task) => task.id === id);
+      if (!tarefa) return;
+
+      await apiFetch(withUser(`/tarefas/${id}`), { method: "DELETE" });
+      setTarefas((items) => items.filter((task) => task.id !== id));
+      setLixeira((items) => [...items, { ...tarefa, excluida: true }]);
+      setSelected(null);
+    } catch (err) {
+      toast.error(errorMessage(err, "Não foi possível enviar o item para a lixeira."));
       return;
     }
-
-    const tarefa = tarefas.find((task) => task.id === id);
-    if (!tarefa) return;
-
-    await apiFetch(`/tarefas/${id}`, { method: "DELETE" });
-    setTarefas((items) => items.filter((task) => task.id !== id));
-    setLixeira((items) => [...items, { ...tarefa, excluida: true }]);
-    setSelected(null);
   }
 
   async function openAttachment(file: Anexo) {
@@ -675,26 +767,45 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
   }
 
   async function submitValidation() {
+    if (checklist.length > 0 && checklist.some((item) => !item.feito)) {
+      toast.error("Conclua todo o checklist antes de enviar para validação.");
+      return;
+    }
     const next = addLocalComment("Tarefa enviada para validação.", true);
-    await saveTask({ status: "EM_VALIDACAO", comentario: JSON.stringify(next) });
+    const updated = await saveTask({ status: "EM_VALIDACAO", comentario: JSON.stringify(next) });
+    if (!updated) return;
     toast.success("Tarefa enviada para validação.");
   }
 
   async function approveTask() {
     const next = addLocalComment("Tarefa aprovada.", true);
-    await saveTask({ status: "APROVADA", comentario: JSON.stringify(next) });
+    const updated = await saveTask({ status: "APROVADA", comentario: JSON.stringify(next) });
+    if (!updated) return;
+    setApprovalOpen(false);
     toast.success("Tarefa aprovada.");
   }
 
-  async function reopenTask() {
-    await saveTask({ status: "EM_ANDAMENTO" });
-    toast.success("Tarefa reaberta.");
+  async function cancelValidation() {
+    const next = addLocalComment("Envio para validação cancelado.", true);
+    const updated = await saveTask({ status: "EM_ANDAMENTO", comentario: JSON.stringify(next) });
+    if (!updated) return;
+    toast.success("Envio para validação cancelado.");
+  }
+
+  async function beginAdjustments() {
+    const next = addLocalComment("Ajustes iniciados.", true);
+    const updated = await saveTask({ status: "EM_ANDAMENTO", comentario: JSON.stringify(next) });
+    if (!updated) return;
+    toast.success("Ajustes iniciados.");
   }
 
   async function requestAdjustments(event: FormEvent) {
     event.preventDefault();
-    const next = addLocalComment(`Ajustes solicitados: ${adjustText}`, true);
-    await saveTask({ status: "AJUSTES", comentario: JSON.stringify(next) });
+    const texto = adjustText.trim();
+    if (!texto) return;
+    const next = addLocalComment(`Ajustes solicitados: ${texto}`, true);
+    const updated = await saveTask({ status: "AJUSTES", comentario: JSON.stringify(next) });
+    if (!updated) return;
     setAdjustOpen(false);
     setAdjustText("");
     toast.success("Ajustes solicitados.");
@@ -717,6 +828,9 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
       return;
     }
     setSelected(null);
+    setEditingComment(null);
+    setCommentEditText("");
+    setDeleteComment(null);
   }
 
   function setDraftValue(value: Partial<typeof draft>) {
@@ -739,35 +853,20 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
   }
 
   async function restoreDeletedColumn(column: DeletedColumn, ids: number[]) {
-    if (!colunas.some((item) => item.id === column.id)) {
-      setColunas((items) => [...items, { id: column.id, nome: column.nome }]);
-    }
-
-    const selectedTasks = column.tarefas.filter((task) => ids.includes(task.id));
-    for (const task of selectedTasks) {
-      const updated = await apiFetch<Tarefa>(`/tarefas/${task.id}`, {
+    try {
+      await apiFetch(withUser(`/colunas/${column.id}/restaurar`), {
         method: "PUT",
-        body: JSON.stringify({
-          nome: task.nome,
-          descricao: task.descricao,
-          responsavel: task.responsavel,
-          coluna: column.nome,
-          prazo: task.prazo,
-          horaPrazo: task.horaPrazo,
-          comentario: task.comentario,
-          checklist: task.checklist,
-          anexo: task.anexo,
-          status: task.status,
-          progresso: task.progresso,
-          excluida: false,
-        }),
+        body: JSON.stringify({ tarefaIds: ids }),
       });
-      setTarefas((items) => [...items, updated]);
+      const selectedTasks = column.tarefas.filter((task) => ids.includes(task.id)).map((task) => ({ ...task, excluida: false }));
+      setColunas((items) => [...items, { id: column.id, nome: column.nome }]);
+      setTarefas((items) => [...items, ...selectedTasks]);
+      setLixeira((items) => items.filter((task) => !ids.includes(task.id)));
+      setDeletedColumns((items) => items.filter((item) => item.id !== column.id));
+      setRestoreColumn(null);
+    } catch (err) {
+      toast.error(errorMessage(err, "Não foi possível restaurar a coluna."));
     }
-
-    setLixeira((items) => items.filter((task) => !ids.includes(task.id)));
-    setDeletedColumns((items) => items.filter((item) => item.id !== column.id));
-    setRestoreColumn(null);
   }
 
   function askRestoreTask(task: Tarefa) {
@@ -778,51 +877,45 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
     }
 
     setRestoreTask(task);
-    setRestoreTaskColumn(restoreColumns[0]?.nome ?? defaultColumn);
+    setRestoreTaskColumn(restoreColumns[0]?.nome ?? "");
   }
 
   async function restoreDeletedTask(task: Tarefa, columnName: string) {
-    if (!colunas.some((item) => item.nome === columnName)) {
-      setColunas((items) => [...items, { id: columnName, nome: columnName }]);
+    const column = colunas.find((item) => item.nome === columnName);
+    if (!column) return;
+    try {
+      const updated = await apiFetch<Tarefa>(withUser(`/tarefas/${task.id}/restaurar`), {
+        method: "PUT",
+        body: JSON.stringify({ colunaId: column.id }),
+      });
+      setTarefas((items) => [...items.filter((item) => item.id !== updated.id), updated]);
+      setLixeira((items) => items.filter((item) => item.id !== updated.id));
+      setRestoreTask(null);
+    } catch (err) {
+      toast.error(errorMessage(err, "Não foi possível restaurar a tarefa."));
     }
-
-    const updated = await apiFetch<Tarefa>(`/tarefas/${task.id}`, {
-      method: "PUT",
-      body: JSON.stringify({
-        nome: task.nome,
-        descricao: task.descricao,
-        responsavel: task.responsavel,
-        coluna: columnName,
-        prazo: task.prazo,
-        horaPrazo: task.horaPrazo,
-        comentario: task.comentario,
-        checklist: task.checklist,
-        anexo: task.anexo,
-        status: task.status,
-        progresso: task.progresso,
-        excluida: false,
-      }),
-    });
-
-    setTarefas((items) => [...items.filter((item) => item.id !== updated.id), updated]);
-    setLixeira((items) => items.filter((item) => item.id !== updated.id));
-    setRestoreTask(null);
   }
 
   async function deleteTaskForever(task: Tarefa) {
-    await apiFetch(`/tarefas/${task.id}/definitivo`, { method: "DELETE" });
-    setLixeira((items) => items.filter((item) => item.id !== task.id));
-    setDeleteTask(null);
+    try {
+      await apiFetch(withUser(`/tarefas/${task.id}/definitivo`), { method: "DELETE" });
+      setLixeira((items) => items.filter((item) => item.id !== task.id));
+      setDeleteTask(null);
+    } catch (err) {
+      toast.error(errorMessage(err, "Não foi possível excluir a tarefa."));
+    }
   }
 
   async function deleteColumnForever(column: DeletedColumn) {
-    for (const task of column.tarefas) {
-      await apiFetch(`/tarefas/${task.id}/definitivo`, { method: "DELETE" });
+    try {
+      await apiFetch(withUser(`/colunas/${column.id}/definitivo`), { method: "DELETE" });
+      const ids = column.tarefas.map((task) => task.id);
+      setLixeira((items) => items.filter((task) => !ids.includes(task.id)));
+      setDeletedColumns((items) => items.filter((item) => item.id !== column.id));
+      setDeleteColumn(null);
+    } catch (err) {
+      toast.error(errorMessage(err, "Não foi possível excluir a coluna."));
     }
-    const ids = column.tarefas.map((task) => task.id);
-    setLixeira((items) => items.filter((task) => !ids.includes(task.id)));
-    setDeletedColumns((items) => items.filter((item) => item.id !== column.id));
-    setDeleteColumn(null);
   }
 
   function openRestoreColumn(column: DeletedColumn) {
@@ -847,23 +940,23 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
           {board.map((coluna) => (
             <section
               key={coluna.id}
-              className={`${styles.column} ${dragging?.type === "column" && dragging.id === coluna.id ? styles.dragging : ""}`}
+              className={`${styles.column} ${dragging?.type === "column" && dragging.id === String(coluna.id) ? styles.dragging : ""}`}
               data-column-id={coluna.id}
               data-column-name={coluna.nome}
-              draggable
-              onPointerDown={(event) => startTouchDrag(event, "column", coluna.id)}
+              draggable={isLeader}
+              onPointerDown={(event) => startTouchDrag(event, "column", String(coluna.id))}
               onPointerMove={moveTouchDrag}
               onPointerUp={endTouchDrag}
               onPointerCancel={endTouchDrag}
               onDragStart={(event) => {
                 event.dataTransfer.effectAllowed = "move";
-                event.dataTransfer.setData("column", coluna.id);
+                event.dataTransfer.setData("column", String(coluna.id));
               }}
               onDragOver={(event) => event.preventDefault()}
               onDrop={(event) => {
                 const columnId = event.dataTransfer.getData("column");
                 if (columnId) {
-                  moveColumn(columnId, coluna.id);
+                  void moveColumn(columnId, String(coluna.id));
                   return;
                 }
 
@@ -873,7 +966,33 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
               }}
             >
               <div className={styles.columnHeader}>
-                <h3>{coluna.nome}</h3>
+                {editingColumn === coluna.id ? (
+                  <input
+                    className={styles.columnTitleInput}
+                    value={editingColumnName}
+                    autoFocus
+                    onPointerDown={(event) => event.stopPropagation()}
+                    onChange={(event) => setEditingColumnName(event.target.value)}
+                    onBlur={() => renameColumn(coluna)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") void renameColumn(coluna);
+                      if (event.key === "Escape") {
+                        setEditingColumn(null);
+                        setEditingColumnName("");
+                      }
+                    }}
+                  />
+                ) : (
+                  <h3
+                    onClick={() => {
+                      if (!isLeader) return;
+                      setEditingColumn(coluna.id);
+                      setEditingColumnName(coluna.nome);
+                    }}
+                  >
+                    {coluna.nome}
+                  </h3>
+                )}
                 <small>{coluna.tarefas.length}</small>
               </div>
 
@@ -881,7 +1000,8 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
                 {coluna.tarefas.map((tarefa) => (
                   <article
                     key={tarefa.id}
-                    className={`${styles.card} ${tarefa.status === "APROVADA" ? styles.doneCard : ""} ${dragging?.type === "task" && dragging.id === String(tarefa.id) ? styles.dragging : ""}`}
+                    className={`${styles.card} ${tarefa.status === "APROVADA" ? styles.doneCard : ""} ${tarefa.status === "EM_VALIDACAO" ? styles.validationCard : ""} ${tarefa.status === "AJUSTES" ? styles.adjustmentCard : ""} ${dragging?.type === "task" && dragging.id === String(tarefa.id) ? styles.dragging : ""}`}
+                    data-task-id={tarefa.id}
                     draggable
                     onPointerDown={(event) => {
                       event.stopPropagation();
@@ -894,6 +1014,19 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
                       event.stopPropagation();
                       event.dataTransfer.setData("task", String(tarefa.id));
                     }}
+                    onDragOver={(event) => {
+                      event.preventDefault();
+                      event.stopPropagation();
+                    }}
+                    onDrop={(event) => {
+                      event.preventDefault();
+                      event.stopPropagation();
+                      const id = Number(event.dataTransfer.getData("task"));
+                      const moved = tarefas.find((task) => task.id === id);
+                      const rect = event.currentTarget.getBoundingClientRect();
+                      const after = event.clientY > rect.top + rect.height / 2;
+                      if (moved) void moveTask(moved, coluna.nome, tarefa.id, after);
+                    }}
                     onClick={(event) => {
                       if (ignoreClick.current) {
                         event.preventDefault();
@@ -903,6 +1036,9 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
                     }}
                   >
                     <strong>{tarefa.nome}</strong>
+                    {tarefa.status === "EM_VALIDACAO" && <em className={styles.taskStatus}>Aguardando validação</em>}
+                    {tarefa.status === "AJUSTES" && <em className={styles.taskStatus}>Ajustes solicitados</em>}
+                    {tarefa.status === "APROVADA" && <em className={styles.taskStatus}>Concluída</em>}
                     <div className={styles.cardFooter}>
                       <div className={styles.cardMeta}>
                         {tarefa.descricao && (
@@ -943,7 +1079,9 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
                       {tarefa.responsavel && (
                         <div className={styles.cardMembers}>
                           {tarefa.responsavel.split(",").map((email) => email.trim()).filter(Boolean).slice(0, 3).map((email) => (
-                            <span key={email} title={email}>{email.slice(0, 1).toUpperCase()}</span>
+                            <span key={email} title={email}>
+                              <UserAvatar fotoUrl={equipe?.membros.find((membro) => membro.email === email)?.fotoUrl} email={email} />
+                            </span>
                           ))}
                           {tarefa.responsavel.split(",").map((email) => email.trim()).filter(Boolean).length > 3 && <span>+</span>}
                         </div>
@@ -953,7 +1091,7 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
                 ))}
               </div>
 
-              {newTaskColumn === coluna.nome ? (
+              {isLeader && newTaskColumn === coluna.nome ? (
                 <form className={styles.inlineForm} onSubmit={(event) => createTask(event, coluna.nome)}>
                   <input
                     value={newTaskName}
@@ -966,15 +1104,15 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
                     <button type="button" onClick={() => setNewTaskColumn("")}>Cancelar</button>
                   </div>
                 </form>
-              ) : (
+              ) : isLeader ? (
                 <button className={styles.addCard} onClick={() => setNewTaskColumn(coluna.nome)}>
                   + Adicionar tarefa
                 </button>
-              )}
+              ) : null}
             </section>
           ))}
 
-          {projectColumns.length < 10 && (
+          {isLeader && projectColumns.length < 10 && (
             <section className={styles.emptyColumn}>
               {newColumn ? (
                 <form className={styles.inlineForm} onSubmit={createColumn}>
@@ -995,7 +1133,7 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
             </section>
           )}
 
-          <div
+          {isLeader && <div
             className={styles.dropTrash}
             data-trash="true"
             onClick={() => setTrashOpen(true)}
@@ -1007,7 +1145,7 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
                 sendToTrash(taskId, "task");
                 return;
               }
-              if (columnId) sendToTrash(columnId, "column");
+              if (columnId) askTrashColumn(columnId);
             }}
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -1017,7 +1155,7 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
               <path d="M14 11v6" />
               <path d="M9 6V4h6v2" />
             </svg>
-          </div>
+          </div>}
         </div>
       )}
 
@@ -1028,6 +1166,7 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
               <input
                 className={styles.titleInput}
                 value={selected.nome}
+                disabled={!canEditDetails}
                 onChange={(event) => {
                   setSelected({ ...selected, nome: event.target.value });
                   setDirty(true);
@@ -1042,20 +1181,22 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
                 <div className={styles.quickActions}>
                   <div className={styles.quickGroup} data-floating="members">
                     <span>Membros</span>
-                    <button className={styles.memberButton} onClick={() => setMembersOpen((open) => !open)} aria-label="Adicionar membros">
-                      {selectedMembros.length === 0 && <span className={styles.plusIcon}>+</span>}
+                    <button className={`${styles.memberButton} ${!canEditDetails ? styles.readOnlyAction : ""}`} disabled={!canEditDetails} onClick={() => setMembersOpen((open) => !open)} aria-label={canEditDetails ? "Adicionar membros" : "Membros atribuídos"}>
+                      {selectedMembros.length === 0 && <span className={styles.plusIcon}>{canEditDetails ? "+" : "Nenhum"}</span>}
                       {selectedMembros.slice(0, 4).map((membro) => (
-                        <span key={membro.id} className={styles.avatar}>{membro.email.slice(0, 1).toUpperCase()}</span>
+                        <span key={membro.id} className={styles.avatar}>
+                          <UserAvatar fotoUrl={membro.fotoUrl} nome={membro.nome} email={membro.email} />
+                        </span>
                       ))}
                     </button>
-                    {membersOpen && (
+                    {membersOpen && canEditDetails && (
                       <div className={styles.popover}>
                         {availableMembros.length > 0 && <small className={styles.popoverLabel}>Disponíveis</small>}
                         {availableMembros.map((membro) => (
                           <button key={membro.id} className={styles.memberOption} onClick={() => toggleMember(membro.email)}>
-                            <span>{membro.email.slice(0, 1).toUpperCase()}</span>
+                            <span><UserAvatar fotoUrl={membro.fotoUrl} nome={membro.nome} email={membro.email} /></span>
                             <div>
-                              <strong>{membro.email.split("@")[0]}</strong>
+                              <strong>{membro.email.split("@")[0]}{membro.email.toLowerCase() === usuario?.email.toLowerCase() && <small className={styles.self}> (Eu)</small>}</strong>
                               <small>{membro.email}</small>
                             </div>
                             <em>+</em>
@@ -1064,12 +1205,12 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
                         {selectedMembros.length > 0 && <small className={styles.popoverLabel}>Adicionados</small>}
                         {selectedMembros.map((membro) => (
                           <button key={membro.id} className={styles.memberOption} onClick={() => toggleMember(membro.email)}>
-                            <span>{membro.email.slice(0, 1).toUpperCase()}</span>
+                            <span><UserAvatar fotoUrl={membro.fotoUrl} nome={membro.nome} email={membro.email} /></span>
                             <div>
-                              <strong>{membro.email.split("@")[0]}</strong>
+                              <strong>{membro.email.split("@")[0]}{membro.email.toLowerCase() === usuario?.email.toLowerCase() && <small className={styles.self}> (Eu)</small>}</strong>
                               <small>{membro.email}</small>
                             </div>
-                            <em><IconX size={13} /></em>
+                            <em className={styles.removeMember}><IconX size={13} /></em>
                           </button>
                         ))}
                       </div>
@@ -1077,18 +1218,18 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
                   </div>
                   <div className={styles.quickGroup} data-floating="date">
                     <span>Data</span>
-                    <button className={styles.dateButton} disabled={locked} onClick={() => setDateOpen((open) => !open)}>
-                      {draft.prazo ? `${formatDateOnly(draft.prazo)} ${draft.horaPrazo || ""}` : "Definir prazo"}
+                    <button className={`${styles.dateButton} ${!canEditDetails ? styles.readOnlyAction : ""}`} disabled={!canEditDetails} onClick={() => setDateOpen((open) => !open)}>
+                      {draft.prazo ? `${formatDateOnly(draft.prazo)} ${draft.horaPrazo || ""}` : canEditDetails ? "Definir prazo" : "Sem prazo"}
                     </button>
-                    {dateOpen && (
+                    {dateOpen && canEditDetails && (
                       <div className={styles.datePopover}>
                         <label>
                           Data
-                          <input type="date" value={draft.prazo} onChange={(event) => setDraftValue({ prazo: event.target.value })} />
+                          <input type="date" min={today()} value={draft.prazo} onChange={(event) => setDraftValue({ prazo: event.target.value })} />
                         </label>
                         <label>
                           Hora
-                          <input type="time" value={draft.horaPrazo} onChange={(event) => setDraftValue({ horaPrazo: event.target.value })} />
+                          <input type="time" min={draft.prazo === today() ? currentTime() : undefined} value={draft.horaPrazo} onChange={(event) => setDraftValue({ horaPrazo: event.target.value })} />
                         </label>
                       </div>
                     )}
@@ -1099,20 +1240,27 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
                   <textarea
                     className={styles.descriptionField}
                     value={draft.descricao}
-                    disabled={locked}
-                    onChange={(event) => setDraftValue({ descricao: event.target.value })}
+                    disabled={!canEditDetails}
+                    onChange={(event) => {
+                      if (event.target.value.length > 800) {
+                        toast.error("A descrição deve ter no máximo 800 caracteres.");
+                        return;
+                      }
+                      setDraftValue({ descricao: event.target.value });
+                    }}
                     rows={6}
                   />
                 </label>
 
                 <div className={styles.attachmentArea}>
-                  <button onClick={() => setAttachmentsOpen(true)}>
+                  <button className={!canEditDetails ? styles.readOnlyAction : ""} onClick={() => setAttachmentsOpen(true)}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M21.44 11.05 12.25 20.24a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
                     </svg>
                     Anexos
                   </button>
                   {attachments.length > 0 && <span>{attachments.length} arquivo(s)</span>}
+                  <span className={styles.charCount}>{draft.descricao.length}/800 caracteres</span>
                 </div>
 
                 <section className={styles.checkBlock}>
@@ -1121,11 +1269,16 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
                     <span>{selectedProgress}%</span>
                   </div>
                   <div className={styles.progressBar}><span style={{ width: `${selectedProgress}%` }} /></div>
+                  <div
+                    ref={checklistRef}
+                    className={`${styles.checkList} ${moreChecklist ? styles.moreBelow : ""}`}
+                    onScroll={(event) => setMoreChecklist(event.currentTarget.scrollTop + event.currentTarget.clientHeight < event.currentTarget.scrollHeight - 2)}
+                  >
                   {checklist.map((item, index) => (
                     <div
                       key={item.id}
-                      className={styles.checkItem}
-                      draggable={!locked}
+                      className={`${styles.checkItem} ${item.feito ? styles.checkItemDone : ""}`}
+                      draggable={canEditDetails}
                       onDragStart={(event) => event.dataTransfer.setData("check", String(index))}
                       onDragOver={(event) => event.preventDefault()}
                       onDrop={(event) => moveChecklist(Number(event.dataTransfer.getData("check")), index)}
@@ -1133,17 +1286,20 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
                       <input
                         type="checkbox"
                         checked={item.feito}
-                        disabled={locked}
+                        disabled={!canInteract}
                         onChange={(event) => toggleChecklist(item.id, event.target.checked)}
                       />
-                      <input
-                        className={styles.checkTextInput}
-                        value={item.texto}
-                        disabled={locked}
-                        onChange={(event) => changeChecklistText(item.id, event.target.value)}
-                        onBlur={() => cleanChecklistText(item.id)}
-                      />
-                      {!locked && (
+                      <span className={styles.checkText}>
+                        <input
+                          className={styles.checkTextInput}
+                          value={item.texto}
+                          disabled={!canEditDetails}
+                          onChange={(event) => changeChecklistText(item.id, event.target.value)}
+                          onBlur={() => cleanChecklistText(item.id)}
+                        />
+                        <span className={styles.checkLineText}>{item.texto}</span>
+                      </span>
+                      {canEditDetails && (
                         <button onClick={() => removeChecklistItem(item.id)} aria-label="Excluir item do checklist">
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M3 6h18" />
@@ -1154,7 +1310,8 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
                       )}
                     </div>
                   ))}
-                  {!locked && (
+                  </div>
+                  {canEditDetails && (
                     <div className={styles.addCheck}>
                       <input className={styles.checkTextInput} value={newChecklist} onChange={(event) => setNewChecklist(event.target.value)} placeholder="Novo item" />
                       <button onClick={addChecklistItem} aria-label="Adicionar item ao checklist">
@@ -1171,7 +1328,11 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
               <aside className={styles.sideArea}>
                 <section className={styles.comments}>
                   <h3>Comentários</h3>
-                  <div className={styles.commentList}>
+                  <div
+                    ref={commentsRef}
+                    className={`${styles.commentList} ${moreComments ? styles.moreBelow : ""}`}
+                    onScroll={(event) => setMoreComments(event.currentTarget.scrollTop + event.currentTarget.clientHeight < event.currentTarget.scrollHeight - 2)}
+                  >
                     {comments.map((comment) => (
                       <article key={comment.id} className={comment.especial ? styles.specialComment : ""}>
                         <div className={styles.commentMeta}>
@@ -1191,7 +1352,7 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
                         ) : (
                           <>
                             <p>{comment.texto}</p>
-                            {!locked && (
+                            {canEditDetails && (
                               <div className={styles.commentActions}>
                                 <button onClick={() => startEditComment(comment)} aria-label="Editar comentário">
                                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -1199,7 +1360,7 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
                                     <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
                                   </svg>
                                 </button>
-                                <button onClick={() => removeComment(comment.id)} aria-label="Excluir comentário">
+                                <button onClick={() => setDeleteComment(comment)} aria-label="Excluir comentário">
                                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="M3 6h18" />
                                     <path d="M8 6V4h8v2" />
@@ -1213,7 +1374,7 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
                       </article>
                     ))}
                   </div>
-                  {!locked && (
+                  {canInteract && (
                     <form onSubmit={(event) => { event.preventDefault(); addComment(); }} className={styles.commentForm}>
                       <input value={commentText} onChange={(event) => setCommentText(event.target.value)} placeholder="Escrever comentário" />
                       <button aria-label="Enviar comentário">
@@ -1228,15 +1389,18 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
 
                 {selected.status === "EM_VALIDACAO" && isLeader && (
                   <>
-                    <button onClick={approveTask}>Aprovar</button>
+                    <button onClick={() => setApprovalOpen(true)}>Aprovar</button>
                     <button onClick={() => setAdjustOpen(true)}>Solicitar ajustes</button>
                   </>
                 )}
-                {selected.status !== "EM_VALIDACAO" && selected.status !== "APROVADA" && !isLeader && (
+                {selected.status !== "EM_VALIDACAO" && selected.status !== "APROVADA" && selected.status !== "AJUSTES" && !isLeader && (
                   <button onClick={submitValidation}>Enviar para validação</button>
                 )}
-                {selected.status === "APROVADA" && isLeader && (
-                  <button onClick={reopenTask}>Reabrir</button>
+                {selected.status === "EM_VALIDACAO" && !isLeader && (
+                  <button onClick={cancelValidation}>Cancelar envio para validação</button>
+                )}
+                {selected.status === "AJUSTES" && !isLeader && (
+                  <button onClick={beginAdjustments}>Iniciar ajustes</button>
                 )}
                 <div className={styles.saveRow}>
                   {dirty ? (
@@ -1277,17 +1441,17 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
                       <path d="M12 15V3" />
                     </svg>
                   </button>
-                  <button onClick={() => removeAttachment(file.id)} disabled={locked} aria-label="Excluir anexo">
+                  {isLeader && <button onClick={() => removeAttachment(file.id)} disabled={!canEditDetails} aria-label="Excluir anexo">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M3 6h18" />
                       <path d="M8 6V4h8v2" />
                       <path d="m19 6-1 14H6L5 6" />
                     </svg>
-                  </button>
+                  </button>}
                 </div>
               ))}
             </div>
-            {!locked && (
+            {canEditDetails && (
               <label className={styles.uploadButton}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 5v14" />
@@ -1320,6 +1484,19 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
             <textarea value={adjustText} onChange={(event) => setAdjustText(event.target.value)} rows={4} required />
             <button>Enviar</button>
           </form>
+        </div>
+      )}
+
+      {approvalOpen && (
+        <div className={styles.smallOverlay} onClick={() => setApprovalOpen(false)}>
+          <div className={styles.smallModal} onClick={(event) => event.stopPropagation()}>
+            <h3>Aprovar tarefa?</h3>
+            <p>Depois da aprovação, esta tarefa ficará concluída e disponível apenas para leitura.</p>
+            <div className={styles.inlineForm}>
+              <button onClick={() => setApprovalOpen(false)}>Cancelar</button>
+              <button onClick={approveTask}>Aprovar tarefa</button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -1438,14 +1615,34 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
           <div className={styles.smallModal} onClick={(event) => event.stopPropagation()}>
             <h3>Restaurar tarefa</h3>
             <p>Escolha para qual coluna ela deve voltar.</p>
-            <select value={restoreTaskColumn} onChange={(event) => setRestoreTaskColumn(event.target.value)}>
-              {restoreColumns.map((column) => (
-                <option key={column.id} value={column.nome}>{column.nome}</option>
-              ))}
-            </select>
+            {restoreColumns.length === 0 ? (
+              <p>Restaure ou crie uma coluna antes de restaurar esta tarefa.</p>
+            ) : (
+              <select value={restoreTaskColumn} onChange={(event) => setRestoreTaskColumn(event.target.value)}>
+                {restoreColumns.map((column) => (
+                  <option key={column.id} value={column.nome}>{column.nome}</option>
+                ))}
+              </select>
+            )}
             <div className={styles.inlineForm}>
-              <button onClick={() => restoreDeletedTask(restoreTask, restoreTaskColumn || defaultColumn)}>Restaurar</button>
+              <button disabled={!restoreTaskColumn} onClick={() => restoreDeletedTask(restoreTask, restoreTaskColumn)}>Restaurar</button>
               <button onClick={() => setRestoreTask(null)}>Cancelar</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {deleteComment && (
+        <div className={styles.smallOverlay} onClick={() => setDeleteComment(null)}>
+          <div className={styles.smallModal} onClick={(event) => event.stopPropagation()}>
+            <h3>Excluir comentário?</h3>
+            <p>Esta ação não poderá ser desfeita depois que a tarefa for salva.</p>
+            <div className={styles.inlineForm}>
+              <button onClick={() => setDeleteComment(null)}>Cancelar</button>
+              <button className={styles.dangerBtn} onClick={() => {
+                void removeComment(deleteComment.id);
+                setDeleteComment(null);
+              }}>Excluir</button>
             </div>
           </div>
         </div>
@@ -1461,8 +1658,27 @@ export default function ProjectTasks({ projetoId }: ProjectTasksProps) {
                 setConfirmClose(false);
                 setSelected(null);
                 setDirty(false);
+                setEditingComment(null);
+                setCommentEditText("");
+                setDeleteComment(null);
               }}>Descartar</button>
               <button onClick={() => setConfirmClose(false)}>Continuar editando</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {trashColumn && (
+        <div className={styles.smallOverlay} onClick={() => setTrashColumn(null)}>
+          <div className={styles.smallModal} onClick={(event) => event.stopPropagation()}>
+            <h3>Excluir coluna?</h3>
+            <p>As tarefas desta coluna também serão enviadas para a lixeira.</p>
+            <div className={styles.inlineForm}>
+              <button onClick={() => setTrashColumn(null)}>Cancelar</button>
+              <button onClick={() => {
+                void sendToTrash(trashColumn.id, "column");
+                setTrashColumn(null);
+              }}>Enviar para lixeira</button>
             </div>
           </div>
         </div>

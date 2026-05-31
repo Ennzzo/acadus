@@ -16,7 +16,7 @@ public class TarefaRequestDTO {
     @Size(min = 3, max = 100, message = "O nome deve ter entre 3 e 100 caracteres")
     private String nome;
 
-    @Size(max = 500, message = "A descrição deve ter no máximo 500 caracteres")
+    @Size(max = 800, message = "A descrição deve ter no máximo 800 caracteres")
     private String descricao;
 
     @Size(max = 1000, message = "O responsável deve ter no máximo 1000 caracteres")

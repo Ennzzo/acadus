@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { apiFetch } from "@/lib/api";
+import { getCurrentUser, withUser } from "@/lib/auth";
 import { toast } from "@/lib/toast";
 import ProjectDetailOverview from "@/components/projetos/ProjectDetailOverview";
 import { Projeto } from "@/types/projeto";
@@ -15,9 +16,10 @@ interface ProjectManagementViewProps {
 export default function ProjectManagementView({ projeto }: ProjectManagementViewProps) {
   const [current, setCurrent] = useState(projeto);
   const [editing, setEditing] = useState(false);
+  const isLeader = getCurrentUser()?.email === current.liderEmail;
 
   async function saveProject(dados: ProjectFormData) {
-    const updated = await apiFetch<Projeto>(`/projetos/${current.id}`, {
+    const updated = await apiFetch<Projeto>(withUser(`/projetos/${current.id}`), {
       method: "PUT",
       body: JSON.stringify({
         nomeProjeto: dados.nome,
@@ -33,7 +35,7 @@ export default function ProjectManagementView({ projeto }: ProjectManagementView
 
   return (
     <div className={styles.container}>
-      <ProjectDetailOverview projeto={current} onEdit={() => setEditing(true)} />
+      <ProjectDetailOverview projeto={current} onEdit={isLeader ? () => setEditing(true) : undefined} />
 
       {editing && (
         <ProjectFormModal

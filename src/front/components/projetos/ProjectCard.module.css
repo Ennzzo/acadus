@@ -44,6 +44,12 @@
   color: #dc2626;
 }
 
+.actionIconLeave:hover {
+  background: #fef3c7;
+  border-color: #fcd34d;
+  color: #92400e;
+}
+
 .card {
   display: flex;
   flex-direction: column;

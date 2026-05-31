@@ -11,12 +11,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tis.acadus.dto.TarefaRequestDTO;
 import com.tis.acadus.dto.TarefaResponseDTO;
+import com.tis.acadus.dto.MovimentoTarefaDTO;
 import com.tis.acadus.entity.Tarefa;
+import com.tis.acadus.service.QuadroService;
 import com.tis.acadus.service.TarefaService;
 
 import jakarta.validation.Valid;
@@ -26,9 +29,11 @@ import jakarta.validation.Valid;
 @RequestMapping
 public class TarefaController {
     private final TarefaService service;
+    private final QuadroService quadroService;
 
-    public TarefaController(TarefaService service) {
+    public TarefaController(TarefaService service, QuadroService quadroService) {
         this.service = service;
+        this.quadroService = quadroService;
     }
 
     @GetMapping("/projetos/{projetoId}/tarefas")
@@ -48,9 +53,10 @@ public class TarefaController {
     @PostMapping("/projetos/{projetoId}/tarefas")
     public TarefaResponseDTO criar(
             @PathVariable Long projetoId,
+            @RequestParam String email,
             @RequestBody @Valid TarefaRequestDTO dto) {
 
-        Tarefa tarefa = service.criar(projetoId, dto);
+        Tarefa tarefa = service.criar(projetoId, dto, email);
 
         return service.toDto(tarefa);
     }
@@ -58,22 +64,39 @@ public class TarefaController {
     @PutMapping("/tarefas/{id}")
     public TarefaResponseDTO editar(
             @PathVariable Long id,
+            @RequestParam String email,
             @RequestBody @Valid TarefaRequestDTO dto) {
 
-        Tarefa tarefa = service.editar(id, dto);
+        Tarefa tarefa = service.editar(id, dto, email);
 
         return service.toDto(tarefa);
     }
 
     @DeleteMapping("/tarefas/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void excluir(@PathVariable Long id) {
-        service.excluir(id);
+    public void excluir(@PathVariable Long id, @RequestParam String email) {
+        service.excluir(id, email);
     }
 
     @DeleteMapping("/tarefas/{id}/definitivo")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void excluirDefinitivo(@PathVariable Long id) {
-        service.excluirDefinitivo(id);
+    public void excluirDefinitivo(@PathVariable Long id, @RequestParam String email) {
+        service.excluirDefinitivo(id, email);
+    }
+
+    @PutMapping("/tarefas/{id}/movimento")
+    public TarefaResponseDTO mover(
+            @PathVariable Long id,
+            @RequestParam String email,
+            @RequestBody @Valid MovimentoTarefaDTO dto) {
+        return service.toDto(quadroService.moverTarefa(id, dto, email));
+    }
+
+    @PutMapping("/tarefas/{id}/restaurar")
+    public TarefaResponseDTO restaurar(
+            @PathVariable Long id,
+            @RequestParam String email,
+            @RequestBody @Valid MovimentoTarefaDTO dto) {
+        return service.toDto(service.restaurar(id, dto.getColunaId(), email));
     }
 }

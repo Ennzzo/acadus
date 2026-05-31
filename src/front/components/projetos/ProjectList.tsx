@@ -7,37 +7,40 @@ import styles from "./ProjectList.module.css";
 interface ProjectListProps {
   projetos: Projeto[];
   view: "cards" | "tabela";
-  onClearFilters: () => void;
-  query: string;
   onEdit: (projeto: Projeto) => void;
   onDelete: (projeto: Projeto) => void;
+  onLeave: (projeto: Projeto) => void;
+  currentUserEmail?: string;
 }
 
 export default function ProjectList({
   projetos,
   view,
-  onClearFilters,
-  query,
   onEdit,
   onDelete,
+  onLeave,
+  currentUserEmail,
 }: ProjectListProps) {
   if (projetos.length === 0) {
-    return <ProjectsEmptyState query={query} onClear={onClearFilters} />;
+    return <ProjectsEmptyState />;
   }
 
   if (view === "tabela") {
-    return <ProjectsTableView projetos={projetos} />;
+    return <ProjectsTableView projetos={projetos} onLeave={onLeave} currentUserEmail={currentUserEmail} />;
   }
 
   return (
     <ul className={styles.grid}>
       {projetos.map((projeto) => (
         <li key={projeto.id}>
-          <ProjectCard projeto={projeto} onEdit={onEdit} onDelete={onDelete} />
+          <ProjectCard
+            projeto={projeto}
+            onEdit={projeto.liderEmail === currentUserEmail ? onEdit : undefined}
+            onDelete={projeto.liderEmail === currentUserEmail ? onDelete : undefined}
+            onLeave={projeto.liderEmail !== currentUserEmail ? onLeave : undefined}
+          />
         </li>
       ))}
     </ul>
   );
 }
-
-

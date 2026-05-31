@@ -1,29 +1,15 @@
 import styles from "./ProjectsEmptyState.module.css";
 
-interface ProjectsEmptyStateProps {
-  query: string;
-  onClear: () => void;
-}
-
-export default function ProjectsEmptyState({ query, onClear }: ProjectsEmptyStateProps) {
+export default function ProjectsEmptyState() {
   return (
     <div className={styles.wrapper}>
       <div className={styles.iconBox}>
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="11" cy="11" r="8" />
-          <line x1="21" y1="21" x2="16.65" y2="16.65" />
-          <line x1="8" y1="11" x2="14" y2="11" />
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
         </svg>
       </div>
-      <h3 className={styles.title}>Nenhum projeto encontrado</h3>
-      <p className={styles.desc}>
-        {query
-          ? `Nenhum resultado para "${query}". Tente ajustar o filtro ou a pesquisa.`
-          : "Nenhum projeto corresponde ao filtro selecionado."}
-      </p>
-      <button className={styles.clearBtn} onClick={onClear}>
-        Limpar filtros
-      </button>
+      <h3 className={styles.title}>Nenhum projeto disponível</h3>
+      <p className={styles.desc}>Crie um projeto ou aguarde o convite para participar de uma equipe.</p>
     </div>
   );
 }

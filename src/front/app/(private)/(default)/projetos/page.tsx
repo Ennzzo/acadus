@@ -2,37 +2,38 @@
 
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/lib/api";
-import { getCurrentUser, getSelectedProjectId, setSelectedProjectId } from "@/lib/auth";
+import { clearSelectedProjectId, getCurrentUser, getSelectedProjectId, setSelectedProjectId, withUser } from "@/lib/auth";
 import { toast } from "@/lib/toast";
-import { Projeto, StatusProjeto } from "@/types/projeto";
+import { Projeto } from "@/types/projeto";
 import ProjectsHeader from "@/components/projetos/ProjectsHeader";
 import ProjectsToolbar, { ProjectViewMode, SortBy } from "@/components/projetos/ProjectsToolbar";
 import ProjectList from "@/components/projetos/ProjectList";
 import ProjectFormModal, { ProjectFormData } from "@/components/projetos/ProjectFormModal";
 import ProjectDeleteModal from "@/components/projetos/ProjectDeleteModal";
+import ProjectLeaveModal from "@/components/projetos/ProjectLeaveModal";
 import styles from "./styles.module.css";
 
 type ModalState =
   | { type: "none" }
   | { type: "criar" }
   | { type: "editar"; projeto: Projeto }
-  | { type: "excluir"; projeto: Projeto };
+  | { type: "excluir"; projeto: Projeto }
+  | { type: "sair"; projeto: Projeto };
 
 export default function ProjetosPage() {
   const [projetos, setProjetos] = useState<Projeto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [query, setQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<StatusProjeto | "TODOS">("TODOS");
   const [sortBy, setSortBy] = useState<SortBy>("nome");
   const [viewMode, setViewMode] = useState<ProjectViewMode>("cards");
   const [modal, setModal] = useState<ModalState>({ type: "none" });
+  const usuario = getCurrentUser();
 
   useEffect(() => {
     async function load() {
       try {
         setLoading(true);
-        const data = await apiFetch<Projeto[]>("/projetos", { cache: "no-store" });
+        const data = await apiFetch<Projeto[]>(withUser("/projetos"), { cache: "no-store" });
         setProjetos(data);
         setError(null);
       } catch (err) {
@@ -45,27 +46,11 @@ export default function ProjetosPage() {
     load();
   }, []);
 
-  const busca = query.trim().toLowerCase();
-  const projetosFiltrados = projetos
-    .filter((projeto) => statusFilter === "TODOS" || projeto.status === statusFilter)
-    .filter((projeto) => {
-      if (!busca) return true;
-      return (
-        projeto.nomeProjeto.toLowerCase().includes(busca) ||
-        (projeto.descricao ?? "").toLowerCase().includes(busca)
-      );
-    })
-    .sort((a, b) =>
+  const projetosOrdenados = [...projetos].sort((a, b) =>
       sortBy === "nome"
         ? a.nomeProjeto.localeCompare(b.nomeProjeto, "pt-BR")
         : a.dataCriacao.localeCompare(b.dataCriacao)
-    );
-
-  function handleClear() {
-    setQuery("");
-    setStatusFilter("TODOS");
-    setSortBy("nome");
-  }
+  );
 
   async function criarProjeto(dados: ProjectFormData) {
     const usuario = getCurrentUser();
@@ -97,7 +82,7 @@ export default function ProjetosPage() {
       status: dados.status,
       capaUrl: dados.capaUrl,
     };
-    const updated = await apiFetch<Projeto>(`/projetos/${modal.projeto.id}`, {
+    const updated = await apiFetch<Projeto>(withUser(`/projetos/${modal.projeto.id}`), {
       method: "PUT",
       body: JSON.stringify(payload),
     });
@@ -107,7 +92,7 @@ export default function ProjetosPage() {
 
   async function excluirProjeto() {
     if (modal.type !== "excluir") return;
-    await apiFetch(`/projetos/${modal.projeto.id}`, { method: "DELETE" });
+    await apiFetch(withUser(`/projetos/${modal.projeto.id}`), { method: "DELETE" });
     setProjetos((prev) => {
       const next = prev.filter((p) => p.id !== modal.projeto.id);
       if (getSelectedProjectId() === modal.projeto.id && next[0]) {
@@ -118,6 +103,21 @@ export default function ProjetosPage() {
     toast.success("Projeto excluído.");
   }
 
+  async function sairProjeto() {
+    if (modal.type !== "sair") return;
+    await apiFetch(withUser(`/projetos/${modal.projeto.id}/sair`), { method: "PUT" });
+    setProjetos((prev) => {
+      const next = prev.filter((projeto) => projeto.id !== modal.projeto.id);
+      const first = next[0];
+      if (getSelectedProjectId() === modal.projeto.id) {
+        if (first) setSelectedProjectId(first.id);
+        else clearSelectedProjectId();
+      }
+      return next;
+    });
+    toast.success("Você saiu do projeto.");
+  }
+
   return (
     <>
       <div className={styles.page}>
@@ -126,16 +126,11 @@ export default function ProjetosPage() {
           onNewProject={() => setModal({ type: "criar" })}
         />
         <ProjectsToolbar
-          query={query}
-          onQueryChange={setQuery}
-          statusFilter={statusFilter}
-          onStatusChange={setStatusFilter}
           sortBy={sortBy}
           onSortChange={setSortBy}
           viewMode={viewMode}
           onViewModeChange={setViewMode}
           total={projetos.length}
-          filtered={projetosFiltrados.length}
         />
         <div className={styles.content}>
           {loading ? (
@@ -144,12 +139,12 @@ export default function ProjetosPage() {
             <span>{error}</span>
           ) : (
             <ProjectList
-              projetos={projetosFiltrados}
+              projetos={projetosOrdenados}
               view={viewMode}
-              onClearFilters={handleClear}
-              query={query}
               onEdit={(p) => setModal({ type: "editar", projeto: p })}
               onDelete={(p) => setModal({ type: "excluir", projeto: p })}
+              onLeave={(p) => setModal({ type: "sair", projeto: p })}
+              currentUserEmail={usuario?.email}
             />
           )}
         </div>
@@ -177,6 +172,14 @@ export default function ProjetosPage() {
           projeto={modal.projeto}
           onClose={() => setModal({ type: "none" })}
           onConfirm={excluirProjeto}
+        />
+      )}
+
+      {modal.type === "sair" && (
+        <ProjectLeaveModal
+          projeto={modal.projeto}
+          onClose={() => setModal({ type: "none" })}
+          onConfirm={sairProjeto}
         />
       )}
     </>

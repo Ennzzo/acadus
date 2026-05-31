@@ -18,107 +18,120 @@ Como oportunidade de melhoria em relação ao cenário atual, destaca-se a centr
 
 #### Detalhamento das atividades
 
-**01. Acessar sistema**
+As tabelas e colunas aparecem entre crases para facilitar a conferência no banco de dados.
 
-| **Campo**              | **Tipo**         | **Restrições**                          | **Valor default** |
-|------------------------|------------------|------------------------------------------|-------------------|
-| E-mail/Usuário        | Caixa de texto   | obrigatório; formato válido              |                   |
-| Senha                 | Caixa de texto   | obrigatório                              |                   |
+**01. Acessar sistema - tabela `usuario`**
 
-| **Comandos** | **Destino**        | **Tipo** |
-|--------------|-------------------|----------|
-| entrar       | Visualizar projetos| default  |
-| criarConta   | Cadastro          | default  |
+| **Campo no banco** | **Tipo** | **Restrições** | **Valor default** |
+|--------------------|----------|----------------|-------------------|
+| `email`            | Texto    | obrigatório; usuário deve estar cadastrado | |
+| `senha`            | Texto    | obrigatório; deve corresponder ao usuário | |
+
+| **Comandos** | **Destino** | **Tipo** |
+|--------------|-------------|----------|
+| Entrar       | Visualizar projetos | default |
+| Criar conta  | Cadastro | default |
 
 ![Tela de Login](images/processo_1/PROCESSO_1_LOGIN.png)
 
-**02. Cadastro**
+**02. Cadastro - tabela `usuario`**
 
-| **Campo**              | **Tipo**         | **Restrições**                          | **Valor default** |
-|------------------------|------------------|------------------------------------------|-------------------|
-| Nome                  | Caixa de texto   | obrigatório                              |                   |
-| Sobrenome             | Caixa de texto   | obrigatório                              |                   |
-| E-mail                | Caixa de texto   | obrigatório; formato válido              |                   |
-| Senha                 | Caixa de texto   | mínimo 6 caracteres                      |                   |
-| Confirmar senha       | Caixa de texto   | deve ser igual à senha                   |                   |
-| Aceitar termos        | Booleano         | obrigatório (true)                       | false             |
+| **Campo no banco** | **Tipo** | **Restrições** | **Valor default** |
+|--------------------|----------|----------------|-------------------|
+| `id`               | Número   | gerado automaticamente | |
+| `nome`             | Texto    | obrigatório; até 100 caracteres | |
+| `sobrenome`        | Texto    | obrigatório; até 100 caracteres | |
+| `email`            | Texto    | obrigatório; formato válido; único; até 150 caracteres | |
+| `senha`            | Texto    | obrigatório; 6 a 255 caracteres | |
 
-| **Comandos** | **Destino**         | **Tipo** |
-|--------------|--------------------|----------|
-| criarConta  | Visualizar projetos | default  |
-| cancelarOperacao     | Acessar sistema    | cancel   |
+| **Comandos** | **Destino** | **Tipo** |
+|--------------|-------------|----------|
+| Criar conta  | Visualizar projetos | default |
+| Cancelar     | Acessar sistema | cancel |
 
 ![Tela de Cadastro](images/processo_1/PROCESSO_1_CADASTRO.png)
 
-**03. Visualizar projetos**
+**03. Visualizar projetos - tabelas `projeto` e `membro_equipe`**
 
-| **Campo** | **Tipo** | **Restrições** | **Valor default** |
-| --- | --- | --- | --- |
-| Projetos | Tabela | Exibir apenas projetos vinculados ao usuário logado |  |
-| Buscar projeto | Caixa de texto | Opcional, até 100 caracteres |  |
-| Filtro de status | Seleção múltipla | Valores: Ativo e/ou Concluído |  |
+| **Campo no banco** | **Tipo** | **Restrições** | **Valor default** |
+|--------------------|----------|----------------|-------------------|
+| `membro_equipe.email` | Texto | corresponde ao usuário autenticado | |
+| `membro_equipe.status` | Texto | somente vínculos com valor `ACEITO` | |
+| `membro_equipe.data_saida` | Data e hora | deve estar vazio para projetos ativos do usuário | |
+| `projeto.nome_projeto` | Texto | nome exibido na listagem | |
+| `projeto.status` | Texto | valores `ATIVO` ou `CONCLUIDO` | |
 
 | **Comandos** | **Destino** | **Tipo** |
-| --- | --- | --- |
-| criarProjeto | Criar projeto | default |
-| editarProjeto | Editar projeto | default |
-| excluirProjeto | Excluir projeto | default |
-| acessarProjeto | Acessar projeto | default |
-| aplicarFiltro | Visualizar projetos | default |
-| limparFiltro | Visualizar projetos | cancel |
+|--------------|-------------|----------|
+| Criar projeto | Criar projeto | default |
+| Editar projeto | Editar projeto | default |
+| Excluir projeto | Excluir projeto | default |
+| Acessar projeto | Detalhes do projeto | default |
 
 ![Wireframe Tela de Visualizar Projetos](images/processo_1/PROCESSO_1_VISUALIZAR_PROJETOS.png)
 
-**04. Criar projeto**
+**04. Criar projeto - tabelas `projeto` e `membro_equipe`**
 
-| **Campo** | **Tipo** | **Restrições** | **Valor default** |
-| --- | --- | --- | --- |
-| Nome do projeto | Caixa de texto | Obrigatório, 3 a 100 caracteres |  |
-| Descrição | Área de texto | Opcional, até 500 caracteres |  |
-| Data de criação | Data | Gerado automaticamente pelo sistema, formato dd-mm-aaaa |  |
+| **Campo no banco** | **Tipo** | **Restrições** | **Valor default** |
+|--------------------|----------|----------------|-------------------|
+| `projeto.nome_projeto` | Texto | obrigatório; 3 a 100 caracteres | |
+| `projeto.descricao` | Texto | opcional; até 500 caracteres | |
+| `projeto.capa_url` | Texto | opcional; imagem de capa | |
+| `projeto.data_criacao` | Data | gerada automaticamente | data atual |
+| `projeto.nome_equipe` | Texto | gerado automaticamente a partir do nome do projeto | `Equipe` + nome do projeto |
+| `projeto.lider_email` | Texto | e-mail do usuário que criou o projeto | |
+| `projeto.status` | Texto | valores `ATIVO` ou `CONCLUIDO` | `ATIVO` |
+| `membro_equipe.projeto_id` | Número | relaciona o líder ao projeto criado | projeto atual |
+| `membro_equipe.email` | Texto | e-mail do líder | |
+| `membro_equipe.papel` | Texto | papel inicial do criador | `LIDER` |
+| `membro_equipe.status` | Texto | vínculo inicial do criador | `ACEITO` |
+| `membro_equipe.data_convite` | Data | gerada automaticamente | data atual |
+| `membro_equipe.data_entrada` | Data | gerada automaticamente | data atual |
 
 | **Comandos** | **Destino** | **Tipo** |
-| --- | --- | --- |
-| salvarProjeto | Visualizar projetos | default |
-| cancelarOperacao | Visualizar projetos | cancel 
+|--------------|-------------|----------|
+| Salvar projeto | Visualizar projetos | default |
+| Cancelar | Visualizar projetos | cancel |
 
 ![Wireframe Tela de Criar Projeto](images/processo_1/PROCESSO_1_NOVO_PROJETO.png)
 
-**05. Editar projeto**
+**05. Editar projeto - tabela `projeto`**
 
-| **Campo** | **Tipo** | **Restrições** | **Valor default** |
-| --- | --- | --- | --- |
-| Nome do projeto | Caixa de texto | Obrigatório, 3 a 100 caracteres | Valor atual |
-| Descrição | Área de texto | Opcional, até 500 caracteres | Valor atual |
+| **Campo no banco** | **Tipo** | **Restrições** | **Valor default** |
+|--------------------|----------|----------------|-------------------|
+| `nome_projeto`     | Texto    | obrigatório; 3 a 100 caracteres | valor atual |
+| `descricao`        | Texto    | opcional; até 500 caracteres | valor atual |
+| `capa_url`         | Texto    | opcional; imagem de capa | valor atual |
+| `status`           | Texto    | valores `ATIVO` ou `CONCLUIDO` | valor atual |
 
 | **Comandos** | **Destino** | **Tipo** |
-| --- | --- | --- |
-| salvarAlteracoes | Visualizar projetos | default |
-| cancelarOperacao | Visualizar projetos | cancel |
+|--------------|-------------|----------|
+| Salvar alterações | Visualizar projetos | default |
+| Cancelar | Visualizar projetos | cancel |
 
 ![Wireframe Tela de Editar Projeto](images/processo_1/PROCESSO_1_EDITAR_PROJETO.png)
 
-**06. Excluir projeto**
+**06. Excluir projeto - tabelas `projeto`, `tarefa`, `chat_mensagem` e `membro_equipe`**
 
-| **Campo** | **Tipo** | **Restrições** | **Valor default** |
-| --- | --- | --- | --- |
-| Confirmação de exclusão | Seleção única | Valores: Sim ou Não |  |
+A exclusão remove o registro da tabela `projeto` e os registros relacionados nas tabelas `tarefa`, `chat_mensagem` e `membro_equipe`.
 
 | **Comandos** | **Destino** | **Tipo** |
-| --- | --- | --- |
-| confirmarExclusao | Visualizar projetos | default |
-| cancelarOperacao | Visualizar projetos | cancel |
+|--------------|-------------|----------|
+| Confirmar exclusão | Visualizar projetos | default |
+| Cancelar | Visualizar projetos | cancel |
 
 ![Wireframe Tela de Excluir Projeto](images/processo_1/PROCESSO_1_EXCLUIR_PROJETO.png)
 
-**07. Acessar projeto**
+**07. Acessar projeto - tabelas `projeto` e `membro_equipe`**
 
-| **Campo** | **Tipo** | **Restrições** | **Valor default** |
-| --- | --- | --- | --- |
-| Projeto selecionado | Seleção única | O projeto deve existir na lista |  |
+| **Campo no banco** | **Tipo** | **Restrições** | **Valor default** |
+|--------------------|----------|----------------|-------------------|
+| `projeto.id`       | Número   | projeto selecionado deve existir | |
+| `membro_equipe.status` | Texto | vínculo do usuário deve estar como `ACEITO` | |
+| `membro_equipe.data_saida` | Data e hora | deve estar vazio | |
 
 | **Comandos** | **Destino** | **Tipo** |
-| --- | --- | --- |
-| abrirProjeto | Detalhes do projeto | default |
+|--------------|-------------|----------|
+| Abrir projeto | Detalhes do projeto | default |
 
 ![Wireframe Tela de Acessar Projeto](images/processo_1/PROCESSO_1_VISUALIZAR_PROJETO.png)

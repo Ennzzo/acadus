@@ -21,10 +21,17 @@ export function getCurrentUser(): Usuario | null {
 
 export function setCurrentUser(usuario: Usuario) {
   localStorage.setItem(USER_KEY, JSON.stringify(usuario));
+  localStorage.removeItem(PROJECT_KEY);
+}
+
+export function updateCurrentUser(usuario: Usuario) {
+  localStorage.setItem(USER_KEY, JSON.stringify(usuario));
+  window.dispatchEvent(new Event("acadus-user-updated"));
 }
 
 export function clearCurrentUser() {
   localStorage.removeItem(USER_KEY);
+  localStorage.removeItem(PROJECT_KEY);
 }
 
 export function clearSelectedProjectId() {
@@ -43,4 +50,10 @@ export function getSelectedProjectId(): number | null {
 
 export function setSelectedProjectId(id: number) {
   localStorage.setItem(PROJECT_KEY, String(id));
+}
+
+export function withUser(path: string) {
+  const email = getCurrentUser()?.email ?? "";
+  const separator = path.includes("?") ? "&" : "?";
+  return `${path}${separator}email=${encodeURIComponent(email)}`;
 }

@@ -16,6 +16,8 @@ public class TarefaResponseDTO {
     private String descricao;
     private String responsavel;
     private String coluna;
+    private Long colunaId;
+    private Integer ordem;
     private Boolean excluida;
     private LocalDate prazo;
     private String horaPrazo;

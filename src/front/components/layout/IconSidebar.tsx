@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
@@ -7,6 +8,7 @@ import { apiFetch } from "@/lib/api";
 import { clearCurrentUser, getCurrentUser } from "@/lib/auth";
 import { toast } from "@/lib/toast";
 import { Notificacao } from "@/types/notificacao";
+import { Usuario } from "@/types/usuario";
 import styles from "./IconSidebar.module.css";
 
 interface NavItem {
@@ -82,21 +84,42 @@ export default function IconSidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const [unread, setUnread] = useState(false);
+  const [chatUnread, setChatUnread] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+  const [usuario, setUsuario] = useState<Usuario | null>(null);
+
+  useEffect(() => {
+    const updateUser = () => setUsuario(getCurrentUser());
+    const timer = window.setTimeout(updateUser, 0);
+    window.addEventListener("acadus-user-updated", updateUser);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("acadus-user-updated", updateUser);
+    };
+  }, []);
 
   useEffect(() => {
     async function loadUnread() {
       const usuario = getCurrentUser();
       if (!usuario) return;
 
-      const data = await apiFetch<Notificacao[]>(`/notificacoes?email=${encodeURIComponent(usuario.email)}`, {
-        cache: "no-store",
-      });
+      const [data, hasUnreadChat] = await Promise.all([
+        apiFetch<Notificacao[]>(`/notificacoes?email=${encodeURIComponent(usuario.email)}`, {
+          cache: "no-store",
+        }),
+        apiFetch<boolean>(`/chats/nao-visualizados?email=${encodeURIComponent(usuario.email)}`, {
+          cache: "no-store",
+        }),
+      ]);
       const seen = Number(localStorage.getItem("acadus_notificacoes_vistas") ?? "0");
       setUnread(data.length > seen);
+      setChatUnread(hasUnreadChat);
     }
 
     loadUnread().catch(() => {});
+    window.addEventListener("acadus-chat-read", loadUnread);
+    return () => window.removeEventListener("acadus-chat-read", loadUnread);
   }, [pathname]);
 
   function logout() {
@@ -108,9 +131,25 @@ export default function IconSidebar() {
   return (
     <>
     {mobileOpen && <button className={styles.mobileBackdrop} aria-label="Fechar menu" onClick={() => setMobileOpen(false)} />}
-    <aside className={`${styles.sidebar} ${mobileOpen ? styles.mobileOpen : ""}`}>
+    <aside
+      className={`${styles.sidebar} ${collapsed ? styles.collapsed : ""} ${mobileOpen ? styles.mobileOpen : ""}`}
+      onMouseEnter={() => collapsed && setCollapsed(false)}
+    >
       <div className={styles.brand}>
-        <span>Acadus</span>
+        <Image className={styles.logo} src="/brand/logo.svg" alt="Acadus" width={132} height={28} priority />
+        <Image className={styles.favicon} src="/brand/favicon.svg" alt="Acadus" width={28} height={28} priority />
+        <button
+          className={styles.collapseButton}
+          type="button"
+          onClick={() => setCollapsed((current) => !current)}
+          aria-label="Recolher menu"
+          title="Recolher menu"
+        >
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect width="18" height="18" x="3" y="3" rx="4" />
+            <path d="M10 3v18" />
+          </svg>
+        </button>
         <button className={styles.mobileClose} type="button" onClick={() => setMobileOpen(false)} aria-label="Fechar menu">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M18 6 6 18" />
@@ -124,17 +163,34 @@ export default function IconSidebar() {
             const active = pathname === href || pathname.startsWith(`${href}/`);
             return (
             <li key={label}>
-              <Link href={href} className={`${styles.item} ${active ? styles.active : ""}`} onClick={() => setMobileOpen(false)}>
+              <Link
+                href={href}
+                className={`${styles.item} ${active ? styles.active : ""}`}
+                onClick={() => setMobileOpen(false)}
+                title={collapsed ? label : undefined}
+              >
                 <span className={styles.icon}>{icon}</span>
                 <span className={styles.label}>{label}</span>
                 {label === "Notificações" && unread && <span className={styles.dot} />}
+                {label === "Chat" && chatUnread && <span className={styles.dot} />}
               </Link>
             </li>
             );
           })}
         </ul>
       </nav>
-      <button className={styles.logout} onClick={logout} type="button">
+      <Link href="/perfil" className={`${styles.profile} ${pathname === "/perfil" ? styles.active : ""}`} title={collapsed ? "Perfil" : undefined}>
+        <span className={styles.avatar}>
+          {usuario?.fotoUrl
+            ? <Image src={usuario.fotoUrl} alt="" width={32} height={32} unoptimized />
+            : <span>{usuario?.nome?.charAt(0).toUpperCase() || "U"}</span>}
+        </span>
+        <span className={styles.profileInfo}>
+          <span className={styles.profileLine}><span>{usuario ? `${usuario.nome} ${usuario.sobrenome}`.trim() : "Perfil"}</span></span>
+          <span className={styles.profileLine}><small>{usuario?.email || ""}</small></span>
+        </span>
+      </Link>
+      <button className={styles.logout} onClick={logout} type="button" title={collapsed ? "Sair" : undefined}>
         <span className={styles.icon}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
@@ -157,6 +213,7 @@ export default function IconSidebar() {
       <div className={styles.mobileTop}>
         <Link href="/chat" aria-label="Chat" className={pathname === "/chat" ? styles.mobileActive : ""}>
           {items[4].icon}
+          {chatUnread && <span className={styles.dot} />}
         </Link>
         <Link href="/notificacoes" aria-label="Notificações" className={pathname === "/notificacoes" ? styles.mobileActive : ""}>
           {items[5].icon}

@@ -12,7 +12,7 @@ Como oportunidade de melhoria, destaca-se a centralização das informações te
 
 #### Modelo BPMN
 
-![Modelo BPMN do Processo de Gestão de Cronograma e Prazos](images/gestao_cronograma.png)
+![Modelo BPMN do Processo de Gestão de Cronograma e Prazos](images/gestao_cronogramas.svg)
 
 #### Detalhamento das atividades
 

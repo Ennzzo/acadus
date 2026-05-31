@@ -42,7 +42,8 @@
   background: #fafaf9;
 }
 
-.row:hover .openBtn {
+.row:hover .openBtn,
+.row:hover .leaveBtn {
   opacity: 1;
 }
 
@@ -148,7 +149,14 @@
   text-align: right;
 }
 
-.openBtn {
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.4rem;
+}
+
+.openBtn,
+.leaveBtn {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
@@ -165,7 +173,13 @@
   white-space: nowrap;
 }
 
-.openBtn:hover {
+.leaveBtn {
+  cursor: pointer;
+  color: #92400e;
+}
+
+.openBtn:hover,
+.leaveBtn:hover {
   background: #f8fafc;
   border-color: #94a3b8;
   color: #0f172a;

@@ -1,29 +1,17 @@
 "use client";
 
-import { StatusProjeto } from "@/types/projeto";
 import styles from "./ProjectsToolbar.module.css";
 
 export type ProjectViewMode = "cards" | "tabela";
 export type SortBy = "nome" | "criacao";
 
 interface ProjectsToolbarProps {
-  query: string;
-  onQueryChange: (v: string) => void;
-  statusFilter: StatusProjeto | "TODOS";
-  onStatusChange: (v: StatusProjeto | "TODOS") => void;
   sortBy: SortBy;
   onSortChange: (v: SortBy) => void;
   viewMode: ProjectViewMode;
   onViewModeChange: (v: ProjectViewMode) => void;
   total: number;
-  filtered: number;
 }
-
-const statusOptions: { value: StatusProjeto | "TODOS"; label: string }[] = [
-  { value: "TODOS", label: "Todos os status" },
-  { value: "ATIVO", label: "Ativo" },
-  { value: "CONCLUIDO", label: "Concluído" },
-];
 
 const sortOptions: { value: SortBy; label: string }[] = [
   { value: "nome", label: "Nome" },
@@ -31,57 +19,14 @@ const sortOptions: { value: SortBy; label: string }[] = [
 ];
 
 export default function ProjectsToolbar({
-  query,
-  onQueryChange,
-  statusFilter,
-  onStatusChange,
   sortBy,
   onSortChange,
   viewMode,
   onViewModeChange,
   total,
-  filtered,
 }: ProjectsToolbarProps) {
   return (
     <div className={styles.toolbar}>
-      <label className={styles.searchBox}>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="11" cy="11" r="8" />
-          <line x1="21" y1="21" x2="16.65" y2="16.65" />
-        </svg>
-        <input
-          id="projetos-search"
-          type="text"
-          placeholder="Pesquisar projetos..."
-          className={styles.searchInput}
-          value={query}
-          onChange={(e) => onQueryChange(e.target.value)}
-        />
-        {query && (
-          <button className={styles.clearSearch} onClick={() => onQueryChange("")} title="Limpar pesquisa">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
-        )}
-      </label>
-
-      <div className={styles.selectWrapper}>
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.selectIcon}>
-          <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-        </svg>
-        <select
-          id="projetos-status-filter"
-          className={styles.select}
-          value={statusFilter}
-          onChange={(e) => onStatusChange(e.target.value as StatusProjeto | "TODOS")}
-        >
-          {statusOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
-          ))}
-        </select>
-      </div>
-
       <div className={styles.selectWrapper}>
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.selectIcon}>
           <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="15" y2="12" /><line x1="3" y1="18" x2="9" y2="18" />
@@ -99,7 +44,7 @@ export default function ProjectsToolbar({
       </div>
 
       <span className={styles.count}>
-        {filtered === total ? `${total} projetos` : `${filtered} de ${total}`}
+        {total} {total === 1 ? "projeto" : "projetos"}
       </span>
 
       <div className={styles.toggleGroup} role="group" aria-label="Modo de visualização">
