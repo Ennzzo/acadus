@@ -1,0 +1,117 @@
+.gridWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+/* ── Week header ─────────────────────────────────── */
+.weekHeader {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.weekDay {
+  padding: 0.625rem 0;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ── Calendar grid ───────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  flex: 1;
+}
+
+.cell {
+  min-height: 100px;
+  border-right: 1px solid #f3f4f6;
+  border-bottom: 1px solid #f3f4f6;
+  padding: 0.375rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  transition: background 0.12s;
+}
+
+.cell:nth-child(7n) {
+  border-right: none;
+}
+
+.cell:hover:not(.cellEmpty) {
+  background: #faf5ff;
+}
+
+.cellEmpty {
+  background: #fafafa;
+}
+
+.cellToday {
+  background: #f5f3ff;
+}
+
+/* ── Day number ──────────────────────────────────── */
+.dayNumber {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #6b7280;
+  padding: 0.125rem 0.25rem;
+  line-height: 1;
+}
+
+.dayToday {
+  background: #7c3aed;
+  color: #fff;
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+/* ── Event tags ──────────────────────────────────── */
+.eventsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  overflow: hidden;
+}
+
+.eventTag {
+  display: block;
+  width: 100%;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.4;
+  transition: opacity 0.12s;
+}
+
+.eventTag:hover {
+  opacity: 0.85;
+}
+
+.moreTag {
+  font-size: 0.625rem;
+  color: #9ca3af;
+  padding: 0 0.25rem;
+  font-weight: 500;
+}
