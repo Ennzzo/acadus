@@ -8,7 +8,7 @@ O processo de comunicação da equipe tem como objetivo centralizar a comunicaç
 
 #### Detalhamento das atividades
 
-**01. Acessar chat da equipe**
+**Acessar chat da equipe**
 
 | **Campo**            | **Tipo**         | **Restrições**                          | **Valor default** |
 |----------------------|------------------|-----------------------------------------|-------------------|
@@ -25,7 +25,7 @@ O processo de comunicação da equipe tem como objetivo centralizar a comunicaç
 
 ![Wireframe Tela de Modal Tipo Chat](images/processo_4/PROCESSO_4_MODAL_TIPO_CHAT.png)
 
-**02. Visualizar chat**
+**Visualizar chat**
 
 | **Campo**            | **Tipo**        | **Restrições**                          | **Valor default** |
 |----------------------|-----------------|-----------------------------------------|-------------------|
@@ -42,7 +42,7 @@ O processo de comunicação da equipe tem como objetivo centralizar a comunicaç
 
 ![Wireframe Tela de Visualizar Chat](images/processo_4/PROCESSO_4_VISUALIZAR_CHAT.png)
 
-**03. Enviar mensagem**
+**Enviar mensagem**
 
 | **Campo**            | **Tipo**         | **Restrições**                          | **Valor default** |
 |----------------------|------------------|-----------------------------------------|-------------------|
@@ -55,7 +55,8 @@ O processo de comunicação da equipe tem como objetivo centralizar a comunicaç
 | Cancelar     | Visualizar chat    | cancel   |
 
 ![Wireframe Tela de Enviar Mensagem](images/processo_4/PROCESSO_4_VISUALIZAR_CHAT.png)
-**04. Bloquear membro**
+
+**Bloquear membro**
 
 | **Campo**            | **Tipo**         | **Restrições**                  | **Valor default** |
 |----------------------|------------------|---------------------------------|-------------------|
@@ -72,7 +73,7 @@ O processo de comunicação da equipe tem como objetivo centralizar a comunicaç
 
 ![Wireframe Tela de Bloquear Membro](images/processo_4/PROCESSO_4_BLOQUEAR_MEMBRO.png)
 
-**05. Desbloquear membro**
+**Desbloquear membro**
 
 | **Campo**        | **Tipo**         | **Restrições** | **Valor default** |
 |------------------|------------------|----------------|-------------------|
@@ -84,4 +85,3 @@ O processo de comunicação da equipe tem como objetivo centralizar a comunicaç
 | Cancelar     | Visualizar chat | cancel   |
 
 ![Wireframe Tela de Desbloquear Membro](images/processo_4/PROCESSO_4_DESBLOQUEAR_MEMBRO.png)
-
