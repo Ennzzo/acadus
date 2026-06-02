@@ -1,10 +1,16 @@
 ### 3.3.4 Processo 4 – Comunicação da equipe
 
-O processo de comunicação da equipe tem como objetivo centralizar a troca de mensagens entre participantes dos projetos e também permitir conversas privadas. O sistema registra mensagens, anexos, edições, exclusões lógicas, leitura e ocultação de conversas, ajudando a organizar a comunicação sem depender de ferramentas externas.
+O processo de Comunicação da Equipe tem como objetivo centralizar a troca de mensagens relacionadas aos projetos acadêmicos e permitir conversas privadas entre os usuários. O fluxo começa com o acesso ao sistema. Caso o usuário ainda não possua cadastro, deve criar uma conta e realizar o login antes de abrir a área de chats.
+
+Após a autenticação, o usuário visualiza sua lista de conversas. Nessa tela, pode selecionar o chat de uma equipe da qual participa ou iniciar uma conversa privada informando o e-mail de outro usuário cadastrado. Ao abrir uma conversa, o sistema registra a leitura na tabela chat_leitura e apresenta as mensagens armazenadas em chat_mensagem. Caso o usuário já tenha saído de um projeto, o chat da equipe continua disponível apenas para consulta do histórico.
+
+Quando a conversa permite interação, o usuário pode escrever uma mensagem e incluir anexos. A mensagem é salva em chat_mensagem. Se o envio ocorrer em uma conversa privada, o sistema também cria uma linha na tabela notificacao para avisar o destinatário. O usuário pode editar suas próprias mensagens, preservando o conteúdo anterior, ou realizar a exclusão lógica, mantendo o registro no banco com a indicação de mensagem excluída.
+
+Por fim, o usuário pode ocultar uma conversa privada da própria lista. O mesmo pode ser feito com um chat de equipe após a saída do projeto. Nesse caso, o sistema registra a ação em chat_oculto sem apagar as mensagens do banco de dados. O processo termina quando o usuário encerra a consulta ou oculta a conversa.
 
 #### Modelo BPMN
 
-![Modelo BPMN do Processo de Interação no Chat](images/chat_bpmn.svg)
+[Arquivo BPMN corrigido e editável do Processo 4](diagram.bpmn)
 
 #### Detalhamento das atividades
 
@@ -28,7 +34,6 @@ Os nomes das tabelas e colunas foram mantidos como aparecem no banco de dados pa
 | Voltar | Fim | cancel |
 
 ![Wireframe Tela de Acessar Chat](images/processo_4/PROCESSO_4_VISUALIZAR_PROJETO_PARA_ACESSAR_CHAT.png)
-![Wireframe Tela de Modal Tipo Chat](images/processo_4/PROCESSO_4_MODAL_TIPO_CHAT.png)
 
 **02. Visualizar chat - tabelas chat_mensagem e chat_leitura**
 
