@@ -4,7 +4,7 @@ O processo de comunicação da equipe tem como objetivo centralizar a comunicaç
 
 #### Modelo BPMN
 
-![Modelo BPMN do Processo de Interação no Chat](images/chat_bpmn.svg)
+![Modelo BPMN do Processo de Interação no Chat](images/processo4_novo.svg)
 
 #### Detalhamento das atividades
 
