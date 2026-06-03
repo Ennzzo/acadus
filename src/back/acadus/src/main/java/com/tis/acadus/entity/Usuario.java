@@ -35,4 +35,7 @@ public class Usuario {
 
     @Column(nullable = false, length = 255)
     private String senha;
+
+    @Column(columnDefinition = "LONGTEXT")
+    private String fotoUrl;
 }

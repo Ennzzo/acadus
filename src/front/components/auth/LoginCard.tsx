@@ -12,11 +12,6 @@ export default function LoginCard() {
 
   return (
     <div className={styles.card}>
-      <div
-        className={`${styles.slider} ${
-          tab === "entrar" ? styles.sliderEntrar : styles.sliderCadastrar
-        }`}
-      />
       <div className={styles.formPanel}>
         <LoginForm tab={tab} onTabChange={setTab} />
       </div>

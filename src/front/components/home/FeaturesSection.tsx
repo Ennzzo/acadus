@@ -8,7 +8,7 @@ const features = [
   },
   {
     tag: "PRAZOS",
-    tagClass: styles.tagPurple,
+    tagClass: styles.tagAmber,
     title: "Professores e alunos nunca perdem uma entrega importante.",
   },
   {
@@ -22,7 +22,7 @@ export default function FeaturesSection() {
   return (
     <section className={styles.section}>
       <div className={styles.inner}>
-        <span className={styles.icon}>🎓</span>
+        <span className={styles.icon} aria-hidden="true" />
         <h2 className={styles.title}>
           A única plataforma que funciona
           <br />

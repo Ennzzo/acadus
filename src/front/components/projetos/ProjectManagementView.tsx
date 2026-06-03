@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import ProjectViewTabs, { ProjectView } from "@/components/projetos/ProjectViewTabs";
+import { apiFetch } from "@/lib/api";
+import { getCurrentUser, withUser } from "@/lib/auth";
+import { toast } from "@/lib/toast";
 import ProjectDetailOverview from "@/components/projetos/ProjectDetailOverview";
 import { Projeto } from "@/types/projeto";
+import ProjectFormModal, { ProjectFormData } from "./ProjectFormModal";
 import styles from "./ProjectManagementView.module.css";
 
 interface ProjectManagementViewProps {
@@ -11,40 +14,37 @@ interface ProjectManagementViewProps {
 }
 
 export default function ProjectManagementView({ projeto }: ProjectManagementViewProps) {
-  const [view, setView] = useState<ProjectView>("overview");
+  const [current, setCurrent] = useState(projeto);
+  const [editing, setEditing] = useState(false);
+  const isLeader = getCurrentUser()?.email === current.liderEmail;
+
+  async function saveProject(dados: ProjectFormData) {
+    const updated = await apiFetch<Projeto>(withUser(`/projetos/${current.id}`), {
+      method: "PUT",
+      body: JSON.stringify({
+        nomeProjeto: dados.nome,
+        descricao: dados.descricao || null,
+        status: dados.status,
+        capaUrl: dados.capaUrl,
+      }),
+    });
+
+    setCurrent(updated);
+    toast.success("Projeto atualizado.");
+  }
 
   return (
     <div className={styles.container}>
-      <ProjectViewTabs activeView={view} onChange={setView} />
+      <ProjectDetailOverview projeto={current} onEdit={isLeader ? () => setEditing(true) : undefined} />
 
-      {view === "overview" && (
-        <ProjectDetailOverview projeto={projeto} />
-      )}
-
-      {view === "quadro" && (
-        <div className={styles.placeholder}>
-          <span>Vista de Quadro — em breve</span>
-        </div>
-      )}
-
-      {view === "calendario" && (
-        <div className={styles.placeholder}>
-          <span>Vista de Calendário — em breve</span>
-        </div>
-      )}
-
-      {view === "gantt" && (
-        <div className={styles.placeholder}>
-          <span>Vista de Gantt — em breve</span>
-        </div>
-      )}
-
-      {view === "tabela" && (
-        <div className={styles.placeholder}>
-          <span>Vista de Tabela — em breve</span>
-        </div>
+      {editing && (
+        <ProjectFormModal
+          mode="editar"
+          projeto={current}
+          onClose={() => setEditing(false)}
+          onSave={saveProject}
+        />
       )}
     </div>
   );
 }
-

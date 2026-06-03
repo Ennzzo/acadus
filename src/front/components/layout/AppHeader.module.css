@@ -1,112 +1,14 @@
 .header {
+  height: 4rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-  height: 52px;
-  border-bottom: 1px solid #2a2a3a;
-  background: #16161f;
-  flex-shrink: 0;
+  padding: 0 1.5rem;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .title {
-  font-size: 15px;
+  color: #0f172a;
+  font-size: 1.1rem;
   font-weight: 600;
-  color: #e0e0f0;
-  letter-spacing: -0.01em;
-}
-
-.right {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.searchBox {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: #1e1e2e;
-  border: 1px solid #2a2a3a;
-  border-radius: 8px;
-  padding: 5px 10px;
-  cursor: pointer;
-  color: #6b6b8a;
-  transition: border-color 0.15s, background 0.15s;
-  min-width: 180px;
-}
-
-.searchBox:hover {
-  border-color: #9b8cf0;
-  background: #1a1a2e;
-}
-
-.searchText {
-  font-size: 12px;
-  color: #6b6b8a;
-  flex: 1;
-}
-
-.kbd {
-  font-size: 10px;
-  font-family: inherit;
-  color: #4a4a6a;
-  background: #12121a;
-  border: 1px solid #2a2a3a;
-  border-radius: 4px;
-  padding: 1px 5px;
-  white-space: nowrap;
-}
-
-.iconBtn {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-  border-radius: 8px;
-  color: #6b6b8a;
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s;
-}
-
-.iconBtn:hover {
-  background: #1e1e2e;
-  color: #c0c0e0;
-}
-
-.avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #9b8cf0, #6a4ecf);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-weight: 700;
-  color: #fff;
-  cursor: pointer;
-  letter-spacing: 0.03em;
-  flex-shrink: 0;
-}
-
-.clearBtn {
-  background: transparent;
-  border: 1px solid #2a2a3a;
-  border-radius: 8px;
-  color: #6b6b8a;
-  font-size: 12px;
-  padding: 5px 12px;
-  cursor: pointer;
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
-  white-space: nowrap;
-}
-
-.clearBtn:hover {
-  background: #1e1e2e;
-  border-color: #3a3a5a;
-  color: #c0c0e0;
 }

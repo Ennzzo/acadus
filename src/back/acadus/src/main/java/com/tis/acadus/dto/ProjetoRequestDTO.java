@@ -1,5 +1,7 @@
 package com.tis.acadus.dto;
 
+import com.tis.acadus.entity.enums.StatusProjeto;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -12,4 +14,11 @@ public class ProjetoRequestDTO {
 
     @Size(max = 500, message = "A descrição deve ter no máximo 500 caracteres")
     private String descricao;
+
+    @Size(max = 150, message = "O e-mail do líder deve ter no máximo 150 caracteres")
+    private String liderEmail;
+
+    private StatusProjeto status;
+
+    private String capaUrl;
 }

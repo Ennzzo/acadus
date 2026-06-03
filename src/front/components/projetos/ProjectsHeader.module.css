@@ -27,7 +27,7 @@
 .newBtn {
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
-  background: #7c3aed;
+  background: #0f172a;
   color: #ffffff;
   font-size: 0.875rem;
   font-weight: 600;
@@ -38,7 +38,7 @@
 }
 
 .newBtn:hover {
-  background: #6d28d9;
+  background: #1e293b;
 }
 
 .stats {

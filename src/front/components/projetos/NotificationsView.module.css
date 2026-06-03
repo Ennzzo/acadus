@@ -1,0 +1,299 @@
+.page {
+  min-height: 100%;
+  padding: 1.5rem;
+  background: #f8fafc;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.header h2 {
+  color: #0f172a;
+  font-size: 1.125rem;
+}
+
+.header p,
+.message,
+.empty p,
+.card p,
+.card small,
+.cardDate {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.header select {
+  border: 1px solid #dbe3ee;
+  border-radius: 0.55rem;
+  background: #ffffff;
+  color: #0f172a;
+  font: inherit;
+  font-size: 0.875rem;
+  padding: 0.55rem 0.75rem;
+}
+
+.empty,
+.card {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: #ffffff;
+}
+
+.empty {
+  padding: 2rem;
+  text-align: center;
+}
+
+.empty h3,
+.card h3 {
+  color: #0f172a;
+}
+
+.list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1rem;
+}
+
+.readCard {
+  border-color: #d7e0eb;
+  background: #f1f5f9;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.cardContent {
+  min-width: 0;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.cardAside {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.cardDate {
+  white-space: nowrap;
+}
+
+.status {
+  display: inline-flex;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-style: normal;
+  font-weight: 600;
+  padding: 0.16rem 0.42rem;
+}
+
+.PENDENTE {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.ACEITO {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.RECUSADO {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.CANCELADO {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.inviteMessage {
+  margin-top: 0.15rem;
+  border-radius: 0.55rem;
+  background: #f8fafc;
+  padding: 0.65rem 0.75rem;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 180;
+  display: grid;
+  place-items: center;
+  background: rgba(15, 23, 42, 0.35);
+  padding: 1rem;
+}
+
+.modal {
+  width: min(38rem, 100%);
+  display: grid;
+  gap: 0.9rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  padding: 1rem;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.modalHeader span {
+  color: #64748b;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.modalHeader h2 {
+  margin-top: 0.1rem;
+  color: #0f172a;
+  font-size: 1.05rem;
+}
+
+.modalHeader button {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  flex: none;
+  place-items: center;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  background: #ffffff;
+  color: #475569;
+  cursor: pointer;
+  padding: 0;
+}
+
+.modal dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.modal dl div {
+  display: grid;
+  gap: 0.1rem;
+  border-radius: 0.55rem;
+  background: #f8fafc;
+  padding: 0.65rem 0.75rem;
+}
+
+.modal dt {
+  color: #64748b;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.modal dd {
+  overflow-wrap: anywhere;
+  color: #334155;
+  font-size: 0.875rem;
+}
+
+.modal dl small {
+  overflow-wrap: anywhere;
+  color: #64748b;
+  font-size: 0.78rem;
+}
+
+.inviteMessage p {
+  margin-top: 0.25rem;
+  color: #475569;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.card small {
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.card h3 {
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.actions button,
+.actions a {
+  border: 1px solid #dbe3ee;
+  border-radius: 0.5rem;
+  background: #ffffff;
+  color: #334155;
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.actions button:first-child,
+.actions a {
+  background: #0f172a;
+  border-color: #0f172a;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+@media (max-width: 720px) {
+  .card {
+    grid-template-columns: 1fr;
+  }
+
+  .cardAside {
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .header {
+    flex-direction: column;
+  }
+
+  .header select {
+    width: 100%;
+  }
+
+  .actions {
+    justify-content: flex-start;
+  }
+
+  .modal dl {
+    grid-template-columns: 1fr;
+  }
+}

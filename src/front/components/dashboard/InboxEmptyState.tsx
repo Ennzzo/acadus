@@ -3,13 +3,11 @@ import styles from "./InboxEmptyState.module.css";
 interface InboxEmptyStateProps {
   title: string;
   subtitle: string;
-  actionLabel?: string;
 }
 
 export default function InboxEmptyState({
   title,
   subtitle,
-  actionLabel,
 }: InboxEmptyStateProps) {
   return (
     <div className={styles.wrapper}>
@@ -24,9 +22,6 @@ export default function InboxEmptyState({
       </div>
       <h2 className={styles.title}>{title}</h2>
       <p className={styles.subtitle}>{subtitle}</p>
-      {actionLabel && (
-        <button className={styles.action}>{actionLabel}</button>
-      )}
     </div>
   );
 }

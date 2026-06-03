@@ -3,6 +3,7 @@ import styles from "./ProjectDetailOverview.module.css";
 
 interface ProjectDetailOverviewProps {
   projeto: Projeto;
+  onEdit?: () => void;
 }
 
 const statusLabel: Record<StatusProjeto, string> = {
@@ -15,27 +16,32 @@ function formatDate(iso: string): string {
   return `${day}/${month}/${year}`;
 }
 
-export default function ProjectDetailOverview({ projeto }: ProjectDetailOverviewProps) {
+export default function ProjectDetailOverview({ projeto, onEdit }: ProjectDetailOverviewProps) {
   return (
     <div className={styles.wrapper}>
-      {/* ── Título ─────────────────────────────── */}
-      <h1 className={styles.titulo}>{projeto.nomeProjeto}</h1>
+      <div className={styles.titleRow}>
+        <h1 className={styles.titulo}>{projeto.nomeProjeto}</h1>
+        {onEdit && (
+          <button type="button" className={styles.editButton} onClick={onEdit}>
+            Editar projeto
+          </button>
+        )}
+      </div>
 
-      {/* ── Conteúdo principal (3 colunas) ─────── */}
       <div className={styles.mainGrid}>
-        {/* Col 1: imagem / capa */}
         <div className={styles.coverBox}>
-          <div className={styles.coverPlaceholder}>
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="3" width="18" height="18" rx="2" />
-              <circle cx="8.5" cy="8.5" r="1.5" />
-              <polyline points="21 15 16 10 5 21" />
-            </svg>
-            <span>Capa do projeto</span>
-          </div>
+          {projeto.capaUrl ? (
+            <div
+              className={styles.coverImage}
+              style={{ backgroundImage: `url(${projeto.capaUrl})` }}
+            />
+          ) : (
+            <div className={styles.coverPlaceholder}>
+              <span>Capa do projeto</span>
+            </div>
+          )}
         </div>
 
-        {/* Col 2: descrição */}
         <div className={styles.descBox}>
           <p className={styles.descLabel}>Descrição:</p>
           <p className={styles.descText}>
@@ -43,19 +49,17 @@ export default function ProjectDetailOverview({ projeto }: ProjectDetailOverview
           </p>
         </div>
 
-        {/* Col 3: status */}
         <div className={styles.equipeBox}>
           <h2 className={styles.equipeTitle}>Status</h2>
           <p className={styles.descText}>{statusLabel[projeto.status]}</p>
+          <h2 className={styles.equipeTitle}>Líder</h2>
+          <p className={styles.descText}>{projeto.liderEmail || "Não informado"}</p>
         </div>
       </div>
 
-      {/* ── Divisor ────────────────────────────── */}
       <hr className={styles.divider} />
 
-      {/* ── Metadados ──────────────────────────── */}
       <div className={styles.metaGrid}>
-        {/* Data de criacao */}
         <div className={styles.metaField}>
           <label className={styles.metaLabel}>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

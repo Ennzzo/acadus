@@ -4,57 +4,99 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.tis.acadus.dto.LoginRequestDTO;
+import com.tis.acadus.dto.PerfilRequestDTO;
 import com.tis.acadus.dto.UsuarioRequestDTO;
 import com.tis.acadus.dto.UsuarioResponseDTO;
 import com.tis.acadus.entity.Usuario;
 import com.tis.acadus.repository.UsuarioRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class UsuarioService {
-    private final UsuarioRepository usuarioRepository;
+    private final UsuarioRepository repository;
 
-    public List<UsuarioResponseDTO> listarUsuarios() {
-        return usuarioRepository.findAll()
-                .stream()
-                .map(this::converterParaDTO)
-                .toList();
+    public UsuarioService(UsuarioRepository repository) {
+        this.repository = repository;
     }
 
-    public UsuarioResponseDTO buscarUsuarioPorId(Long id) {
-        Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-
-        return converterParaDTO(usuario);
+    public List<Usuario> listarUsuarios() {
+        return repository.findAll();
     }
 
-    public UsuarioResponseDTO editarUsuario(Long id, UsuarioRequestDTO dto) {
-        Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    public Usuario buscarUsuarioPorId(Long id) {
+
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+    }
+
+    public Usuario criarUsuario(UsuarioRequestDTO dto) {
+        repository.findByEmail(dto.getEmail())
+                .ifPresent(usuario -> {
+                    throw new RuntimeException("E-mail já cadastrado.");
+                });
+
+        Usuario usuario = Usuario.builder()
+                .nome(dto.getNome())
+                .sobrenome(dto.getSobrenome())
+                .email(dto.getEmail())
+                .senha(dto.getSenha())
+                .build();
+
+        return repository.save(usuario);
+    }
+
+    public Usuario login(LoginRequestDTO dto) {
+        Usuario usuario = repository.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new RuntimeException("E-mail ou senha inválidos."));
+
+        if (!usuario.getSenha().equals(dto.getSenha())) {
+            throw new RuntimeException("E-mail ou senha inválidos.");
+        }
+
+        return usuario;
+    }
+
+    public Usuario editarUsuario(Long id, UsuarioRequestDTO dto) {
+
+        Usuario usuario = buscarUsuarioPorId(id);
 
         usuario.setNome(dto.getNome());
         usuario.setSobrenome(dto.getSobrenome());
         usuario.setEmail(dto.getEmail());
         usuario.setSenha(dto.getSenha());
 
-        return converterParaDTO(usuarioRepository.save(usuario));
+        return repository.save(usuario);
     }
 
     public void excluirUsuario(Long id) {
-        Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        usuarioRepository.delete(usuario);
+        Usuario usuario = buscarUsuarioPorId(id);
+
+        repository.delete(usuario);
     }
 
-    public UsuarioResponseDTO converterParaDTO(Usuario usuario) {
+    public Usuario editarPerfil(Long id, PerfilRequestDTO dto) {
+        Usuario usuario = buscarUsuarioPorId(id);
+
+        usuario.setNome(dto.getNome());
+        usuario.setSobrenome(dto.getSobrenome());
+        usuario.setFotoUrl(dto.getFotoUrl());
+
+        if (dto.getNovaSenha() != null && !dto.getNovaSenha().isBlank()) {
+            usuario.setSenha(dto.getNovaSenha());
+        }
+
+        return repository.save(usuario);
+    }
+
+    public UsuarioResponseDTO toDto(Usuario usuario) {
+
         return UsuarioResponseDTO.builder()
                 .id(usuario.getId())
                 .nome(usuario.getNome())
                 .sobrenome(usuario.getSobrenome())
                 .email(usuario.getEmail())
+                .fotoUrl(usuario.getFotoUrl())
                 .build();
     }
 }

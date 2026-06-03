@@ -1,14 +1,16 @@
 package com.tis.acadus.dto;
 
+import java.util.List;
+
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
 public class EquipeResponseDTO {
-    private Long id;
-    private String nome;
-
-    private Long idProjeto;
+    private Long projetoId;
     private String nomeProjeto;
+    private String nomeEquipe;
+    private String liderEmail;
+    private List<MembroEquipeResponseDTO> membros;
 }

@@ -5,7 +5,6 @@
   padding-top: 4.5rem;
 }
 
-/* ── Content block ─────────────────────────────── */
 .content {
   display: flex;
   flex-direction: column;
@@ -94,11 +93,10 @@
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0;
   color: #9ca3af;
 }
 
-/* ── Tab row ───────────────────────────────────── */
 .tabRow {
   display: flex;
   flex-wrap: wrap;
@@ -128,7 +126,6 @@
   color: #6b7280;
 }
 
-/* ── Product mockup ────────────────────────────── */
 .mockupWrapper {
   width: 100%;
   max-width: 72rem;
@@ -223,7 +220,7 @@
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0;
   color: #9ca3af;
   border-bottom: 1px solid #e5e7eb;
 }

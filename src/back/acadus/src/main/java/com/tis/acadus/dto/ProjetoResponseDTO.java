@@ -14,5 +14,8 @@ public class ProjetoResponseDTO {
     private String nome;
     private String descricao;
     private LocalDate dataCriacao;
+    private String nomeEquipe;
+    private String liderEmail;
+    private String capaUrl;
     private StatusProjeto status;
 }

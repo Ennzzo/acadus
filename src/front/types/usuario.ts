@@ -1,8 +1,7 @@
-export type PerfilUsuario = "ALUNO" | "PROFESSOR";
-
 export interface Usuario {
-  id: string;
+  id: number;
   nome: string;
+  sobrenome: string;
   email: string;
-  perfil: PerfilUsuario;
+  fotoUrl?: string | null;
 }

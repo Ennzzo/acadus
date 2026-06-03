@@ -1,25 +1,32 @@
-export type StatusEquipe = "ATIVA" | "EXCLUIDA";
-export type PapelEquipe = "LIDER" | "MEMBRO" | "OBSERVADOR";
-export type StatusConvite = "PENDENTE" | "ACEITO" | "RECUSADO";
-
-export interface Equipe {
-  id: number;
-  nome: string;
-  projetoId: number;
-  dataCriacao: string;
-  status: StatusEquipe;
-}
+export type PapelMembro = "LIDER" | "MEMBRO";
+export type StatusConvite = "PENDENTE" | "ACEITO" | "RECUSADO" | "CANCELADO";
 
 export interface MembroEquipe {
   id: number;
-  usuarioId: number;
-  nomeUsuario: string;
-  papel: PapelEquipe;
+  projetoId: number;
+  email: string;
+  nome?: string | null;
+  sobrenome?: string | null;
+  fotoUrl?: string | null;
+  papel: PapelMembro;
+  mensagem?: string | null;
+  convidadoPor?: string | null;
+  transferenciaPendente?: boolean;
+  statusTransferencia?: StatusConvite | null;
+  bloqueado?: boolean;
+  motivoBloqueio?: string | null;
+  status: StatusConvite;
+  dataConvite: string;
+  dataEntrada?: string | null;
+  dataSaida?: string | null;
+  removido?: boolean;
+  ocultoLista?: boolean;
 }
 
-export interface ConviteEquipe {
-  id: number;
-  emailConvidado: string;
-  status: StatusConvite;
-  dataEnvio: string;
+export interface Equipe {
+  projetoId: number;
+  nomeProjeto: string;
+  nomeEquipe?: string | null;
+  liderEmail?: string | null;
+  membros: MembroEquipe[];
 }

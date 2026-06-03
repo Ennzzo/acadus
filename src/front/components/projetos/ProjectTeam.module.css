@@ -1,0 +1,327 @@
+.page {
+  min-height: 100%;
+  padding: 1.5rem;
+  background: #f8fafc;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.header h2 {
+  font-size: 1.125rem;
+  color: #0f172a;
+}
+
+.header p,
+.message,
+.empty p,
+.member p {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.errorMsg {
+  color: #b91c1c;
+  font-size: 0.8125rem;
+  margin-bottom: 0.75rem;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: minmax(18rem, 24rem) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.content > .membersPanel:first-child {
+  grid-column: 1 / -1;
+}
+
+.controls {
+  display: grid;
+  gap: 1rem;
+}
+
+.membersPanel {
+  min-width: 0;
+}
+
+.teamForm,
+.inviteForm,
+.empty,
+.member {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+}
+
+.teamForm,
+.inviteForm {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1rem;
+  margin-bottom: 0;
+}
+
+.teamForm {
+  grid-template-columns: 1fr;
+  align-items: end;
+}
+
+.inviteForm {
+  grid-template-columns: 1fr;
+  align-items: end;
+}
+
+.messageField {
+  grid-column: 1 / -1;
+}
+
+.teamForm label,
+.inviteForm label {
+  display: grid;
+  gap: 0.35rem;
+  color: #334155;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.teamForm input,
+.inviteForm input,
+.inviteForm textarea,
+.modal textarea {
+  width: 100%;
+  border: 1px solid #dbe3ee;
+  border-radius: 0.5rem;
+  padding: 0.6rem 0.7rem;
+  font: inherit;
+  color: #0f172a;
+  background: #ffffff;
+}
+
+.teamForm input:read-only {
+  background: #f8fafc;
+  color: #64748b;
+}
+
+.inviteForm textarea,
+.modal textarea {
+  resize: vertical;
+}
+
+.primaryBtn,
+.dangerBtn,
+.actions button,
+.modalActions button {
+  border-radius: 0.5rem;
+  border: 1px solid #dbe3ee;
+  background: #ffffff;
+  color: #334155;
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 0.55rem 0.8rem;
+}
+
+.primaryBtn {
+  background: #0f172a;
+  border-color: #0f172a;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.dangerBtn {
+  color: #b91c1c;
+}
+
+.dangerBtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.empty {
+  padding: 2rem;
+  text-align: center;
+}
+
+.empty h3,
+.member h3 {
+  color: #0f172a;
+  font-size: 1rem;
+}
+
+.list {
+  display: grid;
+  gap: 0.85rem;
+  grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+}
+
+.member {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.avatar {
+  width: 2.4rem;
+  height: 2.4rem;
+  display: grid;
+  flex: none;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.memberInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.frozen {
+  background: #f8fafc;
+}
+
+.note {
+  margin-top: 0.45rem;
+}
+
+.memberSide {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+.role {
+  display: inline-flex;
+  border-radius: 999px;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.LIDER {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.MEMBRO {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.INATIVO {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.self {
+  color: #94a3b8;
+  font-size: 0.8125rem;
+  font-weight: 400;
+}
+
+.actions {
+  display: flex;
+  grid-column: 1 / -1;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.45rem;
+}
+
+.actions:empty {
+  display: none;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.35);
+  z-index: 50;
+}
+
+.modal {
+  width: min(28rem, 100%);
+  display: grid;
+  gap: 0.85rem;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  box-shadow: 0 1.5rem 4rem rgba(15, 23, 42, 0.18);
+}
+
+.modal h2 {
+  color: #0f172a;
+  font-size: 1rem;
+}
+
+.modal label {
+  display: grid;
+  gap: 0.35rem;
+  color: #334155;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+@media (max-width: 760px) {
+  .content {
+    grid-template-columns: 1fr;
+  }
+
+  .header {
+    flex-direction: column;
+  }
+
+  .member {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .memberSide {
+    grid-column: 1 / -1;
+    align-items: flex-start;
+  }
+
+  .actions {
+    justify-content: flex-start;
+  }
+
+  .list {
+    grid-template-columns: 1fr;
+  }
+
+  .teamForm,
+  .inviteForm {
+    grid-template-columns: 1fr;
+  }
+
+  .memberSide {
+    align-items: flex-start;
+  }
+}

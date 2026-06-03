@@ -1,14 +1,12 @@
 package com.tis.acadus.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
 public class EquipeRequestDTO {
-    @NotBlank(message = "O nome da equipe é obrigatório")
-    private String nome;
-
-    @NotNull(message = "A equipe deve estar vinculada a um projeto")
-    private Long idProjeto;
+    @NotBlank(message = "Informe o nome da equipe.")
+    @Size(min = 3, max = 100, message = "O nome da equipe deve ter entre 3 e 100 caracteres.")
+    private String nomeEquipe;
 }

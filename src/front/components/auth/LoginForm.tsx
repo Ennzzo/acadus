@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
+import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
+import { apiFetch } from "@/lib/api";
+import { setCurrentUser } from "@/lib/auth";
+import { toast } from "@/lib/toast";
+import { Usuario } from "@/types/usuario";
 import styles from "./LoginForm.module.css";
 import type { Tab } from "./LoginCard";
-
-type Perfil = "ALUNO" | "PROFESSOR";
 
 interface LoginFormProps {
   tab: Tab;
@@ -13,64 +15,149 @@ interface LoginFormProps {
 }
 
 export default function LoginForm({ tab, onTabChange }: LoginFormProps) {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [perfil, setPerfil] = useState<Perfil>("ALUNO");
+  const [nome, setNome] = useState("");
+  const [sobrenome, setSobrenome] = useState("");
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [confirmar, setConfirmar] = useState("");
+  const [termos, setTermos] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  function resetForm(nextTab: Tab) {
+    setError("");
+    setNome("");
+    setSobrenome("");
+    setEmail("");
+    setSenha("");
+    setConfirmar("");
+    setTermos(false);
+    onTabChange(nextTab);
+  }
+
+  async function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+    setError("");
+
+    if (tab === "cadastrar") {
+      if (senha !== confirmar) {
+        setError("As senhas precisam ser iguais.");
+        toast.error("As senhas precisam ser iguais.");
+        return;
+      }
+
+      if (!termos) {
+        setError("Aceite os termos para criar a conta.");
+        toast.error("Aceite os termos para criar a conta.");
+        return;
+      }
+    }
+
+    try {
+      setLoading(true);
+      const usuario = tab === "entrar"
+        ? await apiFetch<Usuario>("/usuarios/login", {
+            method: "POST",
+            body: JSON.stringify({ email, senha }),
+          })
+        : await apiFetch<Usuario>("/usuarios", {
+            method: "POST",
+            body: JSON.stringify({ nome, sobrenome, email, senha }),
+          });
+
+      setCurrentUser(usuario);
+      toast.success(tab === "entrar" ? "Login realizado." : "Conta criada.");
+      router.push("/projetos");
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Não foi possível continuar.";
+      setError(message);
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div className={styles.wrapper}>
       <h1 className={styles.title}>
-        {tab === "entrar" ? "Login" : "Cadastro"}
+        {tab === "entrar" ? "Entrar" : "Criar conta"}
       </h1>
       <p className={styles.subtitle}>
         {tab === "entrar"
-          ? "Digite os dados da sua conta"
-          : "Crie sua conta no Acadus"}
+          ? "Use seu e-mail e senha para acessar seus projetos."
+          : "Preencha os dados do cadastro para começar."}
       </p>
 
       <div className={styles.tabs}>
         <button
           type="button"
           className={tab === "entrar" ? styles.tabActive : styles.tab}
-          onClick={() => onTabChange("entrar")}
+          onClick={() => resetForm("entrar")}
         >
           Entrar
         </button>
         <button
           type="button"
           className={tab === "cadastrar" ? styles.tabActive : styles.tab}
-          onClick={() => onTabChange("cadastrar")}
+          onClick={() => resetForm("cadastrar")}
         >
           Cadastrar
         </button>
       </div>
 
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={handleSubmit}>
         {tab === "cadastrar" && (
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="nome">
-              Nome completo
-            </label>
-            <input
-              id="nome"
-              type="text"
-              className={styles.input}
-              placeholder=" "
-              autoComplete="name"
-            />
+          <div className={styles.twoCols}>
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="nome">
+                Nome
+              </label>
+              <input
+                id="nome"
+                type="text"
+                className={styles.input}
+                value={nome}
+                onChange={(event) => setNome(event.target.value)}
+                autoComplete="given-name"
+                maxLength={100}
+                required
+              />
+            </div>
+
+            <div className={styles.field}>
+              <label className={styles.label} htmlFor="sobrenome">
+                Sobrenome
+              </label>
+              <input
+                id="sobrenome"
+                type="text"
+                className={styles.input}
+                value={sobrenome}
+                onChange={(event) => setSobrenome(event.target.value)}
+                autoComplete="family-name"
+                maxLength={100}
+                required
+              />
+            </div>
           </div>
         )}
 
         <div className={styles.field}>
           <label className={styles.label} htmlFor="email">
-            {tab === "entrar" ? "Usuário / E-mail" : "E-mail institucional"}
+            E-mail
           </label>
           <input
             id="email"
             type="email"
             className={styles.input}
-            placeholder=" "
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
             autoComplete="email"
+            maxLength={150}
+            required
           />
         </div>
 
@@ -83,10 +170,13 @@ export default function LoginForm({ tab, onTabChange }: LoginFormProps) {
               id="senha"
               type={showPassword ? "text" : "password"}
               className={styles.input}
-              placeholder=" "
+              value={senha}
+              onChange={(event) => setSenha(event.target.value)}
               autoComplete={
                 tab === "entrar" ? "current-password" : "new-password"
               }
+              minLength={tab === "cadastrar" ? 6 : undefined}
+              required
             />
             <button
               type="button"
@@ -118,12 +208,15 @@ export default function LoginForm({ tab, onTabChange }: LoginFormProps) {
               </label>
               <div className={styles.inputRow}>
                 <input
-                  id="confirmar"
-                  type={showConfirm ? "text" : "password"}
-                  className={styles.input}
-                  placeholder=" "
-                  autoComplete="new-password"
-                />
+                id="confirmar"
+                type={showConfirm ? "text" : "password"}
+                className={styles.input}
+                value={confirmar}
+                onChange={(event) => setConfirmar(event.target.value)}
+                autoComplete="new-password"
+                minLength={6}
+                required
+              />
                 <button
                   type="button"
                   className={styles.eyeBtn}
@@ -146,42 +239,21 @@ export default function LoginForm({ tab, onTabChange }: LoginFormProps) {
               </div>
             </div>
 
-            <div className={styles.field}>
-              <label className={styles.label}>Perfil</label>
-              <div className={styles.perfilRow}>
-                <button
-                  type="button"
-                  className={
-                    perfil === "ALUNO" ? styles.perfilActive : styles.perfilBtn
-                  }
-                  onClick={() => setPerfil("ALUNO")}
-                >
-                  Aluno
-                </button>
-                <button
-                  type="button"
-                  className={
-                    perfil === "PROFESSOR"
-                      ? styles.perfilActive
-                      : styles.perfilBtn
-                  }
-                  onClick={() => setPerfil("PROFESSOR")}
-                >
-                  Professor
-                </button>
-              </div>
-            </div>
+            <label className={styles.check}>
+              <input
+                type="checkbox"
+                checked={termos}
+                onChange={(event) => setTermos(event.target.checked)}
+              />
+              Aceito os termos de uso
+            </label>
           </>
         )}
 
-        {tab === "entrar" && (
-          <Link href="#" className={styles.forgot}>
-            Esqueceu a senha?
-          </Link>
-        )}
+        {error && <p className={styles.error}>{error}</p>}
 
-        <button type="submit" className={styles.submit}>
-          {tab === "entrar" ? "Entrar" : "Criar conta"}
+        <button type="submit" className={styles.submit} disabled={loading}>
+          {loading ? "Aguarde..." : tab === "entrar" ? "Entrar" : "Criar conta"}
         </button>
       </form>
     </div>

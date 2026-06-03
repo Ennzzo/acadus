@@ -6,7 +6,7 @@ export default function CtaSection() {
     <section className={styles.section}>
       <div className={styles.container}>
         <div className={styles.gradient}>
-          <span className={styles.icon}>📚</span>
+          <span className={styles.icon} aria-hidden="true" />
           <h2 className={styles.title}>
             Organize seus trabalhos
             <br />

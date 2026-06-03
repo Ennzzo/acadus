@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { setSelectedProjectId } from "@/lib/auth";
 import { Projeto, StatusProjeto } from "@/types/projeto";
 import styles from "./ProjectCard.module.css";
 
@@ -6,6 +7,7 @@ interface ProjectCardProps {
   projeto: Projeto;
   onEdit?: (projeto: Projeto) => void;
   onDelete?: (projeto: Projeto) => void;
+  onLeave?: (projeto: Projeto) => void;
 }
 
 const statusLabel: Record<StatusProjeto, string> = {
@@ -23,10 +25,9 @@ function formatDate(iso: string): string {
   return `${day}/${month}/${year}`;
 }
 
-export default function ProjectCard({ projeto, onEdit, onDelete }: ProjectCardProps) {
+export default function ProjectCard({ projeto, onEdit, onDelete, onLeave }: ProjectCardProps) {
   return (
     <div className={styles.cardWrapper}>
-      {/* Botões de ação — aparecem no hover */}
       <div className={styles.cardActions}>
         {onEdit && (
           <button
@@ -56,9 +57,33 @@ export default function ProjectCard({ projeto, onEdit, onDelete }: ProjectCardPr
             </svg>
           </button>
         )}
+        {onLeave && (
+          <button
+            className={`${styles.actionIcon} ${styles.actionIconLeave}`}
+            title="Sair do projeto"
+            onClick={(event) => { event.preventDefault(); onLeave(projeto); }}
+            aria-label="Sair do projeto"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10 17l5-5-5-5" />
+              <path d="M15 12H3" />
+              <path d="M21 19V5a2 2 0 0 0-2-2h-6" />
+            </svg>
+          </button>
+        )}
       </div>
 
-      <Link href={`/projetos/${projeto.id}`} className={styles.card}>
+      <Link
+        href={`/projetos/${projeto.id}`}
+        className={styles.card}
+        onClick={() => setSelectedProjectId(projeto.id)}
+      >
+        {projeto.capaUrl && (
+          <span
+            className={styles.cover}
+            style={{ backgroundImage: `url(${projeto.capaUrl})` }}
+          />
+        )}
         <div className={styles.top}>
           <div className={styles.meta}>
             <span className={styles.disciplina}>Projeto</span>
@@ -72,8 +97,8 @@ export default function ProjectCard({ projeto, onEdit, onDelete }: ProjectCardPr
 
         <div className={styles.bottom}>
           <div className={styles.footer}>
-            <span className={styles.professor}>Status: {statusLabel[projeto.status]}</span>
-            <span className={styles.prazo}>📅 {formatDate(projeto.dataCriacao)}</span>
+            <span className={styles.professor}>{projeto.liderEmail || "Sem líder"}</span>
+            <span className={styles.prazo}>{formatDate(projeto.dataCriacao)}</span>
           </div>
         </div>
       </Link>

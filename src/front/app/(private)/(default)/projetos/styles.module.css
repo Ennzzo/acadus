@@ -9,10 +9,8 @@
 .content {
   padding: 1.5rem;
   flex: 1;
-  /* quando a view for tabela, o conteúdo terá fundo branco */
-}
+  }
 
-/* A tabela ocupa 100% sem padding extra */
 .content:has(> div[class*="wrapper"]) {
   padding: 0;
   background: #fff;

@@ -1,0 +1,87 @@
+.page {
+  flex: 1;
+  min-height: 100%;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1.5rem;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.header h1 {
+  color: #0f172a;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.header p {
+  color: #64748b;
+  font-size: 0.875rem;
+  margin-top: 0.1rem;
+}
+
+.selectLabel {
+  display: grid;
+  gap: 0.3rem;
+  color: #64748b;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.selectLabel select {
+  min-width: 15rem;
+  border: 1px solid #dbe3ee;
+  border-radius: 0.55rem;
+  background: #ffffff;
+  color: #0f172a;
+  padding: 0.55rem 0.75rem;
+  font: inherit;
+  font-size: 0.875rem;
+}
+
+.content {
+  flex: 1;
+  min-height: 0;
+}
+
+.state,
+.empty {
+  min-height: 100%;
+  display: grid;
+  place-content: center;
+  gap: 0.75rem;
+  padding: 2rem;
+  text-align: center;
+  color: #475569;
+  background: #f8fafc;
+}
+
+.empty h1 {
+  color: #0f172a;
+  font-size: 1.35rem;
+}
+
+.empty a {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+@media (max-width: 760px) {
+  .header {
+    flex-direction: column;
+  }
+
+  .selectLabel,
+  .selectLabel select {
+    width: 100%;
+    min-width: 0;
+  }
+}

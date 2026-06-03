@@ -1,64 +1,70 @@
 .wrapper {
-  padding: 3rem 2.5rem;
+  padding: 2.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   height: 100%;
 }
 
-/* ── Header ────────────────────────────────────── */
 .title {
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: 700;
-  color: #ffffff;
+  color: #0f172a;
   margin-bottom: 0.375rem;
 }
 
 .subtitle {
   font-size: 0.875rem;
-  color: #9ca3af;
-  margin-bottom: 1.75rem;
+  color: #64748b;
+  margin-bottom: 1.5rem;
 }
 
-/* ── Tabs ──────────────────────────────────────── */
 .tabs {
   display: flex;
-  gap: 0;
-  margin-bottom: 2rem;
-  border-bottom: 1px solid #374151;
+  gap: 0.35rem;
+  margin-bottom: 1.5rem;
+  padding: 0.25rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.65rem;
+  background: #f8fafc;
 }
 
 .tab,
 .tabActive {
-  padding: 0.5rem 1.25rem;
+  flex: 1;
+  padding: 0.55rem 1rem;
+  border-radius: 0.5rem;
   font-size: 0.875rem;
-  font-weight: 500;
-  background: none;
+  font-weight: 600;
   border: none;
   cursor: pointer;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-  transition: color 0.15s, border-color 0.15s;
 }
 
 .tab {
-  color: #6b7280;
+  color: #64748b;
+  background: transparent;
 }
 
 .tab:hover {
-  color: #d1d5db;
+  color: #0f172a;
 }
 
 .tabActive {
-  color: #ffffff;
-  border-bottom-color: #7c3aed;
+  color: #0f172a;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
 }
 
-/* ── Form ──────────────────────────────────────── */
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1rem;
+}
+
+.twoCols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
 }
 
 .field {
@@ -69,7 +75,8 @@
 
 .label {
   font-size: 0.8125rem;
-  color: #9ca3af;
+  color: #334155;
+  font-weight: 600;
 }
 
 .inputRow {
@@ -80,18 +87,18 @@
 
 .input {
   width: 100%;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid #4b5563;
-  padding: 0.5rem 2rem 0.5rem 0;
+  background: #ffffff;
+  border: 1px solid #dbe3ee;
+  border-radius: 0.5rem;
+  padding: 0.65rem 2rem 0.65rem 0.75rem;
   font-size: 0.9375rem;
-  color: #ffffff;
+  color: #0f172a;
   outline: none;
-  transition: border-color 0.15s;
 }
 
 .input:focus {
-  border-bottom-color: #7c3aed;
+  border-color: #94a3b8;
+  box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.16);
 }
 
 .eyeBtn {
@@ -102,77 +109,62 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  color: #6b7280;
+  color: #64748b;
   padding: 4px;
   border-radius: 4px;
-  transition: color 0.15s;
 }
 
 .eyeBtn:hover {
-  color: #d1d5db;
+  color: #0f172a;
 }
 
-/* ── Perfil selector ───────────────────────────── */
-.perfilRow {
+.check {
   display: flex;
-  gap: 0.75rem;
-}
-
-.perfilBtn,
-.perfilActive {
-  flex: 1;
-  padding: 0.5rem;
-  border-radius: 0.375rem;
+  align-items: center;
+  gap: 0.55rem;
+  color: #475569;
   font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  border: 1px solid #374151;
-  transition: all 0.15s;
 }
 
-.perfilBtn {
-  background: transparent;
-  color: #9ca3af;
+.check input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: #0f172a;
 }
 
-.perfilBtn:hover {
-  border-color: #7c3aed;
-  color: #c4b5fd;
-}
-
-.perfilActive {
-  background: #7c3aed;
-  border-color: #7c3aed;
-  color: #ffffff;
-}
-
-/* ── Actions ───────────────────────────────────── */
-.forgot {
+.error {
+  color: #b91c1c;
   font-size: 0.8125rem;
-  color: #6b7280;
-  text-decoration: none;
-  align-self: flex-start;
-  transition: color 0.15s;
-  margin-top: -0.25rem;
-}
-
-.forgot:hover {
-  color: #c4b5fd;
+  line-height: 1.5;
 }
 
 .submit {
   margin-top: 0.5rem;
   padding: 0.875rem;
   border-radius: 0.5rem;
-  background: #4f368a;
+  background: #0f172a;
   color: #ffffff;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   border: none;
   cursor: pointer;
-  transition: background 0.15s;
 }
 
 .submit:hover {
-  background: #7c3aed;
+  background: #1e293b;
+}
+
+.submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+@media (max-width: 720px) {
+  .wrapper {
+    padding: 1.5rem;
+  }
+
+  .twoCols {
+    grid-template-columns: 1fr;
+  }
 }
