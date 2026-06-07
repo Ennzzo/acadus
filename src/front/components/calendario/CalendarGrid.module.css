@@ -9,8 +9,8 @@
 .weekHeader {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  border-bottom: 1px solid #e5e7eb;
-  background: #f9fafb;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
 }
 
 .weekDay {
@@ -18,7 +18,7 @@
   text-align: center;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #6b7280;
+  color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -32,8 +32,8 @@
 
 .cell {
   min-height: 100px;
-  border-right: 1px solid #f3f4f6;
-  border-bottom: 1px solid #f3f4f6;
+  border-right: 1px solid #f1f5f9;
+  border-bottom: 1px solid #f1f5f9;
   padding: 0.375rem;
   display: flex;
   flex-direction: column;
@@ -46,28 +46,28 @@
 }
 
 .cell:hover:not(.cellEmpty) {
-  background: #faf5ff;
+  background: #f1f5f9;
 }
 
 .cellEmpty {
-  background: #fafafa;
+  background: #f8fafc;
 }
 
 .cellToday {
-  background: #f5f3ff;
+  background: #f1f5f9;
 }
 
 /* ── Day number ──────────────────────────────────── */
 .dayNumber {
   font-size: 0.8125rem;
   font-weight: 500;
-  color: #6b7280;
+  color: #64748b;
   padding: 0.125rem 0.25rem;
   line-height: 1;
 }
 
 .dayToday {
-  background: #7c3aed;
+  background: #0f172a;
   color: #fff;
   border-radius: 50%;
   width: 1.5rem;
@@ -111,7 +111,7 @@
 
 .moreTag {
   font-size: 0.625rem;
-  color: #9ca3af;
+  color: #94a3b8;
   padding: 0 0.25rem;
   font-weight: 500;
 }
