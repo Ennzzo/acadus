@@ -45,6 +45,10 @@ public class Projeto {
     @Builder.Default
     private LocalDate dataCriacao = LocalDate.now();
 
+    public String getNomeProjeto() {
+        return this.nome;
+    }
+
     @Column(length = 100)
     private String nomeEquipe;
 
