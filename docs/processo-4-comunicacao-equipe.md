@@ -55,7 +55,7 @@ Os campos abaixo são apenas os que aparecem nas telas do processo. A coluna de 
 | Editar mensagem própria | Editar mensagem | default |
 | Excluir mensagem própria | Excluir mensagem | default |
 | Ocultar conversa | Ocultar conversa da lista | default |
-| Sair | Fim | default |
+| Apenas visualizar | Fim | default |
 
 ![Wireframe Tela de Visualizar Chat](images/processo_4/PROCESSO_4_VISUALIZAR_CHAT.png)
 
@@ -106,5 +106,5 @@ Os campos abaixo são apenas os que aparecem nas telas do processo. A coluna de 
 
 | **Comandos** | **Destino** | **Tipo** |
 |--------------|-------------|----------|
-| Ocultar conversa | Atualizar lista de conversas | default |
+| Ocultar conversa | Fim | default |
 | Cancelar | Visualizar chat | cancel |
