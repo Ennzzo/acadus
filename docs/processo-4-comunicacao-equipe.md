@@ -10,22 +10,23 @@ Por fim, o usuário pode ocultar uma conversa privada da própria lista. O mesmo
 
 #### Modelo BPMN
 
-[Arquivo BPMN corrigido e editável do Processo 4](diagram.bpmn)
+![Modelo BPMN do Processo de Comunicação da Equipe](images/chat_bpmn.svg)
 
 #### Detalhamento das atividades
 
-Os nomes das tabelas e colunas foram mantidos como aparecem no banco de dados para facilitar a conferência em um visualizador como o Beekeeper Studio.
+Os campos abaixo são apenas os que aparecem nas telas do processo. A coluna de origem indica onde a informação pode ser conferida no banco.
 
-**01. Acessar chat da equipe ou conversa privada - tabelas projeto, membro_equipe e usuario**
+**01. Acessar chat da equipe ou conversa privada**
 
-| **Campo no banco** | **Tipo** | **Restrições** | **Valor default** |
-|--------------------|----------|----------------|-------------------|
-| projeto.id       | Número | identifica o chat da equipe selecionada | |
-| membro_equipe.email | Texto | identifica o usuário no projeto | |
-| membro_equipe.status | Texto | acesso ao chat da equipe exige valor ACEITO | |
-| membro_equipe.data_saida | Data e hora | quando preenchida, o chat da equipe fica disponível somente para leitura | |
-| usuario.email | Texto | utilizado para iniciar uma conversa privada | |
-| usuario.foto_url | Texto | opcional; imagem exibida para identificar o usuário | |
+| **Campo visível na tela** | **Origem no banco** | **Onde aparece** |
+|---------------------------|---------------------|------------------|
+| Nome do projeto | projeto.nome_projeto | lista de chats de equipe |
+| Nome do contato | usuario.nome e usuario.sobrenome | lista de conversas privadas |
+| E-mail do contato | usuario.email | nova conversa e lista de membros |
+| Foto ou avatar | usuario.foto_url | lista de chats e membros |
+| Prévia da última mensagem | chat_mensagem.conteudo | lista de chats |
+| Indicação de não lida | chat_leitura.visualizado_ate | lista de chats |
+| Status somente leitura | membro_equipe.data_saida | chat de equipe após saída |
 
 | **Comandos** | **Destino** | **Tipo** |
 |--------------|-------------|----------|
@@ -35,21 +36,18 @@ Os nomes das tabelas e colunas foram mantidos como aparecem no banco de dados pa
 
 ![Wireframe Tela de Acessar Chat](images/processo_4/PROCESSO_4_VISUALIZAR_PROJETO_PARA_ACESSAR_CHAT.png)
 
-**02. Visualizar chat - tabelas chat_mensagem e chat_leitura**
+**02. Visualizar chat**
 
-| **Campo no banco** | **Tipo** | **Restrições** | **Valor default** |
-|--------------------|----------|----------------|-------------------|
-| projeto_id       | Número   | preenchido nas mensagens do chat de um projeto; vazio em conversa privada | |
-| tipo_chat        | Texto    | valor EQUIPE ou identificação de conversa privada | |
-| autor_email      | Texto    | identifica quem enviou a mensagem | |
-| conteudo         | Texto    | conteúdo apresentado no chat | |
-| anexo            | Texto    | opcional; armazena os anexos | |
-| editada          | Booleano | indica se a mensagem foi alterada | false |
-| excluida         | Booleano | indica se a mensagem foi excluída logicamente | false |
-| data_hora        | Data e hora | define a ordem das mensagens | |
-| chat_leitura.usuario_email | Texto | identifica quem visualizou a conversa | |
-| chat_leitura.tipo_chat | Texto | usa EQUIPE:<projeto_id> ou PRIVADO:<email>:<email> para identificar a conversa | |
-| chat_leitura.visualizado_ate | Data e hora | registra até qual momento a conversa foi lida | |
+| **Campo visível na tela** | **Origem no banco** | **Onde aparece** |
+|---------------------------|---------------------|------------------|
+| Nome da conversa | projeto.nome_projeto ou usuario.nome | topo do chat |
+| Quantidade de participantes | membro_equipe | topo do chat de equipe |
+| Nome do autor | chat_mensagem.autor_nome ou chat_mensagem.autor_email | mensagem |
+| Horário da mensagem | chat_mensagem.data_hora | mensagem |
+| Texto da mensagem | chat_mensagem.conteudo | mensagem |
+| Anexo | chat_mensagem.anexo | mensagem |
+| Indicação de mensagem editada | chat_mensagem.editada | mensagem própria ou recebida |
+| Mensagem excluída | chat_mensagem.conteudo | mensagem removida logicamente |
 
 | **Comandos** | **Destino** | **Tipo** |
 |--------------|-------------|----------|
@@ -61,19 +59,12 @@ Os nomes das tabelas e colunas foram mantidos como aparecem no banco de dados pa
 
 ![Wireframe Tela de Visualizar Chat](images/processo_4/PROCESSO_4_VISUALIZAR_CHAT.png)
 
-**03. Enviar mensagem - tabelas chat_mensagem e notificacao**
+**03. Enviar mensagem**
 
-| **Campo no banco** | **Tipo** | **Restrições** | **Valor default** |
-|--------------------|----------|----------------|-------------------|
-| projeto_id       | Número   | projeto atual; permanece vazio em conversa privada | |
-| autor_email      | Texto    | obrigatório; e-mail do usuário autenticado | |
-| autor_nome       | Texto    | opcional; até 150 caracteres | |
-| tipo_chat        | Texto    | EQUIPE ou PRIVADO:<email>:<email> | EQUIPE |
-| conteudo         | Texto    | obrigatório; até 1000 caracteres | |
-| anexo            | Texto    | opcional; armazena os anexos | |
-| notificacao.tipo | Texto    | preenchido ao enviar uma mensagem privada | MENSAGEM_PRIVADA |
-| notificacao.destinatario_email | Texto | e-mail do destinatário da conversa privada | |
-| notificacao.remetente_email | Texto | e-mail do autor da mensagem privada | |
+| **Campo visível na tela** | **Origem no banco** | **Onde aparece** |
+|---------------------------|---------------------|------------------|
+| Mensagem digitada | chat_mensagem.conteudo | campo de mensagem |
+| Anexo selecionado | chat_mensagem.anexo | área de anexos |
 
 | **Comandos** | **Destino** | **Tipo** |
 |--------------|-------------|----------|
@@ -82,43 +73,36 @@ Os nomes das tabelas e colunas foram mantidos como aparecem no banco de dados pa
 
 ![Wireframe Tela de Enviar Mensagem](images/processo_4/PROCESSO_4_VISUALIZAR_CHAT.png)
 
-**04. Editar mensagem própria - tabela chat_mensagem**
+**04. Editar mensagem própria**
 
-| **Campo no banco** | **Tipo** | **Restrições** | **Valor default** |
-|--------------------|----------|----------------|-------------------|
-| conteudo_anterior | Texto   | recebe o conteúdo anterior da mensagem | |
-| conteudo         | Texto    | obrigatório; até 1000 caracteres | valor editado |
-| anexo            | Texto    | opcional; armazena os anexos atualizados | valor editado |
-| editada          | Booleano | alterado automaticamente | true |
+| **Campo visível na tela** | **Origem no banco** | **Onde aparece** |
+|---------------------------|---------------------|------------------|
+| Texto da mensagem | chat_mensagem.conteudo | modal de edição |
+| Anexo da mensagem | chat_mensagem.anexo | modal de edição |
 
 | **Comandos** | **Destino** | **Tipo** |
 |--------------|-------------|----------|
 | Salvar alteração | Atualizar chat | default |
 | Cancelar | Visualizar chat | cancel |
 
-**05. Excluir mensagem própria - tabela chat_mensagem**
+**05. Excluir mensagem própria**
 
-| **Campo no banco** | **Tipo** | **Restrições** | **Valor default** |
-|--------------------|----------|----------------|-------------------|
-| conteudo_anterior | Texto   | recebe o conteúdo anterior da mensagem | |
-| conteudo         | Texto    | mensagem é substituída por texto informativo | Mensagem excluída. |
-| anexo            | Texto    | removido durante a exclusão lógica | vazio |
-| excluida         | Booleano | alterado automaticamente | true |
+| **Campo visível na tela** | **Origem no banco** | **Onde aparece** |
+|---------------------------|---------------------|------------------|
+| Texto da mensagem | chat_mensagem.conteudo | mensagem selecionada |
+| Confirmação de exclusão | tela de confirmação | modal de exclusão |
 
 | **Comandos** | **Destino** | **Tipo** |
 |--------------|-------------|----------|
 | Confirmar | Atualizar chat | default |
 | Cancelar | Visualizar chat | cancel |
 
-**06. Ocultar conversa da lista - tabela chat_oculto**
+**06. Ocultar conversa da lista**
 
-| **Campo no banco** | **Tipo** | **Restrições** | **Valor default** |
-|--------------------|----------|----------------|-------------------|
-| usuario_email      | Texto    | identifica o usuário que ocultou a conversa | |
-| tipo_chat          | Texto    | usa EQUIPE:<projeto_id> ou PRIVADO:<email>:<email> para identificar a conversa | |
-| oculto_ate         | Data e hora | registra até qual momento a conversa foi ocultada | data e hora atuais |
-
-Conversas privadas podem ser ocultadas da lista pelo próprio usuário. Chats de equipe podem ser ocultados após a saída do projeto. Essa ação não apaga as mensagens do banco.
+| **Campo visível na tela** | **Origem no banco** | **Onde aparece** |
+|---------------------------|---------------------|------------------|
+| Nome da conversa | projeto.nome_projeto ou usuario.nome | topo do chat |
+| Confirmação de exclusão do chat | tela de confirmação | modal de exclusão do chat |
 
 | **Comandos** | **Destino** | **Tipo** |
 |--------------|-------------|----------|
