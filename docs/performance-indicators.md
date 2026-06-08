@@ -1,13 +1,10 @@
 ## 5. Indicadores de desempenho
 
-_Apresente aqui os principais indicadores de desempenho e algumas metas para o processo. Atenção: as informações necessárias para gerar os indicadores devem estar contempladas no modelo relacional. Defina no mínimo 3 indicadores de desempenho._
+| **Indicador**                 | **Objetivos**                                                    | **Descrição**                                                                                              | **Fonte de dados**                | **Fórmula de cálculo**                                           |
+| ----------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------------------- | ---------------------------------------------------------------- |
+| Média de usuários por projeto | Avaliar o nível de colaboração nos projetos                      | Mede a quantidade média de usuários vinculados aos projetos cadastrados                                    | Tabelas UsuárioProjeto e Projeto  | número total de participantes / número total de projetos         |
+| Média de mensagens por chat   | Avaliar o nível de comunicação entre os membros das equipes      | Mede a quantidade média de mensagens enviadas em cada chat                                                 | Tabelas Mensagem e Chat           | número total de mensagens / número total de chats                |
+| Percentual de usuários ativos | Monitorar o engajamento dos usuários na plataforma               | Mede a porcentagem de usuários que acessaram ou realizaram alguma ação no período analisado                | Tabela Usuário                    | (número de usuários ativos / número total de usuários) × 100     |
+| Média de chats por projeto    | Avaliar o uso dos canais de comunicação dos projetos             | Mede a quantidade média de chats criados por projeto                                                       | Tabelas Chat e Projeto            | número total de chats / número total de projetos                 |
+| Taxa de participação em chats | Verificar o envolvimento dos membros nas discussões dos projetos | Mede o percentual de usuários que enviaram ao menos uma mensagem em relação aos participantes dos projetos | Tabelas Mensagem e UsuárioProjeto | (usuários que enviaram mensagens / usuários participantes) × 100 |
 
-_Usar o seguinte modelo:_
-
-| **Indicador** | **Objetivos** | **Descrição** | **Fonte de dados** | **Fórmula de cálculo** |
-| ---           | ---           | ---           | ---             | ---             |
-| Percentual de reclamações | Avaliar quantitativamente as reclamações | Percentual de reclamações em relação ao total de atendimentos | Tabela Reclamações | número total de reclamações / número total de atendimentos |
-| Taxa de requisições atendidas | Melhorar a prestação de serviços medindo a porcentagem de requisições atendidas| Mede a % de requisições atendidas na semana | Tabela Solicitações | (número de requisições atendidas / número total de requisições) * 100 |
-| Taxa de entrega de material | Manter controle sobre os materiais que estão sendo entregues | Mede % de material entregue dentro do mês | Tabela Pedidos | (número de pedidos entregues / número total de pedidos) * 100 |
-
-_Obs.: todas as informações para gerar os indicadores devem estar no modelo relacional._
