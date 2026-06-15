@@ -148,7 +148,3 @@ FROM chat_mensagem;
 ```
 
 ---
-
-Durante a implementação do dashboard, os valores devem ser carregados dinamicamente através das consultas SQL acima e exibidos em gráficos reais utilizando a biblioteca escolhida para o frontend (Chart.js, ApexCharts, Recharts, ECharts ou similar).
-
-Cada indicador deve ser atualizado automaticamente a partir dos dados armazenados no banco de dados Acadus.
