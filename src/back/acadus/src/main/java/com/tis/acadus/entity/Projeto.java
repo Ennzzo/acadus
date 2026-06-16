@@ -16,6 +16,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.PostLoad;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,7 +38,10 @@ public class Projeto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100)
+    @Column(name = "nome_projeto", nullable = false, length = 100)
+    private String nomeProjeto;
+
+    @Column(name = "nome", length = 100)
     private String nome;
 
     @Column(length = 500)
@@ -45,8 +51,32 @@ public class Projeto {
     @Builder.Default
     private LocalDate dataCriacao = LocalDate.now();
 
-    public String getNomeProjeto() {
-        return this.nome;
+    public String getNome() {
+        return this.nomeProjeto;
+    }
+
+    public void setNome(String nome) {
+        this.nomeProjeto = nome;
+        this.nome = nome;
+    }
+
+    @PostLoad
+    private void normalizeNomeProjeto() {
+        if ((nomeProjeto == null || nomeProjeto.isBlank()) && nome != null) {
+            nomeProjeto = nome;
+        }
+        if ((nome == null || nome.isBlank()) && nomeProjeto != null) {
+            nome = nomeProjeto;
+        }
+    }
+
+    @PrePersist
+    @PreUpdate
+    private void syncNomeColumns() {
+        if ((nomeProjeto == null || nomeProjeto.isBlank()) && nome != null) {
+            nomeProjeto = nome;
+        }
+        nome = nomeProjeto;
     }
 
     @Column(length = 100)

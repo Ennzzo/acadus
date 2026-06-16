@@ -8,6 +8,7 @@ interface CalendarGridProps {
   ano: number;
   eventos: Evento[];
   onEventoClick: (evento: Evento) => void;
+  onDayClick?: (data: string) => void;
 }
 
 const DIAS_SEMANA = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
@@ -32,6 +33,7 @@ export default function CalendarGrid({
   ano,
   eventos,
   onEventoClick,
+  onDayClick,
 }: CalendarGridProps) {
   const primeiroDia = new Date(ano, mes, 1);
   const diaSemanaInicio = primeiroDia.getDay();
@@ -42,6 +44,11 @@ export default function CalendarGrid({
     dia === hoje.getDate() &&
     mes === hoje.getMonth() &&
     ano === hoje.getFullYear();
+
+  function handleDayClick(dia: number) {
+    const dataStr = `${ano}-${String(mes + 1).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
+    onDayClick?.(dataStr);
+  }
 
   // Build the grid cells
   const cells: { dia: number | null; eventosNoDia: Evento[] }[] = [];
@@ -83,6 +90,8 @@ export default function CalendarGrid({
           <div
             key={idx}
             className={`${styles.cell} ${cell.dia === null ? styles.cellEmpty : ""} ${cell.dia !== null && isHoje(cell.dia) ? styles.cellToday : ""}`}
+            onClick={() => cell.dia !== null && handleDayClick(cell.dia)}
+            style={{ cursor: cell.dia !== null ? "pointer" : "default" }}
           >
             {cell.dia !== null && (
               <>
@@ -95,7 +104,10 @@ export default function CalendarGrid({
                       key={evento.id}
                       className={styles.eventTag}
                       style={{ backgroundColor: getCorEvento(evento.id) }}
-                      onClick={() => onEventoClick(evento)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onEventoClick(evento);
+                      }}
                       title={evento.nome}
                     >
                       {evento.nome}

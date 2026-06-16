@@ -1,10 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { membrosMock } from "@/data/mocks/eventos";
+import { apiFetch } from "@/lib/api";
+import { toast } from "@/lib/toast";
+import { MembroEquipe } from "@/types/equipe";
 import styles from "./EventModal.module.css";
 
 interface EventFormModalProps {
+  projetoId?: number;
+  dataPre?: string;
   onClose: () => void;
   onSave: (dados: {
     nome: string;
@@ -14,17 +18,43 @@ interface EventFormModalProps {
   }) => void;
 }
 
-export default function EventFormModal({ onClose, onSave }: EventFormModalProps) {
+export default function EventFormModal({ projetoId, dataPre, onClose, onSave }: EventFormModalProps) {
   const [nome, setNome] = useState("");
-  const [data, setData] = useState("");
+  const [data, setData] = useState(dataPre || "");
   const [descricao, setDescricao] = useState("");
   const [membrosIds, setMembrosIds] = useState<number[]>([]);
+  const [membros, setMembros] = useState<MembroEquipe[]>([]);
+  const [loadingMembros, setLoadingMembros] = useState(true);
   const [errors, setErrors] = useState<{ nome?: string; data?: string; descricao?: string }>({});
   const nomeRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     nomeRef.current?.focus();
   }, []);
+
+  useEffect(() => {
+    async function carregarMembros() {
+      if (!projetoId) {
+        setLoadingMembros(false);
+        return;
+      }
+
+      try {
+        setLoadingMembros(true);
+        const data = await apiFetch<MembroEquipe[]>(`/projetos/${projetoId}/membros`, {
+          cache: "no-store",
+        });
+        setMembros(data);
+      } catch {
+        toast.error("Erro ao carregar membros do projeto");
+        setMembros([]);
+      } finally {
+        setLoadingMembros(false);
+      }
+    }
+
+    carregarMembros();
+  }, [projetoId]);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -117,18 +147,30 @@ export default function EventFormModal({ onClose, onSave }: EventFormModalProps)
             <label className={styles.label}>
               Membros <span className={styles.optional}>(opcional)</span>
             </label>
-            <div className={styles.membrosGrid}>
-              {membrosMock.map((m) => (
-                <label key={m.id} className={styles.membroCheckbox}>
-                  <input
-                    type="checkbox"
-                    checked={membrosIds.includes(m.id)}
-                    onChange={() => toggleMembro(m.id)}
-                  />
-                  <span className={styles.membroNome}>{m.nome}</span>
-                </label>
-              ))}
-            </div>
+            {loadingMembros ? (
+              <div className={styles.membrosGrid}>
+                <p style={{ fontSize: "0.875rem", color: "#64748b" }}>Carregando membros...</p>
+              </div>
+            ) : membros.length === 0 ? (
+              <div className={styles.membrosGrid}>
+                <p style={{ fontSize: "0.875rem", color: "#64748b" }}>
+                  Nenhum membro no projeto
+                </p>
+              </div>
+            ) : (
+              <div className={styles.membrosGrid}>
+                {membros.map((m) => (
+                  <label key={m.id} className={styles.membroCheckbox}>
+                    <input
+                      type="checkbox"
+                      checked={membrosIds.includes(m.id || 0)}
+                      onChange={() => toggleMembro(m.id || 0)}
+                    />
+                    <span className={styles.membroNome}>{m.nome && m.sobrenome ? `${m.nome} ${m.sobrenome}` : m.email}</span>
+                  </label>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className={styles.field}>

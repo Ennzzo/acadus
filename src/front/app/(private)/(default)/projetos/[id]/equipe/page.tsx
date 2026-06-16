@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useParams } from "next/navigation";
 import { apiFetch, apiFetchText } from "@/lib/api";
 import { ConviteEquipe, Equipe, MembroEquipe, PapelEquipe, StatusEquipe } from "@/types/equipe";
 import styles from "./styles.module.css";
@@ -8,6 +9,14 @@ import styles from "./styles.module.css";
 interface ProjetoResumo {
   id: number;
   nome: string;
+  descricao?: string | null;
+  dataCriacao?: string;
+}
+
+interface ProjetoApiResponse {
+  id?: number | string;
+  nome?: string | null;
+  nomeProjeto?: string | null;
   descricao?: string | null;
   dataCriacao?: string;
 }
@@ -25,7 +34,6 @@ type ModalState =
 const papelLabels: Record<PapelEquipe, string> = {
   LIDER: "Líder",
   MEMBRO: "Membro",
-  OBSERVADOR: "Observador",
 };
 
 const statusLabels: Record<StatusEquipe, string> = {
@@ -42,9 +50,13 @@ function initials(value: string) {
     .join("");
 }
 
+function memberDisplayName(membro: MembroEquipe) {
+  return membro.nomeUsuario || [membro.nome, membro.sobrenome].filter(Boolean).join(" ") || membro.email || `Usuário ${membro.usuarioId ?? membro.id}`;
+}
+
 async function loadProjeto(id: string): Promise<ProjetoResumo | null> {
   try {
-    const data = await apiFetch<any>(`/projetos/${id}`, { cache: "no-store" });
+    const data = await apiFetch<ProjetoApiResponse>(`/projetos/${id}`, { cache: "no-store" });
     return {
       id: Number(data.id ?? id),
       nome: data.nomeProjeto ?? data.nome ?? "Projeto",
@@ -53,7 +65,7 @@ async function loadProjeto(id: string): Promise<ProjetoResumo | null> {
     };
   } catch {
     try {
-      const data = await apiFetch<any>(`/projetos/visualizar/${id}`, { cache: "no-store" });
+      const data = await apiFetch<ProjetoApiResponse>(`/projetos/visualizar/${id}`, { cache: "no-store" });
       return {
         id: Number(data.id ?? id),
         nome: data.nome ?? "Projeto",
@@ -66,7 +78,9 @@ async function loadProjeto(id: string): Promise<ProjetoResumo | null> {
   }
 }
 
-export default function EquipeProjetoPage({ params }: { params: { id: string } }) {
+export default function EquipeProjetoPage() {
+  const params = useParams<{ id: string }>();
+  const projetoIdParam = params.id;
   const [projeto, setProjeto] = useState<ProjetoResumo | null>(null);
   const [equipes, setEquipes] = useState<Equipe[]>([]);
   const [equipeAtiva, setEquipeAtiva] = useState<Equipe | null>(null);
@@ -77,28 +91,29 @@ export default function EquipeProjetoPage({ params }: { params: { id: string } }
   const [statusMsg, setStatusMsg] = useState<string | null>(null);
 
   useEffect(() => {
-    loadProjeto(params.id).then(setProjeto);
-  }, [params.id]);
+    loadProjeto(projetoIdParam).then(setProjeto);
+  }, [projetoIdParam]);
 
   useEffect(() => {
     if (!equipeAtiva) return;
 
     let active = true;
+    const equipeId = equipeAtiva.id;
 
     async function loadEquipeData() {
       try {
         const [membros, convitesData] = await Promise.all([
-          apiFetch<MembroEquipe[]>(`/equipes/${equipeAtiva.id}/membros`, { cache: "no-store" }),
-          apiFetch<ConviteEquipe[]>(`/equipes/${equipeAtiva.id}/convites`, { cache: "no-store" }),
+          apiFetch<MembroEquipe[]>(`/equipes/${equipeId}/membros`, { cache: "no-store" }),
+          apiFetch<ConviteEquipe[]>(`/equipes/${equipeId}/convites`, { cache: "no-store" }),
         ]);
 
         if (active) {
-          setMembrosPorEquipe((prev) => ({ ...prev, [equipeAtiva.id]: membros }));
+          setMembrosPorEquipe((prev) => ({ ...prev, [equipeId]: membros }));
           setConvites(convitesData);
         }
       } catch {
         if (active) {
-          setMembrosPorEquipe((prev) => ({ ...prev, [equipeAtiva.id]: prev[equipeAtiva.id] ?? [] }));
+          setMembrosPorEquipe((prev) => ({ ...prev, [equipeId]: prev[equipeId] ?? [] }));
         }
       }
     }
@@ -202,8 +217,11 @@ export default function EquipeProjetoPage({ params }: { params: { id: string } }
       const novo: MembroEquipe = {
         id: Date.now(),
         usuarioId,
+        email: "",
         nomeUsuario: nomeUsuario ?? `Usuário ${usuarioId}`,
         papel,
+        status: "ACEITO",
+        dataConvite: new Date().toISOString(),
       };
       return { ...prev, [equipe.id]: [...list, novo] };
     });
@@ -303,7 +321,7 @@ export default function EquipeProjetoPage({ params }: { params: { id: string } }
                   onClick={() => setEquipeAtiva(equipe)}
                 >
                   <strong>{equipe.nome}</strong>
-                  <span className={styles.teamMeta}>Status: {statusLabels[equipe.status]}</span>
+                  <span className={styles.teamMeta}>Status: {statusLabels[equipe.status ?? "ATIVA"]}</span>
                 </li>
               ))}
             </ul>
@@ -343,23 +361,26 @@ export default function EquipeProjetoPage({ params }: { params: { id: string } }
                     {membrosAtivos.length === 0 && (
                       <p className={styles.cardText}>Ainda não há membros adicionados.</p>
                     )}
-                    {membrosAtivos.map((membro) => (
-                      <div key={membro.usuarioId} className={styles.memberItem}>
-                        <div className={styles.memberInfo}>
-                          <span className={styles.avatar}>{initials(membro.nomeUsuario)}</span>
-                          <div>
-                            <div>{membro.nomeUsuario}</div>
-                            <div className={styles.memberRole}>{papelLabels[membro.papel]}</div>
+                    {membrosAtivos.map((membro) => {
+                      const nomeMembro = memberDisplayName(membro);
+                      return (
+                        <div key={membro.usuarioId ?? membro.id} className={styles.memberItem}>
+                          <div className={styles.memberInfo}>
+                            <span className={styles.avatar}>{initials(nomeMembro)}</span>
+                            <div>
+                              <div>{nomeMembro}</div>
+                              <div className={styles.memberRole}>{papelLabels[membro.papel]}</div>
+                            </div>
                           </div>
+                          <button
+                            className={styles.ghostBtn}
+                            onClick={() => setModal({ type: "remover", equipe: equipeAtiva, membro })}
+                          >
+                            Remover
+                          </button>
                         </div>
-                        <button
-                          className={styles.ghostBtn}
-                          onClick={() => setModal({ type: "remover", equipe: equipeAtiva, membro })}
-                        >
-                          Remover
-                        </button>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                   <button className={styles.secondaryBtn} onClick={() => setModal({ type: "gerenciar", equipe: equipeAtiva })}>
                     Gerenciar
@@ -415,7 +436,7 @@ export default function EquipeProjetoPage({ params }: { params: { id: string } }
       {modal.type === "criar" && (
         <EquipeFormModal
           title="Criar equipe"
-          projetoId={projeto?.id ?? Number(params.id)}
+          projetoId={projeto?.id ?? Number(projetoIdParam)}
           onClose={() => setModal({ type: "none" })}
           onSubmit={handleCriarEquipe}
         />
@@ -424,7 +445,7 @@ export default function EquipeProjetoPage({ params }: { params: { id: string } }
       {modal.type === "editar" && (
         <EquipeFormModal
           title="Editar equipe"
-          projetoId={projeto?.id ?? Number(params.id)}
+          projetoId={projeto?.id ?? Number(projetoIdParam)}
           initialNome={modal.equipe.nome}
           onClose={() => setModal({ type: "none" })}
           onSubmit={(nome) => handleEditarEquipe(modal.equipe, nome)}
@@ -574,7 +595,6 @@ function ConviteModal({
           <select className={styles.modalSelect} value={papel} onChange={(e) => setPapel(e.target.value as PapelEquipe)}>
             <option value="MEMBRO">Membro</option>
             <option value="LIDER">Líder</option>
-            <option value="OBSERVADOR">Observador</option>
           </select>
           <label className={styles.modalLabel}>Mensagem do convite</label>
           <textarea
@@ -644,7 +664,6 @@ function GerenciarModal({
           <select className={styles.modalSelect} value={papel} onChange={(e) => setPapel(e.target.value as PapelEquipe)}>
             <option value="MEMBRO">Membro</option>
             <option value="LIDER">Líder</option>
-            <option value="OBSERVADOR">Observador</option>
           </select>
           <button className={styles.primaryBtn} type="submit">Adicionar</button>
         </form>

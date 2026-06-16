@@ -48,5 +48,7 @@ public interface MembroEquipeRepository extends JpaRepository<MembroEquipe, Long
 
     Optional<MembroEquipe> findFirstByProjetoIdAndPapelAndStatus(Long projetoId, PapelMembro papel, StatusConvite status);
 
+    List<MembroEquipe> findByEmailIgnoreCaseAndStatus(String email, StatusConvite status);
+
     void deleteByProjetoId(Long projetoId);
 }

@@ -6,14 +6,20 @@ import styles from "./EventModal.module.css";
 
 interface EventViewModalProps {
   evento: Evento;
+  responsavelNome?: string;
+  membrosInfo?: Array<{ id: number; nome?: string; sobrenome?: string; email?: string }>;
   onClose: () => void;
   onEdit: () => void;
+  canEdit?: boolean;
 }
 
 export default function EventViewModal({
   evento,
+  responsavelNome,
+  membrosInfo,
   onClose,
   onEdit,
+  canEdit = false,
 }: EventViewModalProps) {
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -41,63 +47,78 @@ export default function EventViewModal({
         </div>
 
         <div className={styles.form}>
+          {/* Nome do Evento */}
           <div className={styles.detailRow}>
-            <span className={styles.detailLabel}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="4" width="18" height="18" rx="2" />
-                <line x1="16" y1="2" x2="16" y2="6" />
-                <line x1="8" y1="2" x2="8" y2="6" />
-                <line x1="3" y1="10" x2="21" y2="10" />
-              </svg>
-              Data
-            </span>
-            <span className={styles.detailValue}>{dataFormatada}</span>
+            <label className={styles.detailLabel}>Nome do Evento</label>
+            <input
+              type="text"
+              value={evento.nome}
+              disabled
+              className={styles.readOnlyInput}
+            />
           </div>
 
-          {evento.membros.length > 0 && (
-            <div className={styles.detailRow}>
-              <span className={styles.detailLabel}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                  <circle cx="9" cy="7" r="4" />
-                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                </svg>
-                Responsáveis
-              </span>
-              <div className={styles.membrosLista}>
-                {evento.membros.map((m) => (
-                  <span key={m.id} className={styles.membroBadge}>
-                    {m.nome}
-                  </span>
+          {/* Data */}
+          <div className={styles.detailRow}>
+            <label className={styles.detailLabel}>Data</label>
+            <input
+              type="text"
+              value={dataFormatada}
+              disabled
+              className={styles.readOnlyInput}
+            />
+          </div>
+
+          {/* Responsável */}
+          <div className={styles.detailRow}>
+            <label className={styles.detailLabel}>Responsável</label>
+            <input
+              type="text"
+              value={responsavelNome || "Não definido"}
+              disabled
+              className={styles.readOnlyInput}
+            />
+          </div>
+
+          {/* Membros */}
+          <div className={styles.detailRow}>
+            <label className={styles.detailLabel}>Membros</label>
+            {membrosInfo && membrosInfo.length > 0 ? (
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                {membrosInfo.map((membro) => (
+                  <div key={membro.id} style={{ fontSize: "0.9rem", color: "#334155" }}>
+                    {membro.nome && membro.sobrenome ? `${membro.nome} ${membro.sobrenome}` : membro.email}
+                  </div>
                 ))}
               </div>
-            </div>
-          )}
+            ) : (
+              <div style={{ fontSize: "0.9rem", color: "#94a3b8" }}>Nenhum membro associado</div>
+            )}
+          </div>
 
-          {evento.descricao && (
-            <div className={styles.detailRow}>
-              <span className={styles.detailLabel}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="17" y1="10" x2="3" y2="10" />
-                  <line x1="21" y1="6" x2="3" y2="6" />
-                  <line x1="21" y1="14" x2="3" y2="14" />
-                  <line x1="17" y1="18" x2="3" y2="18" />
-                </svg>
-                Descrição
-              </span>
-              <p className={styles.descricaoText}>{evento.descricao}</p>
-            </div>
-          )}
+          {/* Descrição */}
+          <div className={styles.detailRow}>
+            <label className={styles.detailLabel}>Descrição</label>
+            <textarea
+              value={evento.descricao || ""}
+              disabled
+              rows={3}
+              className={styles.readOnlyTextarea}
+              style={{ whiteSpace: "pre-wrap", wordWrap: "break-word" }}
+            />
+          </div>
 
+          {/* Ações */}
           <div className={styles.actions}>
-            <button className={styles.editBtn} onClick={onEdit}>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-              </svg>
-              Editar
-            </button>
+            {canEdit && (
+              <button className={styles.editBtn} onClick={onEdit}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                </svg>
+                Editar
+              </button>
+            )}
             <button className={styles.cancelBtn} onClick={onClose}>
               Fechar
             </button>

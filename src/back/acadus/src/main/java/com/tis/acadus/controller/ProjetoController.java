@@ -38,9 +38,19 @@ public class ProjetoController {
                 .toList();
     }
 
+    @GetMapping("/usuario")
+    public List<com.tis.acadus.dto.ProjetoComStatusDTO> listarProjetosDoUsuario(@RequestParam String email) {
+        return service.listarProjetosDoUsuario(email);
+    }
+
     @GetMapping("/{id}")
     public ProjetoResponseDTO buscarProjetoPorId(@PathVariable Long id, @RequestParam String email) {
         return service.toDto(service.buscarProjetoDoUsuario(id, email));
+    }
+
+    @GetMapping("/{id}/membros")
+    public List<com.tis.acadus.dto.MembroEquipeResponseDTO> listarMembrosDoProjetoAceitos(@PathVariable Long id) {
+        return service.listarMembrosDoProjetoAceitos(id);
     }
 
     @PostMapping

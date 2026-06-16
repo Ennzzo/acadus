@@ -307,3 +307,26 @@
   background: #f8fafc;
   border-color: #cbd5e1;
 }
+
+/* ── Read-only inputs (view modal) ──────────────── */
+.readOnlyInput,
+.readOnlyTextarea {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: #0f172a;
+  background: #f8fafc;
+  font-family: inherit;
+  cursor: default;
+  resize: none;
+}
+
+.readOnlyInput {
+  height: 2.25rem;
+}
+
+.readOnlyTextarea {
+  min-height: 100px;
+  overflow: hidden;
+}
