@@ -70,7 +70,7 @@ public class ProjetoService {
     public Projeto criarProjeto(ProjetoRequestDTO dto) {
 
         Projeto projeto = Projeto.builder()
-                .nomeProjeto(dto.getNomeProjeto())
+                .nome(dto.getNomeProjeto())
                 .descricao(dto.getDescricao())
                 .dataCriacao(LocalDate.now())
                 .nomeEquipe("Equipe " + dto.getNomeProjeto())
@@ -101,7 +101,7 @@ public class ProjetoService {
         Projeto projeto = buscarProjetoPorId(id);
         conferirLider(projeto, email);
 
-        projeto.setNomeProjeto(dto.getNomeProjeto());
+        projeto.setNome(dto.getNomeProjeto());
         projeto.setDescricao(dto.getDescricao());
         projeto.setCapaUrl(dto.getCapaUrl());
         if (dto.getStatus() != null) {
