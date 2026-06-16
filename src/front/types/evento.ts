@@ -3,6 +3,8 @@ export interface Evento {
   nome: string;
   descricao?: string | null;
   data: string; // ISO date string (YYYY-MM-DD)
+  cor?: string | null;
+  tipo?: "evento" | "tarefa";
   projetoId?: number | null;
   equipeId?: number | null;
   responsavelId?: number | null;
@@ -20,5 +22,6 @@ export interface EventoFormData {
   nome: string;
   data: string;
   descricao?: string;
+  cor?: string;
   membrosIds: number[];
 }

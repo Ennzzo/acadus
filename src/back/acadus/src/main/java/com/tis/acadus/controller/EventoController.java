@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/eventos")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin("*")
 public class EventoController {
     
     @Autowired
@@ -29,7 +29,8 @@ public class EventoController {
                     dto.projetoId(),
                     dto.equipeId(),
                     dto.responsavelId(),
-                    dto.membrosIds()
+                    dto.membrosIds(),
+                    dto.cor()
             );
             Evento salvo = eventoService.criarEvento(evento);
             return ResponseEntity.status(HttpStatus.CREATED).body(toDTO(salvo));
@@ -117,7 +118,8 @@ public class EventoController {
                     dto.projetoId(),
                     dto.equipeId(),
                     dto.responsavelId(),
-                    dto.membrosIds()
+                    dto.membrosIds(),
+                    dto.cor()
             );
             evento.setId(id);
             Evento atualizado = eventoService.atualizarEvento(id, evento);
@@ -145,6 +147,7 @@ public class EventoController {
                 evento.getProjetoId(),
                 evento.getEquipeId(),
                 evento.getResponsavelId(),
+                evento.getCor(),
                 evento.getMembrosIds()
         );
     }

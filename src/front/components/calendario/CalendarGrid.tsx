@@ -14,7 +14,6 @@ interface CalendarGridProps {
 const DIAS_SEMANA = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 
 const CORES_EVENTO = [
-  "#7c3aed",
   "#2563eb",
   "#059669",
   "#d97706",
@@ -26,6 +25,10 @@ const CORES_EVENTO = [
 
 function getCorEvento(id: number): string {
   return CORES_EVENTO[id % CORES_EVENTO.length];
+}
+
+function getEventoKey(evento: Evento, index: number) {
+  return `${evento.tipo ?? "evento"}-${evento.id}-${evento.data}-${index}`;
 }
 
 export default function CalendarGrid({
@@ -65,12 +68,9 @@ export default function CalendarGrid({
     cells.push({ dia, eventosNoDia });
   }
 
-  // Fill remaining cells to complete the last week
-  const restante = 7 - (cells.length % 7);
-  if (restante < 7) {
-    for (let i = 0; i < restante; i++) {
-      cells.push({ dia: null, eventosNoDia: [] });
-    }
+  // Always render 6 full weeks so months with 31 days do not change the grid height.
+  while (cells.length < 42) {
+    cells.push({ dia: null, eventosNoDia: [] });
   }
 
   return (
@@ -99,11 +99,11 @@ export default function CalendarGrid({
                   {cell.dia}
                 </span>
                 <div className={styles.eventsList}>
-                  {cell.eventosNoDia.slice(0, 3).map((evento) => (
+                  {cell.eventosNoDia.map((evento, eventoIndex) => (
                     <button
-                      key={evento.id}
-                      className={styles.eventTag}
-                      style={{ backgroundColor: getCorEvento(evento.id) }}
+                      key={getEventoKey(evento, eventoIndex)}
+                      className={`${styles.eventTag} ${evento.tipo === "tarefa" ? styles.taskTag : ""}`}
+                      style={{ backgroundColor: evento.cor || getCorEvento(evento.id) }}
                       onClick={(e) => {
                         e.stopPropagation();
                         onEventoClick(evento);
@@ -113,11 +113,6 @@ export default function CalendarGrid({
                       {evento.nome}
                     </button>
                   ))}
-                  {cell.eventosNoDia.length > 3 && (
-                    <span className={styles.moreTag}>
-                      +{cell.eventosNoDia.length - 3} mais
-                    </span>
-                  )}
                 </div>
               </>
             )}

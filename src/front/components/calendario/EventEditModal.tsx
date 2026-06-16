@@ -2,24 +2,43 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Evento } from "@/types/evento";
-import { membrosMock } from "@/data/mocks/eventos";
+import { MembroEquipe } from "@/types/equipe";
+import UserAvatar from "@/components/ui/UserAvatar";
 import styles from "./EventModal.module.css";
+
+const CORES_EVENTO = ["#2563eb", "#059669", "#d97706", "#dc2626", "#db2777", "#4338ca"];
 
 interface EventEditModalProps {
   evento: Evento;
+  membros: MembroEquipe[];
   onClose: () => void;
   onSave: (dados: {
     id: number;
     nome: string;
     data: string;
     descricao: string;
+    cor: string;
     membrosIds: number[];
   }) => void;
-  onDelete: (id: number) => void;
+  onDelete: () => void;
+}
+
+function nomeMembro(membro: MembroEquipe) {
+  return [membro.nome, membro.sobrenome].filter(Boolean).join(" ") || membro.email;
+}
+
+function RemoveIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 6 6 18" />
+      <path d="m6 6 12 12" />
+    </svg>
+  );
 }
 
 export default function EventEditModal({
   evento,
+  membros,
   onClose,
   onSave,
   onDelete,
@@ -27,11 +46,14 @@ export default function EventEditModal({
   const [nome, setNome] = useState(evento.nome);
   const [data, setData] = useState(evento.data);
   const [descricao, setDescricao] = useState(evento.descricao ?? "");
+  const [cor, setCor] = useState(evento.cor || CORES_EVENTO[0]);
   const [membrosIds, setMembrosIds] = useState<number[]>(
     evento.membros.map((m) => m.id)
   );
   const [errors, setErrors] = useState<{ nome?: string; data?: string; descricao?: string }>({});
   const nomeRef = useRef<HTMLInputElement>(null);
+  const membrosDisponiveis = membros.filter((membro) => !membrosIds.includes(membro.id));
+  const membrosSelecionados = membros.filter((membro) => membrosIds.includes(membro.id));
 
   useEffect(() => {
     nomeRef.current?.focus();
@@ -76,12 +98,9 @@ export default function EventEditModal({
       nome: nome.trim(),
       data,
       descricao: descricao.trim(),
+      cor,
       membrosIds,
     });
-  }
-
-  function handleDelete() {
-    onDelete(evento.id);
   }
 
   return (
@@ -129,20 +148,66 @@ export default function EventEditModal({
           </div>
 
           <div className={styles.field}>
+            <label className={styles.label}>Cor</label>
+            <div className={styles.colorGrid}>
+              {CORES_EVENTO.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  className={`${styles.colorSwatch} ${cor === item ? styles.colorActive : ""}`}
+                  style={{ backgroundColor: item }}
+                  onClick={() => setCor(item)}
+                  aria-label={`Selecionar cor ${item}`}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className={styles.field}>
             <label className={styles.label}>
               Atribuir Membros <span className={styles.optional}>(opcional)</span>
             </label>
             <div className={styles.membrosGrid}>
-              {membrosMock.map((m) => (
-                <label key={m.id} className={styles.membroCheckbox}>
-                  <input
-                    type="checkbox"
-                    checked={membrosIds.includes(m.id)}
-                    onChange={() => toggleMembro(m.id)}
-                  />
-                  <span className={styles.membroNome}>{m.nome}</span>
-                </label>
-              ))}
+              {membros.length === 0 ? (
+                <p style={{ fontSize: "0.875rem", color: "#64748b" }}>
+                  Nenhum membro no projeto
+                </p>
+              ) : (
+                <>
+                {membrosDisponiveis.length > 0 && <small className={styles.popoverLabel}>Disponíveis</small>}
+                {membrosDisponiveis.map((m) => (
+                <button
+                  key={m.id}
+                  type="button"
+                  className={styles.memberOption}
+                  onClick={() => toggleMembro(m.id)}
+                >
+                  <span><UserAvatar fotoUrl={m.fotoUrl} nome={m.nome ?? undefined} email={m.email} /></span>
+                  <div>
+                    <strong>{nomeMembro(m)}</strong>
+                    <small>{m.email}</small>
+                  </div>
+                  <em>+</em>
+                </button>
+                ))}
+                {membrosSelecionados.length > 0 && <small className={styles.popoverLabel}>Adicionados</small>}
+                {membrosSelecionados.map((m) => (
+                  <button
+                    key={m.id}
+                    type="button"
+                    className={styles.memberOption}
+                    onClick={() => toggleMembro(m.id)}
+                  >
+                    <span><UserAvatar fotoUrl={m.fotoUrl} nome={m.nome ?? undefined} email={m.email} /></span>
+                    <div>
+                      <strong>{nomeMembro(m)}</strong>
+                      <small>{m.email}</small>
+                    </div>
+                    <em className={styles.removeMember}><RemoveIcon /></em>
+                  </button>
+                ))}
+                </>
+              )}
             </div>
           </div>
 
@@ -169,7 +234,7 @@ export default function EventEditModal({
               </svg>
               Salvar
             </button>
-            <button type="button" className={styles.deleteBtn} onClick={handleDelete}>
+            <button type="button" className={styles.deleteBtn} onClick={onDelete}>
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="3 6 5 6 21 6" />
                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />

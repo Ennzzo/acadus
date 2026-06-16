@@ -2,7 +2,9 @@ package com.tis.acadus.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -157,9 +159,8 @@ public class ProjetoService {
             return List.of();
         }
 
-        return membroRepository.findByEmailIgnoreCaseAndStatus(email, StatusConvite.ACEITO).stream()
-                .map(membro -> {
-                    Projeto projeto = membro.getProjeto();
+        return membroRepository.findProjetosByEmailAndStatus(email, StatusConvite.ACEITO).stream()
+                .map(projeto -> {
                     String statusUsuario = projeto.getLiderEmail() != null && projeto.getLiderEmail().equalsIgnoreCase(email)
                             ? "CRIADOR"
                             : "CONVIDADO";
@@ -184,8 +185,16 @@ public class ProjetoService {
             return List.of();
         }
 
-        return membroRepository.findByProjetoIdOrderByIdAsc(projetoId).stream()
-                .filter(membro -> membro.getStatus() == StatusConvite.ACEITO)
+        Map<String, MembroEquipe> membrosAtuais = new LinkedHashMap<>();
+        for (MembroEquipe membro : membroRepository.findByProjetoIdOrderByIdAsc(projetoId)) {
+            if (membro.getStatus() == StatusConvite.ACEITO
+                    && membro.getDataSaida() == null
+                    && !Boolean.TRUE.equals(membro.getOcultoLista())) {
+                membrosAtuais.put(membro.getEmail().toLowerCase(), membro);
+            }
+        }
+
+        return membrosAtuais.values().stream()
                 .map(membro -> {
                     Optional<Usuario> usuario = usuarioRepository.findByEmailIgnoreCase(membro.getEmail());
 

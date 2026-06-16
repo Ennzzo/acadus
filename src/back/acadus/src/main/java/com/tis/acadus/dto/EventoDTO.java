@@ -11,6 +11,7 @@ public record EventoDTO(
         Long projetoId,
         Long equipeId,
         Long responsavelId,
+        String cor,
         List<Long> membrosIds
 ) {
 }

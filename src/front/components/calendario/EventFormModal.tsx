@@ -1,60 +1,59 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { apiFetch } from "@/lib/api";
-import { toast } from "@/lib/toast";
 import { MembroEquipe } from "@/types/equipe";
+import UserAvatar from "@/components/ui/UserAvatar";
 import styles from "./EventModal.module.css";
+
+const CORES_EVENTO = ["#2563eb", "#059669", "#d97706", "#dc2626", "#db2777", "#4338ca"];
 
 interface EventFormModalProps {
   projetoId?: number;
   dataPre?: string;
+  membros: MembroEquipe[];
+  coresUsadasPorData?: (data?: string) => string[];
   onClose: () => void;
   onSave: (dados: {
     nome: string;
     data: string;
     descricao: string;
+    cor: string;
     membrosIds: number[];
   }) => void;
 }
 
-export default function EventFormModal({ projetoId, dataPre, onClose, onSave }: EventFormModalProps) {
+function nomeMembro(membro: MembroEquipe) {
+  return [membro.nome, membro.sobrenome].filter(Boolean).join(" ") || membro.email;
+}
+
+function sugerirCor(coresUsadas: string[]) {
+  return CORES_EVENTO.find((item) => !coresUsadas.includes(item)) || CORES_EVENTO[0];
+}
+
+function RemoveIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 6 6 18" />
+      <path d="m6 6 12 12" />
+    </svg>
+  );
+}
+
+export default function EventFormModal({ dataPre, membros, coresUsadasPorData, onClose, onSave }: EventFormModalProps) {
   const [nome, setNome] = useState("");
   const [data, setData] = useState(dataPre || "");
   const [descricao, setDescricao] = useState("");
+  const [cor, setCor] = useState(() => sugerirCor(coresUsadasPorData?.(dataPre) ?? []));
+  const [corEscolhidaManual, setCorEscolhidaManual] = useState(false);
   const [membrosIds, setMembrosIds] = useState<number[]>([]);
-  const [membros, setMembros] = useState<MembroEquipe[]>([]);
-  const [loadingMembros, setLoadingMembros] = useState(true);
   const [errors, setErrors] = useState<{ nome?: string; data?: string; descricao?: string }>({});
   const nomeRef = useRef<HTMLInputElement>(null);
+  const membrosDisponiveis = membros.filter((membro) => !membrosIds.includes(membro.id));
+  const membrosSelecionados = membros.filter((membro) => membrosIds.includes(membro.id));
 
   useEffect(() => {
     nomeRef.current?.focus();
   }, []);
-
-  useEffect(() => {
-    async function carregarMembros() {
-      if (!projetoId) {
-        setLoadingMembros(false);
-        return;
-      }
-
-      try {
-        setLoadingMembros(true);
-        const data = await apiFetch<MembroEquipe[]>(`/projetos/${projetoId}/membros`, {
-          cache: "no-store",
-        });
-        setMembros(data);
-      } catch {
-        toast.error("Erro ao carregar membros do projeto");
-        setMembros([]);
-      } finally {
-        setLoadingMembros(false);
-      }
-    }
-
-    carregarMembros();
-  }, [projetoId]);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -68,6 +67,13 @@ export default function EventFormModal({ projetoId, dataPre, onClose, onSave }: 
     setMembrosIds((prev) =>
       prev.includes(id) ? prev.filter((m) => m !== id) : [...prev, id]
     );
+  }
+
+  function handleDataChange(novaData: string) {
+    setData(novaData);
+    if (!corEscolhidaManual) {
+      setCor(sugerirCor(coresUsadasPorData?.(novaData) ?? []));
+    }
   }
 
   function validate(): boolean {
@@ -94,6 +100,7 @@ export default function EventFormModal({ projetoId, dataPre, onClose, onSave }: 
       nome: nome.trim(),
       data,
       descricao: descricao.trim(),
+      cor,
       membrosIds,
     });
   }
@@ -138,20 +145,35 @@ export default function EventFormModal({ projetoId, dataPre, onClose, onSave }: 
               type="date"
               className={`${styles.input} ${errors.data ? styles.inputError : ""}`}
               value={data}
-              onChange={(e) => setData(e.target.value)}
+              onChange={(e) => handleDataChange(e.target.value)}
             />
             {errors.data && <span className={styles.errorMsg}>{errors.data}</span>}
+          </div>
+
+          <div className={styles.field}>
+            <label className={styles.label}>Cor</label>
+            <div className={styles.colorGrid}>
+              {CORES_EVENTO.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  className={`${styles.colorSwatch} ${cor === item ? styles.colorActive : ""}`}
+                  style={{ backgroundColor: item }}
+                  onClick={() => {
+                    setCor(item);
+                    setCorEscolhidaManual(true);
+                  }}
+                  aria-label={`Selecionar cor ${item}`}
+                />
+              ))}
+            </div>
           </div>
 
           <div className={styles.field}>
             <label className={styles.label}>
               Membros <span className={styles.optional}>(opcional)</span>
             </label>
-            {loadingMembros ? (
-              <div className={styles.membrosGrid}>
-                <p style={{ fontSize: "0.875rem", color: "#64748b" }}>Carregando membros...</p>
-              </div>
-            ) : membros.length === 0 ? (
+            {membros.length === 0 ? (
               <div className={styles.membrosGrid}>
                 <p style={{ fontSize: "0.875rem", color: "#64748b" }}>
                   Nenhum membro no projeto
@@ -159,15 +181,37 @@ export default function EventFormModal({ projetoId, dataPre, onClose, onSave }: 
               </div>
             ) : (
               <div className={styles.membrosGrid}>
-                {membros.map((m) => (
-                  <label key={m.id} className={styles.membroCheckbox}>
-                    <input
-                      type="checkbox"
-                      checked={membrosIds.includes(m.id || 0)}
-                      onChange={() => toggleMembro(m.id || 0)}
-                    />
-                    <span className={styles.membroNome}>{m.nome && m.sobrenome ? `${m.nome} ${m.sobrenome}` : m.email}</span>
-                  </label>
+                {membrosDisponiveis.length > 0 && <small className={styles.popoverLabel}>Disponíveis</small>}
+                {membrosDisponiveis.map((m) => (
+                  <button
+                    key={m.id}
+                    type="button"
+                    className={styles.memberOption}
+                    onClick={() => toggleMembro(m.id)}
+                  >
+                    <span><UserAvatar fotoUrl={m.fotoUrl} nome={m.nome ?? undefined} email={m.email} /></span>
+                    <div>
+                      <strong>{nomeMembro(m)}</strong>
+                      <small>{m.email}</small>
+                    </div>
+                    <em>+</em>
+                  </button>
+                ))}
+                {membrosSelecionados.length > 0 && <small className={styles.popoverLabel}>Adicionados</small>}
+                {membrosSelecionados.map((m) => (
+                  <button
+                    key={m.id}
+                    type="button"
+                    className={styles.memberOption}
+                    onClick={() => toggleMembro(m.id)}
+                  >
+                    <span><UserAvatar fotoUrl={m.fotoUrl} nome={m.nome ?? undefined} email={m.email} /></span>
+                    <div>
+                      <strong>{nomeMembro(m)}</strong>
+                      <small>{m.email}</small>
+                    </div>
+                    <em className={styles.removeMember}><RemoveIcon /></em>
+                  </button>
                 ))}
               </div>
             )}

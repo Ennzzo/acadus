@@ -70,7 +70,7 @@ export default function LoginForm({ tab, onTabChange }: LoginFormProps) {
 
       setCurrentUser(usuario);
       toast.success(tab === "entrar" ? "Login realizado." : "Conta criada.");
-      router.push("/projetos");
+      router.push("/dashboard");
     } catch (err) {
       const message = err instanceof Error ? err.message : "Não foi possível continuar.";
       setError(message);

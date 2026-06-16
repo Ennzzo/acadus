@@ -29,6 +29,9 @@ public class Evento {
     
     @Column(name = "responsavel_id")
     private Long responsavelId;
+
+    @Column(length = 20)
+    private String cor;
     
     @ElementCollection
     @CollectionTable(name = "evento_membros", joinColumns = @JoinColumn(name = "evento_id"))
@@ -38,6 +41,10 @@ public class Evento {
     public Evento() {}
     
     public Evento(String nome, String descricao, LocalDate data, Long projetoId, Long equipeId, Long responsavelId, List<Long> membrosIds) {
+        this(nome, descricao, data, projetoId, equipeId, responsavelId, membrosIds, null);
+    }
+
+    public Evento(String nome, String descricao, LocalDate data, Long projetoId, Long equipeId, Long responsavelId, List<Long> membrosIds, String cor) {
         this.nome = nome;
         this.descricao = descricao;
         this.data = data;
@@ -45,6 +52,7 @@ public class Evento {
         this.equipeId = equipeId;
         this.responsavelId = responsavelId;
         this.membrosIds = membrosIds;
+        this.cor = cor;
     }
     
     public Long getId() { return id; }
@@ -67,6 +75,9 @@ public class Evento {
     
     public Long getResponsavelId() { return responsavelId; }
     public void setResponsavelId(Long responsavelId) { this.responsavelId = responsavelId; }
+
+    public String getCor() { return cor; }
+    public void setCor(String cor) { this.cor = cor; }
     
     public List<Long> getMembrosIds() { return membrosIds; }
     public void setMembrosIds(List<Long> membrosIds) { this.membrosIds = membrosIds; }

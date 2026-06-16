@@ -3,6 +3,7 @@ export type StatusProjeto = "ATIVO" | "CONCLUIDO";
 export interface Projeto {
   id: number;
   nomeProjeto: string;
+  nome?: string;
   descricao?: string | null;
   dataCriacao: string;
   nomeEquipe?: string | null;
@@ -14,6 +15,7 @@ export interface Projeto {
 export interface ProjetoComStatus {
   id: number;
   nomeProjeto: string;
+  nome?: string;
   descricao?: string | null;
   dataCriacao: string;
   nomeEquipe?: string | null;

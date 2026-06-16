@@ -24,6 +24,9 @@ public class EventoService {
         if (evento.getDescricao() != null && evento.getDescricao().length() > 500) {
             throw new IllegalArgumentException("Descrição muito longa");
         }
+        if (evento.getCor() == null || evento.getCor().isBlank()) {
+            evento.setCor("#2563eb");
+        }
         return eventoRepository.save(evento);
     }
     
@@ -70,6 +73,9 @@ public class EventoService {
             }
             if (eventoAtualizado.getResponsavelId() != null) {
                 evento.setResponsavelId(eventoAtualizado.getResponsavelId());
+            }
+            if (eventoAtualizado.getCor() != null) {
+                evento.setCor(eventoAtualizado.getCor());
             }
             if (eventoAtualizado.getMembrosIds() != null) {
                 evento.setMembrosIds(eventoAtualizado.getMembrosIds());
