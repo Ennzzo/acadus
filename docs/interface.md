@@ -14,6 +14,10 @@ O cadastro solicita nome, sobrenome, e-mail e senha. No login, o sistema valida 
 
 ![Tela final de login do Acadus](images/interface/login.png)
 
+A tela de cadastro utiliza o mesmo padrão visual do login e reúne os campos de nome, sobrenome, e-mail, senha, confirmação da senha e aceite dos termos de uso.
+
+![Tela final de cadastro do Acadus](images/interface/cadastro.png)
+
 O dashboard apresenta os totais do usuário, a distribuição das tarefas por status, a taxa de conclusão, o resumo dos projetos, os próximos prazos e as atividades recentes. Os valores são consolidados a partir dos projetos em que o usuário possui vínculo ativo.
 
 ![Dashboard final do Acadus](images/interface/dashboard.png)
@@ -26,6 +30,14 @@ O formulário de projeto permite informar nome, descrição e imagem de capa. Pr
 
 ![Tela final de projetos](images/interface/projetos.png)
 
+Ao criar um projeto, o líder informa o nome, a descrição e, opcionalmente, uma imagem de capa. A data de criação é preenchida automaticamente pelo sistema.
+
+![Formulário final de criação de projeto](images/interface/projeto-novo.png)
+
+Ao abrir um projeto, a interface apresenta sua capa, descrição, status, líder e data de criação. As opções de edição são disponibilizadas de acordo com a permissão do usuário.
+
+![Tela final de um projeto aberto](images/interface/projeto-aberto.png)
+
 ## 6.3. Gerenciamento de equipe
 
 A tela de equipe apresenta o líder, os membros ativos e o histórico de convites, recusas, cancelamentos, saídas e remoções. O líder pode convidar usuários pelo e-mail, reenviar convites, remover integrantes e solicitar a transferência da liderança.
@@ -35,6 +47,10 @@ O destinatário recebe o convite na área de notificações e pode aceitar ou re
 No desktop, os formulários de configuração e convite ficam à esquerda, enquanto os participantes são distribuídos em uma grade que aproveita o espaço horizontal.
 
 ![Tela final de gerenciamento da equipe](images/interface/equipe.png)
+
+As ações que alteram a equipe utilizam confirmação. Na remoção de um membro, o líder pode incluir uma mensagem que será enviada ao usuário junto da notificação.
+
+![Confirmação final de remoção de membro](images/interface/equipe-remover-membro.png)
 
 ## 6.4. Gerenciamento de tarefas
 
@@ -46,6 +62,10 @@ Os cartões exibem indicadores resumidos de descrição, prazo, checklist, anexo
 
 ![Tela final do quadro de tarefas](images/interface/tarefas.png)
 
+O modal de uma tarefa concentra título, responsáveis, prazo, descrição, anexos, checklist e comentários. As ações de edição, validação e aprovação são exibidas conforme o papel do usuário e o estado atual da tarefa.
+
+![Modal final de uma tarefa aberta](images/interface/tarefa-aberta.png)
+
 ## 6.5. Comunicação e notificações
 
 A área de chat reúne conversas de equipe e conversas privadas. A lista lateral é ordenada pela atividade mais recente e identifica mensagens ainda não visualizadas. O histórico possui rolagem própria, permitindo que o cabeçalho e o campo de envio permaneçam acessíveis mesmo em conversas longas.
@@ -56,7 +76,15 @@ A área de notificações reúne convites, transferências de liderança, atribu
 
 ![Tela final de chat](images/interface/chat.png)
 
+Uma conversa privada pode ser iniciada informando o e-mail de outro usuário cadastrado. Após a primeira mensagem, a conversa passa a integrar a lista lateral ordenada pela atividade mais recente.
+
+![Modal final para iniciar uma conversa privada](images/interface/chat-nova-conversa.png)
+
 ![Tela final de notificações](images/interface/notificacoes.png)
+
+Ao abrir uma notificação, o modal apresenta os dados relacionados à ação, como projeto, remetente, data, situação e mensagem, sem sobrecarregar a listagem principal.
+
+![Modal final de detalhes de uma notificação](images/interface/notificacao-detalhes.png)
 
 ## 6.6. Cronograma e calendário
 
@@ -65,6 +93,14 @@ O calendário apresenta eventos e prazos de tarefas dos projetos do usuário. É
 Os formulários de evento permitem definir título, descrição, data, horário, projeto e participantes. As tarefas com prazo são incluídas automaticamente na visualização do calendário.
 
 ![Tela final do calendário](images/interface/calendario.png)
+
+O formulário de evento permite definir nome, data, cor, participantes e descrição. Os participantes disponíveis são obtidos da equipe do projeto selecionado.
+
+![Formulário final de criação de evento](images/interface/calendario-novo-evento.png)
+
+Ao selecionar um evento, o sistema apresenta seus dados em um modal próprio, com as ações de edição e exclusão disponíveis ao responsável.
+
+![Modal final de detalhes de um evento](images/interface/calendario-evento.png)
 
 ## 6.7. Perfil do usuário
 
