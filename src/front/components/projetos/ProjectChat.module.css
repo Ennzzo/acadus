@@ -1,15 +1,42 @@
 .page {
   min-height: 0;
   height: 100%;
+  max-height: 100%;
+  min-width: 0;
   display: grid;
   grid-template-columns: 18rem 1fr;
   background: #f8fafc;
+  overflow: hidden;
 }
 
 .chatList {
+  min-height: 0;
+  min-width: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
   border-right: 1px solid #e2e8f0;
   background: #ffffff;
   padding: 1rem;
+  overflow: hidden;
+}
+
+.chatItems {
+  min-height: 0;
+  min-width: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
+.chatItems::-webkit-scrollbar,
+.feed::-webkit-scrollbar {
+  width: 0.4rem;
+}
+
+.chatItems::-webkit-scrollbar-thumb,
+.feed::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: #cbd5e1;
 }
 
 .listHeader {
@@ -85,8 +112,11 @@
 
 .chatList strong {
   display: block;
+  overflow: hidden;
   color: #0f172a;
   font-size: 0.875rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .chatList small,
@@ -133,7 +163,10 @@
 }
 
 .chatBox {
+  height: 100%;
+  max-height: 100%;
   min-height: 0;
+  min-width: 0;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   padding: 1rem;
@@ -276,7 +309,10 @@
   flex-direction: column;
   gap: 0.7rem;
   min-height: 0;
+  min-width: 0;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
   border-inline: 1px solid #e2e8f0;
   background: #f1f5f9;
   padding: 1rem;
@@ -294,6 +330,8 @@
 
 .messageCard {
   width: min(34rem, 88%);
+  max-width: 100%;
+  min-width: 0;
   border: 1px solid #e2e8f0;
   border-radius: 0.85rem;
   background: #ffffff;
@@ -325,6 +363,7 @@
 }
 
 .messageCard p {
+  overflow-wrap: anywhere;
   color: #334155;
   font-size: 0.9rem;
   line-height: 1.55;
@@ -358,6 +397,7 @@
   border-radius: 0.65rem;
   background: rgba(255, 255, 255, 0.65);
   padding: 0.55rem;
+  min-width: 0;
 }
 
 .fileBubble span {
@@ -370,8 +410,12 @@
 }
 
 .fileBubble strong {
+  min-width: 0;
+  overflow: hidden;
   color: #0f172a;
   font-size: 0.82rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .messageActions {
@@ -734,18 +778,27 @@
 @media (max-width: 820px) {
   .page {
     grid-template-columns: 1fr;
-    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-rows: 5.5rem minmax(0, 1fr);
     padding-bottom: 0;
   }
 
   .chatList {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
     border-right: none;
     border-bottom: 1px solid #e2e8f0;
-    overflow-x: auto;
+    gap: 0.5rem;
+    height: 5.5rem;
+    max-height: none;
+    padding: 0.75rem;
+  }
+
+  .chatItems {
     display: flex;
     gap: 0.5rem;
-    max-height: 5.5rem;
-    padding: 0.75rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-gutter: auto;
   }
 
   .chatList h2 {
@@ -766,6 +819,8 @@
   }
 
   .chatBox {
+    height: 100%;
+    max-height: 100%;
     min-height: 0;
     padding: 0.75rem;
   }

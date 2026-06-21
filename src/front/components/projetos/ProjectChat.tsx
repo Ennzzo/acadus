@@ -572,28 +572,30 @@ export default function ProjectChat({ projetoId }: ProjectChatProps) {
           <h2>Chats</h2>
           <button onClick={() => { setNewChatError(""); setNewChatOpen(true); }} aria-label="Nova conversa"><PlusIcon /></button>
         </div>
-        {chatItems.map((item) => item.type === "equipe" ? (
-          <button key={`equipe-${item.projeto.id}`} className={!privateContact && item.projeto.id === selectedProject ? styles.activeChat : ""} onClick={() => selectProject(item.projeto.id)}>
-            <span>{item.projeto.nomeProjeto.slice(0, 1).toUpperCase()}</span>
-            <div>
-              <strong>{item.projeto.nomeProjeto}</strong>
-              <small className={styles.chatPreview}>
-                <span>{item.projeto.resumo || "Nenhuma mensagem"}</span>
-                <em className={styles.teamTag}>{item.projeto.statusMembro === "SAIU" ? "Somente leitura" : "Equipe"}</em>
-              </small>
-            </div>
-            {item.projeto.naoVisualizada && <i className={styles.unreadDot} />}
-          </button>
-        ) : (
-          <button key={`privado-${item.contato.email}`} className={privateContact?.email === item.contato.email ? styles.activeChat : ""} onClick={() => selectPrivate(item.contato)}>
-            <span><UserAvatar fotoUrl={item.contato.fotoUrl} nome={item.contato.nome} email={item.contato.email} /></span>
-            <div>
-              <strong>{contactName(item.contato)}</strong>
-              <small className={styles.chatPreview}><span>{item.contato.resumo || "Nenhuma mensagem"}</span></small>
-            </div>
-            {item.contato.naoVisualizada && <i className={styles.unreadDot} />}
-          </button>
-        ))}
+        <div className={styles.chatItems}>
+          {chatItems.map((item) => item.type === "equipe" ? (
+            <button key={`equipe-${item.projeto.id}`} className={!privateContact && item.projeto.id === selectedProject ? styles.activeChat : ""} onClick={() => selectProject(item.projeto.id)}>
+              <span>{item.projeto.nomeProjeto.slice(0, 1).toUpperCase()}</span>
+              <div>
+                <strong>{item.projeto.nomeProjeto}</strong>
+                <small className={styles.chatPreview}>
+                  <span>{item.projeto.resumo || "Nenhuma mensagem"}</span>
+                  <em className={styles.teamTag}>{item.projeto.statusMembro === "SAIU" ? "Somente leitura" : "Equipe"}</em>
+                </small>
+              </div>
+              {item.projeto.naoVisualizada && <i className={styles.unreadDot} />}
+            </button>
+          ) : (
+            <button key={`privado-${item.contato.email}`} className={privateContact?.email === item.contato.email ? styles.activeChat : ""} onClick={() => selectPrivate(item.contato)}>
+              <span><UserAvatar fotoUrl={item.contato.fotoUrl} nome={item.contato.nome} email={item.contato.email} /></span>
+              <div>
+                <strong>{contactName(item.contato)}</strong>
+                <small className={styles.chatPreview}><span>{item.contato.resumo || "Nenhuma mensagem"}</span></small>
+              </div>
+              {item.contato.naoVisualizada && <i className={styles.unreadDot} />}
+            </button>
+          ))}
+        </div>
       </aside>
 
       <main className={styles.chatBox}>

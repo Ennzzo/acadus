@@ -120,11 +120,23 @@ A proposta consiste no desenvolvimento de uma aplicação web que centralize as 
 
 ## 7. Conclusão
 
-O desenvolvimento da aplicação proposta busca solucionar problemas comuns enfrentados por equipes acadêmicas, oferecendo uma plataforma centralizada para organização, comunicação e acompanhamento de tarefas. Espera-se que a solução contribua para aumentar a produtividade, melhorar a colaboração entre os membros e reduzir falhas na execução de trabalhos em grupo.
+O desenvolvimento do Acadus resultou em uma aplicação web integrada para apoiar a organização de trabalhos acadêmicos em equipe. A solução reúne autenticação, gerenciamento de projetos e equipes, quadro Kanban, atribuição e validação de tarefas, checklists, comentários, anexos, chat de equipe e privado, notificações, calendário, perfil do usuário e indicadores de desempenho.
+
+Os objetivos definidos no início do projeto foram atendidos por meio da centralização das informações e da definição clara das responsabilidades de líderes e membros. O quadro de tarefas permite acompanhar a execução das atividades, enquanto as notificações e o chat reduzem a dispersão da comunicação. O calendário reúne eventos e prazos, e o dashboard apresenta uma visão consolidada dos projetos acessíveis ao usuário.
+
+A implementação também permitiu aplicar conceitos de desenvolvimento em camadas, API REST, persistência relacional, componentes de interface, responsividade e validação de regras de negócio. O uso de Next.js e React no front-end, Spring Boot no back-end e MySQL na persistência possibilitou manter responsabilidades separadas e facilitar a manutenção do código.
+
+Como resultado, o sistema oferece uma base funcional para o acompanhamento de projetos acadêmicos. Entre possíveis evoluções futuras estão a atualização de mensagens em tempo real, o armazenamento externo de anexos, a ampliação dos relatórios e a execução do sistema em infraestrutura on-line. Essas extensões não impedem o uso da versão atual nos fluxos propostos para o trabalho.
 
 # REFERÊNCIAS
 
-_(Opcional — adicionar se necessário conforme ABNT)_
+NEXT.JS. **Next.js Documentation: App Router**. Vercel, 2026. Disponível em: <https://nextjs.org/docs/app>. Acesso em: 21 jun. 2026.
+
+ORACLE. **MySQL 8.0 Reference Manual**. Oracle Corporation, 2026. Disponível em: <https://dev.mysql.com/doc/refman/8.0/en/>. Acesso em: 21 jun. 2026.
+
+REACT. **React Reference**. Meta Open Source, 2026. Disponível em: <https://react.dev/reference/react>. Acesso em: 21 jun. 2026.
+
+SPRING. **Spring Boot Reference Documentation**. Broadcom, 2026. Disponível em: <https://docs.spring.io/spring-boot/reference/index.html>. Acesso em: 21 jun. 2026.
 
 # APÊNDICES
 

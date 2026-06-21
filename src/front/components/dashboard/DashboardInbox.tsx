@@ -147,6 +147,7 @@ export default function DashboardInbox() {
     const validacao = tarefas.filter((tarefa) => tarefa.status === "EM_VALIDACAO").length;
     const ajustes = tarefas.filter((tarefa) => tarefa.status === "AJUSTES").length;
     const atrasadas = tarefas.filter(isOverdue).length;
+    const atencao = tarefas.filter((tarefa) => isOverdue(tarefa) || tarefa.status === "AJUSTES").length;
     const hoje = tarefas.filter((tarefa) => sameDay(tarefa.prazo)).length;
     const progresso = percent(aprovadas, tarefas.length);
     const progressoMedio = avg(tarefas.map((tarefa) => tarefa.progresso || 0));
@@ -187,6 +188,7 @@ export default function DashboardInbox() {
       validacao,
       ajustes,
       atrasadas,
+      atencao,
       hoje,
       progresso,
       progressoMedio,
@@ -237,7 +239,7 @@ export default function DashboardInbox() {
               <article className={styles.stat}>
                 <CardIcon type="alert" />
                 <span>Atenção</span>
-                <strong>{dados.atrasadas + dados.ajustes}</strong>
+                <strong>{dados.atencao}</strong>
                 <small>{dados.atrasadas} atrasadas, {dados.ajustes} em ajustes</small>
               </article>
             </div>

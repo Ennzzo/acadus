@@ -1,31 +1,33 @@
-cff-version: 1.0.1
-message: Please cite this software using these metadata.
-title: 
+cff-version: 1.2.0
+message: "Se este software for utilizado, cite-o usando os metadados abaixo."
+title: "Acadus: Sistema de Organização de Trabalhos Acadêmicos"
+type: software
 authors:
-  - family-names: sobrenome do aluno 1
-    given-names: Nome do aluno 1 
-  - family-names: sobrenome do aluno 2
-    given-names: Nome do aluno 2 
-  - family-names: sobrenome do aluno 3
-    given-names: Nome do aluno 3 
-  - family-names: sobrenome do aluno 4
-    given-names: Nome do aluno 4 
-  - family-names: sobrenome do aluno 5
-    given-names: Nome do aluno 5 
-  - family-names: sobrenome do aluno 6
-    given-names: Nome do aluno 6 
-  - name-suffix: Professora
-    affiliation: PUC Minas
-    family-names: Alonso Veloso
-    given-names: Eveline 
-  - name-suffix: Professora
-    affiliation: PUC Minas
-    family-names: Baroni De Carvalho
-    given-names: Juliana Amaral 
+  - given-names: Enzo
+    family-names: Bambirra Pinto
+  - given-names: Francisco Maycon
+    family-names: Lima Castro
+  - given-names: Thiago Junio
+    family-names: Oliveira da Silva
+  - given-names: Sofia Ferreira
+    family-names: Costa
+  - given-names: Rafael Henrique
+    family-names: de Oliveira Cruz
+  - given-names: Cleia Marcia
+    family-names: Gomes Amaral
+    name-suffix: Professora
+    affiliation: Pontifícia Universidade Católica de Minas Gerais
+  - given-names: Joana Gabriela
+    family-names: Ribeiro de Souza
+    name-suffix: Professora
+    affiliation: Pontifícia Universidade Católica de Minas Gerais
 keywords:
-  - 
-  - 
-repository-code: 
+  - trabalhos acadêmicos
+  - gerenciamento de projetos
+  - quadro Kanban
+  - colaboração em equipe
+  - comunicação acadêmica
+repository-code: "https://github.com/ICEI-PUC-Minas-PPLES-TI/plf-es-2026-1-ti2-1381100-Acadus"
 license: CC-BY-4.0
 version: 1.0.0
-date-released:
+date-released: "2026-06-30"
