@@ -3,22 +3,22 @@ message: "Se este software for utilizado, cite-o usando os metadados abaixo."
 title: "Acadus: Sistema de Organização de Trabalhos Acadêmicos"
 type: software
 authors:
-  - given-names: Enzo
-    family-names: Bambirra Pinto
-  - given-names: Francisco Maycon
-    family-names: Lima Castro
-  - given-names: Thiago Junio
-    family-names: Oliveira da Silva
-  - given-names: Sofia Ferreira
-    family-names: Costa
-  - given-names: Rafael Henrique
-    family-names: de Oliveira Cruz
-  - given-names: Cleia Marcia
-    family-names: Gomes Amaral
+  - given-names: Enzo Bambirra
+    family-names: Pinto
+  - given-names: Francisco
+    family-names: Maycon Lima Castro
+  - given-names: Thiago
+    family-names: Junio Oliveira da Silva
+  - given-names: Sofia
+    family-names: Ferreira Costa
+  - given-names: Rafael 
+    family-names: Henrique de Oliveira Cruz
+  - given-names: Cleia
+    family-names: Marcia Gomes Amaral
     name-suffix: Professora
     affiliation: Pontifícia Universidade Católica de Minas Gerais
-  - given-names: Joana Gabriela
-    family-names: Ribeiro de Souza
+  - given-names: Joana
+    family-names: Gabriela Ribeiro de Souza
     name-suffix: Professora
     affiliation: Pontifícia Universidade Católica de Minas Gerais
 keywords:
