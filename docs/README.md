@@ -1,11 +1,11 @@
 # Sistema de Organização de Trabalhos Acadêmicos
 
 
-**Enzo Bambirra Pinto**  
-**Francisco Maycon Lima Castro**  
-**Thiago Junio Oliveira da Silva**  
-**Sofia Ferreira Costa**  
-**Rafael Henrique de Oliveira Cruz** 
+**Enzo Bambirra Pinto** – **1632379@sga.pucminas.br**
+**Francisco Maycon Lima Castro** – **1624926@sga.pucminas.br** 
+**Thiago Junio Oliveira da Silva** – **1599663@sga.pucminas.br**
+**Sofia Ferreira Costa** – **1628789@sga.pucminas.br**
+**Rafael Henrique de Oliveira Cruz** – **1350441@sga.pucminas.br**
 
 ---
 
