@@ -1,3 +1,8 @@
+> [!NOTE]
+> Cópia pública do repositório original (privado) da organização **ICEI-PUC-Minas-PPLES-TI**, publicada com autorização de toda a equipe. O histórico de commits de cada integrante foi preservado.
+>
+> **Equipe:** [Enzo Bambirra](https://github.com/Ennzzo) · [Francisco Castro](https://github.com/franciscopuc) · [Rafael Cruz](https://github.com/rafaelhoc) · [Sofia Costa](https://github.com/costa-sofia) · [Thiago Silva](https://github.com/ThiagoOliveiraJ)
+
 # Sistema de Organização de Trabalhos Acadêmicos
 
 
